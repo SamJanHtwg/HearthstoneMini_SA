@@ -1,0 +1,687 @@
+{
+  "field" : {
+    "players" : [ {
+      "name" : "sam",
+      "id" : 1,
+      "fieldbar" : {
+        "cardarea" : {
+          "row" : [ {
+            "card" : {
+              "name" : "Kanalisier",
+              "manaCost" : 4,
+              "attValue" : 2,
+              "defenseValue" : 5,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          }, {
+            "card" : {
+              "name" : "Golakkakra",
+              "manaCost" : 2,
+              "attValue" : 2,
+              "defenseValue" : 3,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          }, {
+            "card" : {
+              "name" : "Haifischfl",
+              "manaCost" : 2,
+              "attValue" : 2,
+              "defenseValue" : 2,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          }, {
+            "card" : {
+              "name" : "Grobian",
+              "manaCost" : 3,
+              "attValue" : 3,
+              "defenseValue" : 3,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          }, {
+            "card" : {
+              "name" : "Riesenflos",
+              "manaCost" : 5,
+              "attValue" : 6,
+              "defenseValue" : 6,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          } ]
+        }
+      },
+      "gamebar" : {
+        "hp" : {
+          "value" : 10,
+          "max" : 10
+        },
+        "mana" : {
+          "value" : 3,
+          "max" : 11
+        },
+        "deck" : [ {
+          "card" : {
+            "name" : "Blei-Bot",
+            "manaCost" : 3,
+            "attValue" : 1,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Meisterin ",
+            "manaCost" : 4,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Bösewichte",
+            "manaCost" : 3,
+            "attValue" : 3,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Aasfressen",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Kodoreiter",
+            "manaCost" : 6,
+            "attValue" : 3,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Zottelpelz",
+            "manaCost" : 9,
+            "attValue" : 2,
+            "defenseValue" : 25,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Khadgar",
+            "manaCost" : 2,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Zündelemen",
+            "manaCost" : 4,
+            "attValue" : 5,
+            "defenseValue" : 15,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Gazlowe",
+            "manaCost" : 6,
+            "attValue" : 3,
+            "defenseValue" : 6,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Koboldbibl",
+            "manaCost" : 1,
+            "attValue" : 2,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Trübauge d",
+            "manaCost" : 4,
+            "attValue" : 11,
+            "defenseValue" : 79,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Diener von",
+            "manaCost" : 5,
+            "attValue" : 4,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Savannenho",
+            "manaCost" : 6,
+            "attValue" : 12,
+            "defenseValue" : 10,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Belagerung",
+            "manaCost" : 7,
+            "attValue" : 5,
+            "defenseValue" : 8,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Die Tidens",
+            "manaCost" : 7,
+            "attValue" : 12,
+            "defenseValue" : 8,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Panther",
+            "manaCost" : 2,
+            "attValue" : 3,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Manasüchti",
+            "manaCost" : 2,
+            "attValue" : 1,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Cairne Blu",
+            "manaCost" : 6,
+            "attValue" : 4,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Tempelwach",
+            "manaCost" : 8,
+            "attValue" : 5,
+            "defenseValue" : 10,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Nerubische",
+            "manaCost" : 6,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Wiederverw",
+            "manaCost" : 3,
+            "attValue" : 10,
+            "defenseValue" : 8,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Bolvar For",
+            "manaCost" : 5,
+            "attValue" : 1,
+            "defenseValue" : 7,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Verletzter",
+            "manaCost" : 5,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Austauschs",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Blubbernde",
+            "manaCost" : 5,
+            "attValue" : 3,
+            "defenseValue" : 10,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Feuerwerk",
+            "manaCost" : 8,
+            "attValue" : 1,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Aaslarve",
+            "manaCost" : 3,
+            "attValue" : 2,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Verrückte ",
+            "manaCost" : 5,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        } ],
+        "hand" : [ {
+          "card" : {
+            "name" : "Kriegsdrui",
+            "manaCost" : 3,
+            "attValue" : 1,
+            "defenseValue" : 6,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Gedankenbe",
+            "manaCost" : 1,
+            "attValue" : 1,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        } ],
+        "friedhof" : [ ]
+      }
+    }, {
+      "name" : "jan",
+      "id" : 2,
+      "fieldbar" : {
+        "cardarea" : {
+          "row" : [ {
+            "card" : "none"
+          }, {
+            "card" : "none"
+          }, {
+            "card" : "none"
+          }, {
+            "card" : {
+              "name" : "Jadegolem",
+              "manaCost" : 10,
+              "attValue" : 25,
+              "defenseValue" : 25,
+              "effect" : "Effect",
+              "rarity" : "Rarity"
+            }
+          }, {
+            "card" : "none"
+          } ]
+        }
+      },
+      "gamebar" : {
+        "hp" : {
+          "value" : 10,
+          "max" : 10
+        },
+        "mana" : {
+          "value" : 11,
+          "max" : 11
+        },
+        "deck" : [ {
+          "card" : {
+            "name" : "Bär 3",
+            "manaCost" : 5,
+            "attValue" : 11,
+            "defenseValue" : 15,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Argentuman",
+            "manaCost" : 2,
+            "attValue" : 1,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Raven der ",
+            "manaCost" : 3,
+            "attValue" : 5,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Hehler aus",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Messer",
+            "manaCost" : 3,
+            "attValue" : 5,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Jahrmarkts",
+            "manaCost" : 3,
+            "attValue" : 4,
+            "defenseValue" : 7,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Rädelsführ",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Satyraufse",
+            "manaCost" : 4,
+            "attValue" : 8,
+            "defenseValue" : 50,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Felsenkief",
+            "manaCost" : 4,
+            "attValue" : 3,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Xyrellas E",
+            "manaCost" : 6,
+            "attValue" : 4,
+            "defenseValue" : 7,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Skelettsch",
+            "manaCost" : 3,
+            "attValue" : 4,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Aufwert-o-",
+            "manaCost" : 4,
+            "attValue" : 3,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Ritzelmeis",
+            "manaCost" : 10,
+            "attValue" : 2,
+            "defenseValue" : 95,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Voodoo-Ver",
+            "manaCost" : 5,
+            "attValue" : 2,
+            "defenseValue" : 7,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Randaliert",
+            "manaCost" : 4,
+            "attValue" : 3,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Königswach",
+            "manaCost" : 8,
+            "attValue" : 3,
+            "defenseValue" : 8,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Inquisitor",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 2,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Zauberhaft",
+            "manaCost" : 6,
+            "attValue" : 6,
+            "defenseValue" : 6,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Kil’rek",
+            "manaCost" : 4,
+            "attValue" : 4,
+            "defenseValue" : 8,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Zündelemen",
+            "manaCost" : 4,
+            "attValue" : 5,
+            "defenseValue" : 15,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Schnipps B",
+            "manaCost" : 4,
+            "attValue" : 3,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Belebter B",
+            "manaCost" : 1,
+            "attValue" : 1,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Knappe der",
+            "manaCost" : 1,
+            "attValue" : 1,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Rexxar",
+            "manaCost" : 4,
+            "attValue" : 11,
+            "defenseValue" : 72,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Verseucher",
+            "manaCost" : 5,
+            "attValue" : 5,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Jadegolem",
+            "manaCost" : 4,
+            "attValue" : 4,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Dunkeleise",
+            "manaCost" : 3,
+            "attValue" : 2,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Haizahnhar",
+            "manaCost" : 2,
+            "attValue" : 4,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Karussellg",
+            "manaCost" : 5,
+            "attValue" : 5,
+            "defenseValue" : 5,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        } ],
+        "hand" : [ {
+          "card" : {
+            "name" : "Knochenweb",
+            "manaCost" : 1,
+            "attValue" : 2,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Käfersamml",
+            "manaCost" : 2,
+            "attValue" : 2,
+            "defenseValue" : 1,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Sumpfdrach",
+            "manaCost" : 1,
+            "attValue" : 0,
+            "defenseValue" : 3,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Pyromanin",
+            "manaCost" : 3,
+            "attValue" : 3,
+            "defenseValue" : 4,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        }, {
+          "card" : {
+            "name" : "Aranna Ste",
+            "manaCost" : 4,
+            "attValue" : 3,
+            "defenseValue" : 10,
+            "effect" : "Effect",
+            "rarity" : "Rarity"
+          }
+        } ],
+        "friedhof" : [ ]
+      }
+    } ],
+    "slotnum" : 5,
+    "turns" : 2
+  }
+}

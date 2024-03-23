@@ -1,0 +1,40 @@
+game_bar.scala
+	HP[hp], Mana, List[card], Stack[card]
+	def draw
+	
+
+menue_bar.scala 
+	spielerName[String], surrButton[?], turnButton[?]
+
+playingfield.scala
+	array[card], stack[card]
+	def placeCard
+	def removeCard
+	def attac(p1.card, p2.card)
+	def useEffect
+	
+
+hp.scala
+	val value
+	def inc
+	def dec
+	def isEmpty
+	def setVal
+
+mana.scala
+	val value
+	def inc
+	def dec
+	def isEmpty
+	def setVal
+
+card.scala
+	name[String]
+	manaCost[int]
+	atk[int]
+	def[int]
+	effect[String]
+	bild[png]
+	isInDestructable[bool]
+
+

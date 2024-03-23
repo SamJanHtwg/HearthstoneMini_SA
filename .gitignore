@@ -1,0 +1,27 @@
+*.class
+.bloop
+.bsp
+.metals
+.vscode
+
+project/project/
+project/target/
+project/metals.sbt
+target/
+.DS_Store
+.history
+.scala_dependencies
+.cache-main
+build.properties
+
+# intelliJ
+.idea
+*.log
+*.iml
+*.ipr
+*.iws
+*.semanticdb
+
+# mac
+.DS_Store
+
