@@ -19,8 +19,8 @@ import java.text.Annotation
 import scala.util.{Failure, Success, Try}
 
 case class Controller @Inject() (var field: FieldInterface) extends ControllerInterface {
-      private val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
-      private val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
+     private val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
+     private val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
      var gameState: GameState = GameState.CHOOSEMODE
      var errorMsg: Option[String] = None
      private val undoManager: UndoManager = new UndoManager
