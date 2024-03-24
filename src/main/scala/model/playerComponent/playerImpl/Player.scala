@@ -31,7 +31,6 @@ object Player {
     maxHpValue = 0,
     id = (json \\ "id").head.toString().toInt,
     manaValue = 0,
-    maxManaValue = 1,
     fieldbar = Fieldbar.fromJson((json \\ "fieldbar").head),
     gamebar = Gamebar.fromJson((json \\ "gamebar").head)
   )
@@ -42,7 +41,6 @@ object Player {
     maxHpValue = 0,
     id = (node \\ "id").head.text.toInt,
     manaValue = 0,
-    maxManaValue = 1,
     fieldbar = Fieldbar.fromXML((node \\ "fieldbar").head),
     gamebar = Gamebar.fromXML((node \\ "gamebar").head)
   )
@@ -96,7 +94,7 @@ case class Player(name: String = "Player",
   override def setManaValue(amount: Int): Player = copy(manaValue = amount)
 
   // matrix
-  override def toMatrix: Matrix[String] = if ((id % 2) == 1) then renderUnevenId() else renderEvenId()
+  override def toMatrix: Matrix[String] = if (id % 2) == 1 then renderUnevenId() else renderEvenId()
 
   override def renderUnevenId(): Matrix[String] = new Matrix[String](
     FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,

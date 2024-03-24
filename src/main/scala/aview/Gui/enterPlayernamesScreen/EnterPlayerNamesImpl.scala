@@ -13,7 +13,8 @@ import scalafx.scene.control.{Button, Label, RadioButton, TextField, ToggleGroup
 import scalafx.scene.layout.GridPane
 import model.fileIOComponent.jsonIOImpl.FileIO
 
-class EnterPlayernamesScreenImpl(controller: ControllerInterface) extends GridPane with EnterPlayernamesScreenInterface {
+//noinspection DuplicatedCode
+class EnterPlayerNamesImpl(controller: ControllerInterface) extends GridPane with EnterPlayerNamesScreenInterface {
   override val textfields: Seq[TextField] = Seq(
     new TextField() { promptText = "Player 1"},
     new TextField() { promptText = "Player 2"})
@@ -23,17 +24,19 @@ class EnterPlayernamesScreenImpl(controller: ControllerInterface) extends GridPa
   override val nextButton: Button = new Button("next")
 
   nextButton.disable = true
-  var bool1, bool2: Boolean = false
-  nextButton.onMouseClicked = (_) => {
+  private var bool1, bool2: Boolean = false
+  nextButton.onMouseClicked = _ => {
     controller.setPlayerNames(Move(p1 = textfields.head.text.value, p2 = textfields(1).text.value))
   }
-  textfields.head.text.onChange { (_, _, newValue) => {
+  textfields.head.text.onChange { //noinspection DuplicatedCode
+    (_, _, newValue) => {
     bool1 = newValue.trim().isEmpty
-    nextButton.disable = (bool1 && bool2)
+    nextButton.disable = bool1 && bool2
   }}
-  textfields(1).text.onChange { (_, _, newValue) => {
+  textfields(1).text.onChange { //noinspection DuplicatedCode
+    (_, _, newValue) => {
     bool2 = newValue.trim().isEmpty
-    nextButton.disable = (bool1 && bool2)
+    nextButton.disable = bool1 && bool2
   }}
 
   vgap = 10

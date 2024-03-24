@@ -24,7 +24,7 @@ object Cardarea {
 }
 
 case class Cardarea(row: Vector[Option[CardInterface]]) extends CardAreaInterface:
-    def this(size: Int, filling: Option[CardInterface]) = this(Vector.tabulate(size) { (row) => filling })
+    def this(size: Int, filling: Option[CardInterface]) = this(Vector.tabulate(size) { row => filling })
     override val size: Int = row.size
     override def slot(slotNum: Int): Option[CardInterface] = row(slotNum)
     override def replaceSlot(slotNum: Int, card: Option[CardInterface]): CardAreaInterface = copy(row.updated(slotNum, card))

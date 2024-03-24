@@ -8,7 +8,7 @@ import scalafx.geometry.Insets
 import scalafx.scene.Node
 import scalafx.scene.control.{Button, Label, RadioButton, TextField, ToggleGroup}
 
-trait EnterPlayernamesScreenInterface extends scalafx.scene.layout.GridPane {
+trait EnterPlayerNamesScreenInterface extends scalafx.scene.layout.GridPane {
   val textfields: Seq[TextField]
   val labels: Seq[Label]
   val nextButton: Button

@@ -19,13 +19,13 @@ class ModeSelectionScreenImpl(controller: ControllerInterface) extends GridPane 
   override val radiogroup: ToggleGroup = new ToggleGroup()
   radiobuttons.foreach(_.setToggleGroup(radiogroup))
   override val nextbutton: Button = new Button("next")
-  nextbutton.onMouseClicked = (_) =>
+  nextbutton.onMouseClicked = _ =>
     controller.setStrategy(radiogroup.getSelectedToggle.getUserData.asInstanceOf[Strategy])
 
-  val loadButton: Button = new Button("load")
-  loadButton.onMouseClicked = (_) => controller.loadField
+  private val loadButton: Button = new Button("load")
+  loadButton.onMouseClicked = _ => controller.loadField
 
-  radiobuttons(0).setUserData(Strategy.normal)
+  radiobuttons.head.setUserData(Strategy.normal)
   radiobuttons(1).setUserData(Strategy.hardcore)
   radiobuttons(2).setUserData(Strategy.debug)
 
@@ -33,7 +33,7 @@ class ModeSelectionScreenImpl(controller: ControllerInterface) extends GridPane 
   hgap = 10
   padding = Insets(20, 100, 10, 10)
 
-  add(radiobuttons(0),0,0)
+  add(radiobuttons.head,0,0)
   add(radiobuttons(1),0,1)
   add(radiobuttons(2),0,2)
   add(nextbutton,1,3)

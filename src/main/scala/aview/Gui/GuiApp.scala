@@ -1,7 +1,7 @@
 package hearthstoneMini
 package aview.Gui
 
-import aview.Gui.GUI
+import aview.Gui.Gui
 import controller.GameState
 import controller.component.controllerImpl.Controller
 import javafx.geometry.Side
@@ -15,8 +15,8 @@ import scalafx.scene.paint.Color
 import util.{Event, Observer}
 import hearthstoneMini.controller.component.ControllerInterface
 
-class GUIApp(val controller: ControllerInterface) extends Observer {
-    override def update(e: Event, msg: Option[String]) = {
+class GuiApp(val controller: ControllerInterface) extends Observer {
+    override def update(e: Event, msg: Option[String]): Unit = {
         Platform.runLater{
             e match {
                 case Event.ERROR => gui.showErrorDialog(msg)
@@ -26,8 +26,8 @@ class GUIApp(val controller: ControllerInterface) extends Observer {
         }
     }
 
-    val gui: GUI = new GUI(this, controller)
-    val thread: Thread = new Thread {
+    private val gui: Gui = new Gui(this, controller)
+    private val thread: Thread = new Thread {
         override def run(): Unit = {
             gui.main(Array())
         }

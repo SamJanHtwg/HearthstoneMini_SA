@@ -6,6 +6,7 @@ import util.Observable
 import hearthstoneMini.controller.GameState.GameState
 import hearthstoneMini.controller.Strategy
 
+//noinspection AccessorLikeMethodIsEmptyParen,UnitMethodIsParameterless
 trait ControllerInterface extends Observable {
   var errorMsg: Option[String]
   var field: FieldInterface
