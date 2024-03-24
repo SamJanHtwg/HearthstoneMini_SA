@@ -17,12 +17,12 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
   override def doStep: Try[FieldInterface] = {
     if checkConditions then {
       val difference = Math.abs(controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).get.attValue
-        - controller.field.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue)
+        - controller.field.players(controller.field.getInactivePlayerId).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue)
       newField = controller.field.reduceDefVal(move.fieldSlotInactive, 
         controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).get.attValue)
       newField = newField.reduceAttackCount(move.fieldSlotActive)
-      if newField.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue <= 0 then
-        newField = newField.destroyCard(1, move.fieldSlotInactive).reduceHp(1, difference)
+      if newField.players(controller.field.getInactivePlayerId).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue <= 0 then
+        newField = newField.destroyCard(controller.field.getInactivePlayerId, move.fieldSlotInactive).reduceHp(controller.field.getInactivePlayerId, difference)
 
       if newField.players.values.filter(_.isHpEmpty).size != 0
       then controller.nextState()
@@ -45,7 +45,7 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
 
   override def checkConditions: Boolean =
     if controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).isDefined then
-      if controller.field.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).isDefined then
+      if controller.field.players(controller.field.getInactivePlayerId).fieldbar.cardArea.slot(move.fieldSlotInactive).isDefined then
         if controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).get.attackCount >= 1 then
           if controller.field.turns > 1 then return true
           else

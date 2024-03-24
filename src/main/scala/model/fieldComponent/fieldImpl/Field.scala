@@ -91,19 +91,19 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
     players(activePlayerId).reduceAttackCount(slotNum)))
 
   override def resetAttackCount(): Field = copy(
-    players = players.updated(activePlayerId, players(activePlayerId).resetAttackCount()).updated(2, players(2).resetAttackCount()))
+    players = players.updated(activePlayerId, players(activePlayerId).resetAttackCount()).updated(getInactivePlayerId, players(getInactivePlayerId).resetAttackCount()))
 
   override def resetAndIncreaseMana(): Field = copy(players = players.updated(activePlayerId, players(activePlayerId).resetAndIncreaseMana())
-    .updated(2, players(2).resetAndIncreaseMana()))
+    .updated(getInactivePlayerId, players(getInactivePlayerId).resetAndIncreaseMana()))
 
   override def setPlayerNames(p1: String, p2: String): Field = copy(players = players.updated(activePlayerId, players(activePlayerId)
-    .setName(p1)).updated(2, players(2).setName(p2)))
+    .setName(p1)).updated(getInactivePlayerId, players(getInactivePlayerId).setName(p2)))
 
   override def setHpValues(amount: Int): Field = copy(players = players.updated(activePlayerId, players(activePlayerId).setHpValue(amount))
-    .updated(2, players(2).setHpValue(amount)))
+    .updated(getInactivePlayerId, players(getInactivePlayerId).setHpValue(amount)))
 
   override def setManaValues(amount: Int): Field = copy(players = players.updated(activePlayerId, players(activePlayerId).setManaValue(amount))
-    .updated(2, players(2).setManaValue(amount)))
+    .updated(getInactivePlayerId, players(getInactivePlayerId).setManaValue(amount)))
 
   override def switchPlayer(): Field = if (turns != 0 && turns % 2 == 1)
     then copy(players = players.mapValues((player) => player.resetAndIncreaseMana()).toMap,
@@ -115,8 +115,10 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
 
   override def getActivePlayer: Player = players(activePlayerId)
 
+  override def getInactivePlayerId: Int = players.find((id, player) => id != activePlayerId).get._1
+
   override def reduceDefVal(slotNum: Int, amount: Int): Field = copy(
-    players = players.updated(2, players(2).reduceDefVal(slotNum, amount)))
+    players = players.updated(getInactivePlayerId, players(getInactivePlayerId).reduceDefVal(slotNum, amount)))
 
   override def toMatrix: Matrix[String] = matrix
     .updateMatrix(0, 0, List[String]("-" * FieldObject.standartFieldWidth))

@@ -55,7 +55,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
       "switch the active player" in {
         val fieldAfterMove = field.switchPlayer()
-        fieldAfterMove.activePlayerId should be(field.players(2).id)
+        fieldAfterMove.activePlayerId should be(field.players(field.getInactivePlayerId).id)
         val fieldAfter2ndMove = fieldAfterMove.switchPlayer()
         fieldAfter2ndMove.players(field.activePlayerId).manaValue should be(3)
       }
@@ -75,8 +75,8 @@ class FieldSpec extends AnyWordSpec with Matchers {
         val fieldAfterMove = field1.resetAndIncreaseMana()
         fieldAfterMove.players(field.activePlayerId).manaValue should be(2)
         fieldAfterMove.players(field.activePlayerId).maxManaValue should be(2)
-        fieldAfterMove.players(2).manaValue should be(2)
-        fieldAfterMove.players(2).maxManaValue should be(2)
+        fieldAfterMove.players(field.getInactivePlayerId).manaValue should be(2)
+        fieldAfterMove.players(field.getInactivePlayerId).maxManaValue should be(2)
       }
     }
      "when hp value is set" in {

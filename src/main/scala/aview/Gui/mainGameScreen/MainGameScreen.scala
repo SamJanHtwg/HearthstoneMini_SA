@@ -68,7 +68,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
       hpBar.onMouseDragReleased = event => {
         val thatNodesX = getColumnIndex(event.getGestureSource.asInstanceOf[Node])
         if event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar" then {
-          if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
+          if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(controller.field.getInactivePlayerId).id.toString &&
             event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString
           then {
             controller.directAttack(Move(fieldSlotActive = thatNodesX))
@@ -182,7 +182,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
         }
       } else if event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
         event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar" then {
-        if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
+        if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(controller.field.getInactivePlayerId).id.toString &&
           event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString
         then {
           controller.attack(Move(fieldSlotInactive = thisNodesX, fieldSlotActive = thatNodesX))

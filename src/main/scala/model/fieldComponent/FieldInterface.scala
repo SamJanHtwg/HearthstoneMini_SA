@@ -20,6 +20,8 @@ trait FieldInterface {
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): FieldInterface
 
+  def getInactivePlayerId: Int
+  
   def drawCard(): FieldInterface
 
   def destroyCard(player: Int, slot: Int): FieldInterface
