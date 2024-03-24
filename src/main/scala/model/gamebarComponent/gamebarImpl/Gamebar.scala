@@ -28,6 +28,7 @@ object Gamebar {
         friedhof = (node \\"friedhof" \\ "entry").map(card => Card.fromXML(card).get).toArray,
     )
 }
+//noinspection DuplicatedCode
 case class Gamebar(hand: List[CardInterface] = new CardProvider("/json/cards.json").getCards(5),
                    deck: List[CardInterface] = new CardProvider("/json/cards.json").getCards(30),
                    friedhof: Array[CardInterface] = Array[CardInterface]()) extends GamebarInterface{
@@ -38,7 +39,7 @@ case class Gamebar(hand: List[CardInterface] = new CardProvider("/json/cards.jso
         case Some(_) => copy(friedhof = friedhof.appended(card.get))
         case None => this
     }
-    def drawCard(): Gamebar = copy(hand = hand.appended(deck(0)), deck = deck.filter(_ != deck(0)))
+    def drawCard(): Gamebar = copy(hand = hand.appended(deck.head), deck = deck.filter(_ != deck.head))
     def handAsMatrix(): Matrix[String] = {
         var tmpMatrix =  new Matrix[String](FieldObject.standartCardHeight, FieldObject.standartFieldWidth, " ")
         hand.zipWithIndex.foreach((elem,index) => tmpMatrix = tmpMatrix.updateMatrixWithMatrix(0, FieldObject.standartSlotWidth * index + 1, hand(index).toMatrix))

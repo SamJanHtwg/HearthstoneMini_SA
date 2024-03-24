@@ -34,7 +34,7 @@ case class Fieldbar(cardArea: CardAreaInterface = new Cardarea(FieldObject.stand
     override def reduceAttackCount(slotNum: Int): Fieldbar = copy(cardArea = cardArea.reduceAttackCount(slotNum))
     override def toMatrix: Matrix[String] = {
         var old = matrix
-        cardArea.row.zipWithIndex.foreach((card, index) => card.fold({})((card) =>
+        cardArea.row.zipWithIndex.foreach((card, index) => card.fold({})(card =>
             old = old.updateMatrixWithMatrix(0, index * FieldObject.standartSlotWidth + 1, card.toMatrix)))
         old.updateMatrix(5,0, List[String]("-" * FieldObject.standartFieldWidth))
     }

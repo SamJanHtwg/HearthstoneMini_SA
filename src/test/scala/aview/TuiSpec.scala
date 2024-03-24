@@ -10,7 +10,7 @@ import scala.util.Success
 import model.fieldComponent.fieldImpl.Field
 
 
-class StrategySpec extends AnyWordSpec with Matchers {
+class TuiSpec extends AnyWordSpec with Matchers {
   "The Tui" when {
     val tui = new Tui(Controller(Field()))
     "checkInput is used" should {

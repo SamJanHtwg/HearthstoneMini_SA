@@ -8,6 +8,7 @@ import model.fieldComponent.FieldInterface
 import util.Command
 import scala.util.{Failure, Success, Try}
 
+//noinspection DuplicatedCode
 class AttackCommand(controller: Controller, move: Move) extends Command {
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _
@@ -23,7 +24,7 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
       if newField.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue <= 0 then
         newField = newField.destroyCard(1, move.fieldSlotInactive).reduceHp(1, difference)
 
-      if newField.players(0).isHpEmpty || newField.players(1).isHpEmpty
+      if newField.players.head.isHpEmpty || newField.players(1).isHpEmpty
       then controller.nextState()
       Success(newField)
     }

@@ -1,7 +1,7 @@
 package hearthstoneMini
 package aview.Gui
 
-import aview.Gui.enterPlayernamesScreen.EnterPlayernamesScreenImpl
+import aview.Gui.enterPlayernamesScreen.EnterPlayerNamesImpl
 import aview.Gui.mainGameScreen.MainGameScreen
 import aview.Gui.modeSelectionScreen.ModeSelectionScreenImpl
 import controller.GameState
@@ -17,7 +17,7 @@ import scalafx.scene.image.{Image, ImageView}
 import hearthstoneMini.controller.component.ControllerInterface
 
 
-class GUI(guiApp: GUIApp, controller: ControllerInterface) extends JFXApp3
+class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3
 {
   override def start(): Unit = {
     stage = new JFXApp3.PrimaryStage {
@@ -31,12 +31,11 @@ class GUI(guiApp: GUIApp, controller: ControllerInterface) extends JFXApp3
           () -> {
             controller.gameState match {
               case GameState.CHOOSEMODE => content = new ModeSelectionScreenImpl(controller = controller)
-              case GameState.ENTERPLAYERNAMES => content = new EnterPlayernamesScreenImpl(controller = controller)
+              case GameState.ENTERPLAYERNAMES => content = new EnterPlayerNamesImpl(controller = controller)
               case GameState.MAINGAME => content = new MainGameScreen(controller = controller)
-              case GameState.WIN => {
+              case GameState.WIN =>
                 content =  new MainGameScreen(controller = controller)
-                showWinDialog
-              }
+                showWinDialog()
             }
           }
         }
@@ -44,7 +43,7 @@ class GUI(guiApp: GUIApp, controller: ControllerInterface) extends JFXApp3
     }
   }
 
-  def showErrorDialog(msg: Option[String]) = {
+  def showErrorDialog(msg: Option[String]): Unit = {
     val exitButton = new ButtonType("close")
     val alert = new Alert(AlertType.Warning) {
       title = "Unable to proceed!"
@@ -59,7 +58,7 @@ class GUI(guiApp: GUIApp, controller: ControllerInterface) extends JFXApp3
   }
 
   
-  def showWinDialog: Unit = {
+  private def showWinDialog(): Unit = {
     val exitButton = new ButtonType("Exit")
     val alert = new Alert(AlertType.Confirmation) {
       title = "Congratulations!"

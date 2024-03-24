@@ -4,6 +4,7 @@ import model.fieldComponent.FieldInterface
 
 import scala.util.Try
 
+//noinspection UnitMethodIsParameterless,MutatorLikeMethodIsParameterless
 trait Command {
   def doStep: Try[FieldInterface]
   def undoStep: Unit
