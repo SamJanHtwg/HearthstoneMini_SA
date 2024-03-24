@@ -106,7 +106,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
       vgap = 10
       hgap = 10
     }
-    controller.field.getPlayerById(idInt).gamebar.hand.zipWithIndex.foreach(card => {
+    controller.field.getPlayerById(idInt).hand.zipWithIndex.foreach(card => {
       hand.add(renderCard(Some(card(0))), card(1), 0)
     })
     val deck: Rectangle = new Rectangle() {
@@ -115,7 +115,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
       width = 100
     }
     deck.onMouseClicked = event => {
-      if controller.field.getPlayerById(idInt).gamebar.hand.length < 5
+      if controller.field.getPlayerById(idInt).hand.length < 5
         && isActive
       then controller.drawCard()
     }
@@ -127,17 +127,17 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
     idInt % 2 match{
       case 0 =>
         add(deck,1,1)
-        add(new Label("Deck: " + controller.field.getPlayerById(idInt).gamebar.deck.length.toString),1,1)
+        add(new Label("Deck: " + controller.field.getPlayerById(idInt).deck.length.toString),1,1)
         add(friedhof, 1,0)
-        add(new Label("Friedhof: " + controller.field.getPlayerById(idInt).gamebar.friedhof.length.toString),1,0)
+        add(new Label("Friedhof: " + controller.field.getPlayerById(idInt).friedhof.length.toString),1,0)
         add(gamebar, 0,2)
         add(hand, 0,1)
         add(fieldbar, 0, 0)
       case 1 =>
         add(deck,1,1)
-        add(new Label("Deck: " + controller.field.getPlayerById(idInt).gamebar.deck.length.toString),1,1)
+        add(new Label("Deck: " + controller.field.getPlayerById(idInt).deck.length.toString),1,1)
         add(friedhof, 1,2)
-        add(new Label("Friedhof: " + controller.field.getPlayerById(idInt).gamebar.friedhof.length.toString),1,2)
+        add(new Label("Friedhof: " + controller.field.getPlayerById(idInt).friedhof.length.toString),1,2)
         add(gamebar, 0,0)
         add(hand, 0,1)
         add(fieldbar, 0, 2)

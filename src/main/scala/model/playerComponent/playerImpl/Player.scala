@@ -3,7 +3,6 @@ package model.playerComponent.playerImpl
 
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.{Field, FieldObject}
-import model.gamebarComponent.gamebarImpl.Gamebar
 import model.playerComponent.PlayerInterface
 import model.fieldbarComponent.fieldbarImpl.Fieldbar
 import model.fieldComponent.fieldImpl.{Field, FieldObject}
@@ -16,11 +15,13 @@ import hearthstoneMini.model.cardComponent.CardInterface
 import java.awt.MenuBar
 import scala.xml.Node
 import hearthstoneMini.model.fieldbarComponent.FieldbarInterface
-import hearthstoneMini.model.gamebarComponent.GamebarInterface
+import hearthstoneMini.util.CardProvider
 
 /** TODO:
  *    - Serialisierbarkeit Mana
  *    - Serialisierbarkeit Hp
+ *    - Check ob drawCard() logik passt
+ *    - karten zum friedhof hinzufügen sollte kein optional bekommen
  * */
 
 
@@ -33,7 +34,6 @@ object Player {
     manaValue = 0,
     maxManaValue = 1,
     fieldbar = Fieldbar.fromJson((json \\ "fieldbar").head),
-    gamebar = Gamebar.fromJson((json \\ "gamebar").head)
   )
 
   def fromXML(node: Node): Player = Player(
@@ -44,7 +44,6 @@ object Player {
     manaValue = 0,
     maxManaValue = 1,
     fieldbar = Fieldbar.fromXML((node \\ "fieldbar").head),
-    gamebar = Gamebar.fromXML((node \\ "gamebar").head)
   )
 }
 
@@ -54,16 +53,25 @@ case class Player(name: String = "Player",
                   maxHpValue: Int = 1,
                   maxManaValue: Int = 1,
                   manaValue: Int = 1,
+
+                  hand: List[CardInterface] = new CardProvider("/json/cards.json").getCards(5),
+
+                  deck: List[CardInterface] = new CardProvider("/json/cards.json").getCards(30),
+                  
+                  friedhof: Array[CardInterface] = Array[CardInterface](),
                   fieldbar: FieldbarInterface = new Fieldbar(FieldObject.standartSlotNum, None),
-                  gamebar: GamebarInterface = new Gamebar())
+                  )
 
   extends PlayerInterface {
-  override def placeCard(handSlot: Int, fieldSlot: Int): Player = copy(
-    fieldbar = fieldbar.placeCard(fieldSlot, gamebar.hand(handSlot)),
-    gamebar = gamebar.removeCardFromHand(handSlot))
-
+  
   // player
-  override def drawCard(): Player = copy(gamebar = gamebar.drawCard())
+  override def placeCard(handSlot: Int, fieldSlot: Int): Player = copy(
+    fieldbar = fieldbar.placeCard(fieldSlot, hand(handSlot)),
+    hand = removeCardFromHand(handSlot))
+  
+  private def removeCardFromHand(index: Int):List[CardInterface] = hand.filter(_ != hand(index))
+  
+  override def drawCard(): Player = copy(hand = hand.appended(deck(0)), deck = deck.slice(1, deck.length))
 
   override def reduceAttackCount(slotNum: Int): Player = copy(fieldbar = fieldbar.reduceAttackCount(slotNum))
 
@@ -71,7 +79,7 @@ case class Player(name: String = "Player",
 
   override def destroyCard(fieldSlot: Int): Player = copy(
     fieldbar = fieldbar.removeCard(fieldSlot),
-    gamebar = gamebar.addCardToFriedhof(fieldbar.cardArea.row(fieldSlot)))
+    friedhof = friedhof.appended(fieldbar.cardArea.row(fieldSlot).get))
 
   override def setName(name: String): Player = copy(name = name)
 
@@ -103,7 +111,6 @@ case class Player(name: String = "Player",
     FieldObject.standartFieldWidth,
     " ")
     .updateMatrixWithMatrix(0, 0, menueBar())
-    .updateMatrixWithMatrix(FieldObject.standartMenueBarHeight, 0, gamebar.toMatrix)
     .updateMatrixWithMatrix(FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight, 0,
       fieldbar.toMatrix)
 
@@ -111,7 +118,6 @@ case class Player(name: String = "Player",
     FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
     FieldObject.standartFieldWidth, " ")
     .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
-    .updateMatrixWithMatrix(FieldObject.standartFieldBarHeight, 0, gamebar.toMatrix)
     .updateMatrixWithMatrix(FieldObject.standartFieldBarHeight + FieldObject.standartGameBarHeight,
       0, menueBar())
 
@@ -130,7 +136,6 @@ case class Player(name: String = "Player",
     "name" -> name,
     "id" -> id,
     "fieldbar" -> fieldbar.toJson,
-    "gamebar" -> gamebar.toJson
   )
 
   override def toXML: Node =
@@ -141,9 +146,6 @@ case class Player(name: String = "Player",
       <id>
         {id.toString}
       </id>
-      <gamebar>
-        {gamebar.toXML}
-      </gamebar>
       <fieldbar>
         {fieldbar.toXML}
       </fieldbar>
