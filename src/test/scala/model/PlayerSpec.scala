@@ -1,7 +1,6 @@
 package hearthstoneMini
 package model
 
-import model.gamebarComponent.gamebarImpl.Gamebar
 import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -14,15 +13,13 @@ class PlayerSpec extends AnyWordSpec with Matchers {
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""))
 
   "A Player" when {
-    val player1 = Player(id = 1, gamebar = Gamebar(hand = testCards)).resetAndIncreaseMana()
+    val player1 = Player(id = 1, hand =  testCards).resetAndIncreaseMana()
     val player2 = Player(id = 2)
     "created player with ID = 1" should {
       "have ID 1" in {
         player1.id should be(1)
       }
-      "have a gamebar" in {
-        player1.gamebar shouldBe a[Gamebar]
-      }
+      
       "have a fieldbar" in {
         player1.fieldbar shouldBe a[Fieldbar]
       }
@@ -34,9 +31,7 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       "have ID 2" in {
         player2.id should be(2)
       }
-      "have a gamebar" in {
-        player2.gamebar shouldBe a[Gamebar]
-      }
+      
       "have a fieldbar" in {
         player2.fieldbar shouldBe a[Fieldbar]
       }
@@ -48,10 +43,10 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player1.placeCard(2,2).fieldbar.cardArea.row(2).isDefined should be(true)
     }
     "drawing a card" in {
-      player1.drawCard().gamebar.hand.length.intValue should be (5)
+      player1.drawCard().hand.length.intValue should be (5)
     }
     "destroying a card" in {
-      player1.placeCard(2,2).destroyCard(2).gamebar.friedhof.length should be (1)
+      player1.placeCard(2,2).destroyCard(2).friedhof.length should be (1)
     }
     "reducing hp" in {
       player1.reduceHp(20).hpValue should be (10)

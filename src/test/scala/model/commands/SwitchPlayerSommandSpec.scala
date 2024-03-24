@@ -16,16 +16,16 @@ import model.fieldComponent.fieldImpl.Field
 class SwitchPlayerSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "when switching players" in {
-      val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1)
-        .resetAndIncreaseMana(), Player(id = 2))))
+      val controller = Controller(Field(slotNum = 5, players = Map[Int,Player]((1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2)))))
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.doStep
       switchPlayer.memento should be (testField)
     }
     "undo / redo step" in {
-      val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1)
-        .resetAndIncreaseMana(), Player(id = 2))))
+      val controller = Controller(Field(slotNum = 5, players = Map[Int,Player]((1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2)))))
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.undoStep

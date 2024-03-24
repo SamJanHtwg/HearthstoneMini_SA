@@ -23,7 +23,7 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
       if newField.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue <= 0 then
         newField = newField.destroyCard(1, move.fieldSlotInactive).reduceHp(1, difference)
 
-      if newField.players(0).isHpEmpty || newField.players(1).isHpEmpty
+      if newField.players.values.filter(_.isHpEmpty).size != 0
       then controller.nextState()
       Success(newField)
     }

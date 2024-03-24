@@ -49,7 +49,7 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
   FieldObject.standartFieldWidth, " "),
                            slotNum: Int = FieldObject.standartSlotNum,
                            players: Map[Int, Player] = Map[Int, Player](),
-                           activePlayerId: Int,
+                           activePlayerId: Int = 1,
                            turns: Int = 0) extends FieldInterface() {
 
   def this(size: Int, player1: String, player2: String) = this(

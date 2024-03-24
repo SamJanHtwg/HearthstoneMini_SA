@@ -81,13 +81,11 @@ case class Controller @Inject() (var field: FieldInterface) extends ControllerIn
           notifyObservers(Event.PLAY, msg = None)
      }
      def getWinner(): Option[String] = {
-          val value = field.players.mapValues(player => !player.isHpEmpty)
-          
-          
-          // if p1Hp then Some(field.players(1).name)
-          // else if p2Hp then Some(field.players.head.name)
-          // else None
-          None
+          val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
+          playersWithHp.values.size match {
+               case 1 => Some(playersWithHp.values.head.name) 
+               case _ => None 
+          }
      }
      def saveField:Unit = {
           fileIO.save(this.field)
