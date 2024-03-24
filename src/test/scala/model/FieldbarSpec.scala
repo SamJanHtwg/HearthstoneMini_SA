@@ -14,7 +14,7 @@ class FieldbarSpec extends AnyWordSpec with Matchers {
       val fieldBar1 = new Fieldbar(5, None)
       val fieldBar2 = Fieldbar()
       "be able to place cards" in {
-        val newfield = fieldBar1.placeCard(1, new Card("Test", 1, 1, 1, "kann zaubern", "rare"))
+        val newfield = fieldBar1.placeCard(1, new Card("Test", 1, 1, 1, "kann zaubern", "rare", 0, ""))
         newfield.cardArea.row(1).get shouldBe a[Card]
       }
       "when card is removed" in {

@@ -9,9 +9,9 @@ import model.cardComponent.cardImpl.Card
 import model.fieldbarComponent.fieldbarImpl.Fieldbar
 
 class PlayerSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1"), Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1"))
+  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""))
 
   "A Player" when {
     val player1 = Player(id = 1, gamebar = Gamebar(hand = testCards)).resetAndIncreaseMana()
@@ -54,30 +54,30 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player1.placeCard(2,2).destroyCard(2).gamebar.friedhof.length should be (1)
     }
     "reducing hp" in {
-      player1.reduceHp(20).gamebar.hp.value should be (10)
+      player1.reduceHp(20).hpValue should be (10)
     }
     "increasing hp" in {
-      player1.increaseHp(20).gamebar.hp.value should be (50)
+      player1.increaseHp(20).hpValue should be (50)
     }
     "reducing mana" in {
-      player1.reduceMana(10).gamebar.mana.value should be (0)
+      player1.reduceMana(10).manaValue should be (0)
     }
     "increasing mana" in {
-      player1.increaseMana(50).gamebar.mana.value should be (2)
+      player1.increaseMana(50).manaValue should be (2)
     }
     "reset and increasing mana" in {
       val afterAlter = player1.resetAndIncreaseMana()
-      afterAlter.gamebar.mana.value should be (player1.gamebar.mana.value + 1)
-      afterAlter.gamebar.mana.max should be (player1.gamebar.mana.max + 1)
+      afterAlter.manaValue should be (player1.manaValue + 1)
+      afterAlter.maxManaValue should be (player1.maxManaValue + 1)
     }
     "set a player name" in {
       player1.setName("testName").name should be("testName")
     }
     "set HP value for a Player" in {
-      player1.setHpValue(50).gamebar.hp.value should be (50)
+      player1.setHpValue(50).hpValue should be (50)
     }
     "set Mana for a Player" in {
-      player2.setManaValue(40).gamebar.mana.value should be (40)
+      player2.setManaValue(40).manaValue should be (40)
     }
   }
 }

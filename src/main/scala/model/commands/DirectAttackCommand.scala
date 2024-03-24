@@ -18,7 +18,7 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
       memento = controller.field
       val newField = controller.field.reduceHp(1, controller.field.players.head.fieldbar.cardArea.
         slot(move.fieldSlotActive).get.attValue).reduceAttackCount(move.fieldSlotActive)
-      if (newField.players(0).gamebar.hp.isEmpty || newField.players(1).gamebar.hp.isEmpty)
+      if newField.players(0).isHpEmpty || newField.players(1).isHpEmpty
       then controller.nextState()
       Success(newField)
     } else

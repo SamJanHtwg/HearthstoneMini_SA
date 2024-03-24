@@ -24,7 +24,7 @@ class CardareaSpec extends AnyWordSpec with Matchers {
           cardArea.slot(0).isEmpty should be(true)
         }
         "allow replacing a slot with another String- returns a new CardArea" in {
-          val replacedCardArea = cardArea.replaceSlot(1, Some(Card("test", 2, 2, 2, "Schmettern", "rare")))
+          val replacedCardArea = cardArea.replaceSlot(1, Some(Card("test", 2, 2, 2, "Schmettern", "rare", 0 ,"")))
           replacedCardArea.slot(1).isDefined should be(true)
         }
     }

@@ -5,19 +5,17 @@ import _root_.hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import _root_.hearthstoneMini.model.playerComponent.playerImpl.Player
 import _root_.hearthstoneMini.model.gamebarComponent.gamebarImpl.Gamebar
 import _root_.hearthstoneMini.model.Move
-import _root_.hearthstoneMini.model.healthpointsComponent.healthpointsImpl.Healthpoints
 import hearthstoneMini.model.commands.AttackCommand
 import hearthstoneMini.controller.component.controllerImpl.Controller
-import hearthstoneMini.model.manaComponent.manaImpl.Mana
 
 class AttackCommandSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-    Card("test1", 1, 10, 1, "testEffect1", "testRarety1"), Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-    Card("test1", 1, 1, 20, "testEffect1", "testRarety1"))
+  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 10, 1, "testEffect1", "testRarety1", 1, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 20, "testEffect1", "testRarety1", 1, ""))
 
   "A controller" should {
-    val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1, gamebar = Gamebar(hand = testCards, hp = Healthpoints(1,1), mana = Mana(100,100)))
-      ,Player(id = 2, gamebar = Gamebar(hand = testCards, hp = Healthpoints(1,1),mana = Mana(100,100))))))
+    val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1, gamebar = Gamebar(hand = testCards))
+      ,Player(id = 2, gamebar = Gamebar(hand = testCards)))))
       controller.placeCard(Move(1,1))
       controller.switchPlayer()
       controller.placeCard(Move(0,1))

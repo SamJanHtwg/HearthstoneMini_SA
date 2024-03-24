@@ -81,8 +81,8 @@ case class Controller @Inject() (var field: FieldInterface) extends ControllerIn
           notifyObservers(Event.PLAY, msg = None)
      }
      def getWinner(): Option[String] = {
-          val p1Hp = field.players.head.gamebar.hp.isEmpty
-          val p2Hp = field.players(1).gamebar.hp.isEmpty
+          val p1Hp = field.players.head.isHpEmpty
+          val p2Hp = field.players(1).isHpEmpty
 
           if p1Hp then Some(field.players(1).name)
           else if p2Hp then Some(field.players.head.name)

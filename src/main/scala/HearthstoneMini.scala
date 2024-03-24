@@ -13,7 +13,7 @@ import scalafx.scene.text.FontWeight.Bold
 import hearthstoneMini.controller.component.ControllerInterface
 
 object HearthstoneMini {
-  val hearthstoneMiniRunner = new HearthstoneMiniRunner()
+  val hearthstoneMiniRunner = new HearthstoneMiniRunner(initGUI = true, initTUI = true)
 
   def main(args: Array[String]): Unit = {
     hearthstoneMiniRunner.play()
