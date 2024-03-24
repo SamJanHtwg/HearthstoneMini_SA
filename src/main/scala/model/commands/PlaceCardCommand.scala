@@ -31,6 +31,6 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move) extends Comm
   override def checkConditions: Boolean = controller.field.players.head.fieldbar.cardArea
       .slot(move.fieldSlotActive).isEmpty
     && move.handSlot < controller.field.players.head.gamebar.hand.length
-    && controller.field.players.head.gamebar.mana.value
+    && controller.field.players.head.manaValue
       >= controller.field.players.head.gamebar.hand(move.handSlot).manaCost
 }

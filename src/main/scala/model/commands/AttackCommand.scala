@@ -10,7 +10,7 @@ import scala.util.{Failure, Success, Try}
 
 class AttackCommand(controller: Controller, move: Move) extends Command {
   var memento: FieldInterface = controller.field
-  var newField: FieldInterface = null
+  var newField: FieldInterface = _
   var errorMsg: String = ""
 
   override def doStep: Try[FieldInterface] = {
@@ -23,7 +23,7 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
       if newField.players(1).fieldbar.cardArea.slot(move.fieldSlotInactive).get.defenseValue <= 0 then
         newField = newField.destroyCard(1, move.fieldSlotInactive).reduceHp(1, difference)
 
-      if (newField.players(0).gamebar.hp.isEmpty || newField.players(1).gamebar.hp.isEmpty)
+      if newField.players(0).isHpEmpty || newField.players(1).isHpEmpty
       then controller.nextState()
       Success(newField)
     }

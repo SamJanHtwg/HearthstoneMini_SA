@@ -48,12 +48,14 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
   def this(size: Int, player1: String, player2: String) = this(new Matrix[String](FieldObject.standartFieldHeight,
     FieldObject.standartSlotWidth * size, " "),
     size,
-    players = List[Player](Player(name = player1, id = 1), Player(name = player2, id = 2)))
+    players = List[Player](Player(name = player1, id = 1, manaValue = 0, maxManaValue = 1),
+      Player(name = player2, id = 2, manaValue = 0, maxManaValue = 1)))
 
   def this(size: Int) = this(new Matrix[String](FieldObject.standartFieldHeight, FieldObject.standartSlotWidth * size,
     " "),
     size,
-    players = List[Player](Player(id = 1), Player(id = 2)))
+    players = List[Player](Player(id = 1, manaValue = 0, maxManaValue = 1),
+      Player(id = 2, manaValue = 0, maxManaValue = 1)))
 
   override def placeCard(handSlot: Int, fieldSlot: Int): Field =
     copy(players = players.updated(0, players.head.placeCard(handSlot, fieldSlot).reduceMana(players.head.gamebar

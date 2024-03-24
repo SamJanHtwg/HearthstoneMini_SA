@@ -43,11 +43,11 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
         id = "hpbar"
         val bar: Rectangle = new Rectangle {
           height = 20
-          width = 300 * (controller.field.getPlayerById(idInt).gamebar.hp.value.toDouble /
-            controller.field.getPlayerById(idInt).gamebar.hp.max.toDouble)
+          width = 300 * (controller.field.getPlayerById(idInt).hpValue.toDouble /
+            controller.field.getPlayerById(idInt).maxHpValue.toDouble)
           fill = Green
         }
-        val amount = new Label("  " + controller.field.getPlayerById(idInt).gamebar.hp.value.toString)
+        val amount = new Label("  " + controller.field.getPlayerById(idInt).hpValue.toString)
         amount.setTextFill(White)
         add(bar, 0,0)
         add(amount,0,0)
@@ -55,11 +55,11 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
       val manaBar: GridPane = new GridPane() {
         val bar: Rectangle = new Rectangle {
           height = 20
-          width = 100 * (controller.field.getPlayerById(idInt).gamebar.mana.value.toDouble /
-            controller.field.getPlayerById(idInt).gamebar.mana.max.toDouble)
+          width = 100 * (controller.field.getPlayerById(idInt).manaValue.toDouble /
+            controller.field.getPlayerById(idInt).maxManaValue.toDouble)
           fill = Blue
         }
-        val amount = new Label("  " + controller.field.getPlayerById(idInt).gamebar.mana.value.toString)
+        val amount = new Label("  " + controller.field.getPlayerById(idInt).manaValue.toString)
         amount.setTextFill(White)
         add(bar, 0,0)
         add(amount,0,0)
