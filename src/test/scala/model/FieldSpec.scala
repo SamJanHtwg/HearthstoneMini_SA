@@ -14,9 +14,9 @@ import model.fieldComponent.fieldImpl.FieldObject
 class FieldSpec extends AnyWordSpec with Matchers {
   "A Field" when {
     "created" should {
-      val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1"), Card("test1", 1, 1, 1, "testEffect1", "testRarety1"),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1"), Card("test1", 1, 1, 1, "testEffect1", "testRarety1"))
+      val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""))
 
       val field0 = new Field(5, "Player1", "Player2")
       val field = new Field(slotNum = 5, players = List[Player](
@@ -44,22 +44,22 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field.drawCard().players(0).gamebar.hand.length should be(6)
       }
       "have 10 Hp when reduced by 20" in {
-        field.reduceHp(0, 20).players(0).gamebar.hp.value should be(10)
+        field.reduceHp(0, 20).players(0).hpValue should be(10)
       }
       "have 50 Hp when increased by 20" in {
-        field.increaseHp(20).players(0).gamebar.hp.value should be(50)
+        field.increaseHp(20).players(0).hpValue should be(50)
       }
       "have 0 Mana when reduced by 10" in {
-        field.reduceMana(10).players(0).gamebar.mana.value should be(0)
+        field.reduceMana(10).players(0).manaValue should be(0)
       }
       "have 1 Mana when increased" in {
-        field.increaseMana(20).players(1).gamebar.mana.value should be(1)
+        field.increaseMana(20).players(1).manaValue should be(1)
       }
       "switch the active player" in {
         val fieldAfterMove = field.switchPlayer()
         fieldAfterMove.players should be(field.players.reverse)
         val fieldAfter2ndMove = fieldAfterMove.switchPlayer()
-        fieldAfter2ndMove.players(0).gamebar.mana.value should be(3)
+        fieldAfter2ndMove.players(0).manaValue should be(3)
       }
       "return the active player" in {
         field.getActivePlayer should be(field.players(0))
@@ -75,17 +75,17 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
       "have reset and increased mana" in {
         val fieldAfterMove = field1.resetAndIncreaseMana()
-        fieldAfterMove.players(0).gamebar.mana.value should be(2)
-        fieldAfterMove.players(0).gamebar.mana.max should be(2)
-        fieldAfterMove.players(1).gamebar.mana.value should be(2)
-        fieldAfterMove.players(1).gamebar.mana.max should be(2)
+        fieldAfterMove.players(0).manaValue should be(2)
+        fieldAfterMove.players(0).maxManaValue should be(2)
+        fieldAfterMove.players(1).manaValue should be(2)
+        fieldAfterMove.players(1).maxManaValue should be(2)
       }
     }
      "when hp value is set" in {
-       Field().setHpValues(34).players(0).gamebar.hp.value should be (34)
+       Field().setHpValues(34).players(0).hpValue should be (34)
      }
     "when mana value is set" in {
-      Field().setManaValues(45).players(1).gamebar.mana.value should be (45)
+      Field().setManaValues(45).players(1).manaValue should be (45)
     }
   }
 }

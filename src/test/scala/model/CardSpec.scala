@@ -9,7 +9,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class CardSpec extends AnyWordSpec with Matchers {
    "A Card" when {
     "filled" should {
-      val card = new Card("test", 2, 2, 2, "Schmettern", "rare")
+      val card = new Card("test", 2, 2, 2, "Schmettern", "rare", 0, "")
       "have a String repesentation" in {
         card.toString() should be("test (2)#atk: 2#def: 2#Schmettern#rare")
       }
@@ -38,7 +38,7 @@ class CardSpec extends AnyWordSpec with Matchers {
     }
 
      "a empty Card when init" should  {
-       val emptyCard = new EmptyCard(defenseValue = 5, attackCount = 3)
+       val emptyCard = new EmptyCard(defenseValue = 5, attackCount = 3, "")
 
        "have standard values" in {
          emptyCard.name should be ("yolo")
