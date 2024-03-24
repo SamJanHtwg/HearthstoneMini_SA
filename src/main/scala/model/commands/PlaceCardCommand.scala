@@ -28,9 +28,9 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move) extends Comm
     memento = new_memento
   }
 
-  override def checkConditions: Boolean = controller.field.players.head.fieldbar.cardArea
+  override def checkConditions: Boolean = controller.field.players(controller.field.activePlayerId).fieldbar.cardArea
       .slot(move.fieldSlotActive).isEmpty
-    && move.handSlot < controller.field.players.head.hand.length
-    && controller.field.players.head.manaValue
-      >= controller.field.players.head.hand(move.handSlot).manaCost
+    && move.handSlot < controller.field.players(controller.field.activePlayerId).hand.length
+    && controller.field.players(controller.field.activePlayerId).manaValue
+      >= controller.field.players(controller.field.activePlayerId).hand(move.handSlot).manaCost
 }

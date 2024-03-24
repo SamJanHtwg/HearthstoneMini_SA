@@ -11,7 +11,8 @@ import scala.xml.Node
 import hearthstoneMini.model.playerComponent.PlayerInterface
 
 trait FieldInterface {
-  val players: List[PlayerInterface]
+  val players: Map[Int, PlayerInterface]
+  val activePlayerId: Int
   val matrix: Matrix[String]
   val slotNum: Int
   val turns: Int

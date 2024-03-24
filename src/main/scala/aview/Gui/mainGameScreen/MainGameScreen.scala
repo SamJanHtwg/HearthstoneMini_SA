@@ -35,7 +35,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
     vgap = 10
     hgap = 10
 
-    val isActive: Boolean = if controller.field.players.head.id.toString == id.value then true else false
+    val isActive: Boolean = controller.field.activePlayerId.toString == id.value 
     val gamebar: GridPane = new GridPane() {
       vgap = 10
       hgap = 10
@@ -68,7 +68,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
         val thatNodesX = getColumnIndex(event.getGestureSource.asInstanceOf[Node])
         if event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar" then {
           if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
-            event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players.head.id.toString
+            event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString
           then {
             controller.directAttack(Move(fieldSlotActive = thatNodesX))
           }
@@ -174,15 +174,15 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
       val thatNodesX = getColumnIndex(event.getGestureSource.asInstanceOf[Node])
       if (event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
         event.getGestureSource.asInstanceOf[Node].getParent.getId == "hand") then {
-        if (event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players.head.id.toString &&
-          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players.head.id.toString)
+        if (event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString &&
+          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString)
         then {
           controller.placeCard(Move(handSlot = thatNodesX, fieldSlotActive = thisNodesX))
         }
       } else if (event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
         event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar") then {
         if (event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
-          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players.head.id.toString)
+          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString)
         then {
           controller.attack(Move(fieldSlotInactive = thisNodesX, fieldSlotActive = thatNodesX))
         }

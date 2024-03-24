@@ -28,5 +28,5 @@ class DrawCardCommand(controller: Controller) extends Command {
     memento = new_memento
   }
 
-  override def checkConditions: Boolean = controller.field.players.head.hand.length < 5
+  override def checkConditions: Boolean = controller.field.players(controller.field.activePlayerId).hand.length < 5
 }
