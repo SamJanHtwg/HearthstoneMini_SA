@@ -50,10 +50,10 @@ object Player {
 
 case class Player(name: String = "Player",
                   id: Int,
-                  manaValue: Int = 1,
                   hpValue: Int = 5,
                   maxHpValue: Int = 1,
                   maxManaValue: Int = 1,
+                  manaValue: Int = 1,
                   fieldbar: FieldbarInterface = new Fieldbar(FieldObject.standartSlotNum, None),
                   gamebar: GamebarInterface = new Gamebar())
 

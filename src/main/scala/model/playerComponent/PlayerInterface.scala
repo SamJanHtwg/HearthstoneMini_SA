@@ -13,6 +13,8 @@ import hearthstoneMini.model.cardareaComponent.CardAreaInterface
 trait PlayerInterface {
   val id: Int
   val name: String
+  val hpValue: Int
+  val maxHpValue: Int
   val manaValue: Int
   val maxManaValue: Int
   val gamebar: GamebarInterface
