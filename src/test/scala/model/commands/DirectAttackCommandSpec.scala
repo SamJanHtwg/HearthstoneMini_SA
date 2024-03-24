@@ -15,11 +15,11 @@ class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
     val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1, gamebar = Gamebar())
       , Player(id = 2, gamebar = Gamebar()))))
 
-    controller.placeCard(Move(handSlot = 0, fieldSlotActive = 0))
+    controller.placeCard(Move())
     controller.switchPlayer()
     controller.switchPlayer()
     val field = controller.field
-    val directAttackCommand = new DirectAttackCommand(controller, Move(fieldSlotActive = 0))
+    val directAttackCommand = new DirectAttackCommand(controller, Move())
     "do step" in {
       directAttackCommand.doStep
       directAttackCommand.memento should be (field)

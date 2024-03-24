@@ -58,10 +58,10 @@ object Card {
         }
     }
 }
-case class Card(val name: String,
-           val manaCost: Int, val attValue: Int, val defenseValue: Int,
-           val effect: String, val rarity: String,
-           var attackCount: Int  = 1, val id: String)
+case class Card(name: String,
+                manaCost: Int, attValue: Int, defenseValue: Int,
+                effect: String, rarity: String,
+                var attackCount: Int  = 1, id: String)
   extends CardInterface {
     override def toString: String = name + " (" + manaCost + ")" + "#" + "atk: " + attValue + "#def: "
       + defenseValue + "#" + effect + "#" + rarity
@@ -93,9 +93,9 @@ case class Card(val name: String,
         </card>
 }
 
-case class EmptyCard(val name: String = "yolo", val manaCost: Int = 0,
-                val attValue: Int = 0, val defenseValue: Int = 0, val effect: String = "", val rarity: String = "",
-                var attackCount: Int = 0, val id: String)
+case class EmptyCard(name: String = "yolo", manaCost: Int = 0,
+                     attValue: Int = 0, defenseValue: Int = 0, effect: String = "", rarity: String = "",
+                     var attackCount: Int = 0, id: String)
   extends CardInterface {
 
   override def toJson: JsValue = ???

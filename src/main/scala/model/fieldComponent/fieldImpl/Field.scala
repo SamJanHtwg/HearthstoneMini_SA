@@ -38,6 +38,7 @@ object FieldObject {
   )
 }
 
+//noinspection DuplicatedCode
 case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObject.standartFieldHeight,
   FieldObject.standartFieldWidth, " "),
                            slotNum: Int = FieldObject.standartSlotNum,
@@ -48,14 +49,14 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
   def this(size: Int, player1: String, player2: String) = this(new Matrix[String](FieldObject.standartFieldHeight,
     FieldObject.standartSlotWidth * size, " "),
     size,
-    players = List[Player](Player(name = player1, id = 1, manaValue = 0, maxManaValue = 1),
-      Player(name = player2, id = 2, manaValue = 0, maxManaValue = 1)))
+    players = List[Player](Player(name = player1, id = 1, manaValue = 0),
+      Player(name = player2, id = 2, manaValue = 0)))
 
   def this(size: Int) = this(new Matrix[String](FieldObject.standartFieldHeight, FieldObject.standartSlotWidth * size,
     " "),
     size,
-    players = List[Player](Player(id = 1, manaValue = 0, maxManaValue = 1),
-      Player(id = 2, manaValue = 0, maxManaValue = 1)))
+    players = List[Player](Player(id = 1, manaValue = 0),
+      Player(id = 2, manaValue = 0)))
 
   override def placeCard(handSlot: Int, fieldSlot: Int): Field =
     copy(players = players.updated(0, players.head.placeCard(handSlot, fieldSlot).reduceMana(players.head.hand(handSlot).manaCost)))
@@ -92,7 +93,7 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
   override def setManaValues(amount: Int): Field = copy(players = players.updated(0, players.head.setManaValue(amount))
     .updated(1, players(1).setManaValue(amount)))
 
-  override def switchPlayer(): Field = if (turns != 0 && turns % 2 == 1)
+  override def switchPlayer(): Field = if turns != 0 && turns % 2 == 1
   then copy(players = players.updated(0, players.head.resetAndIncreaseMana()).updated(1, players(1)
       .resetAndIncreaseMana()).reverse, turns = turns + 1)
   else copy(players = players.reverse, turns = turns + 1)

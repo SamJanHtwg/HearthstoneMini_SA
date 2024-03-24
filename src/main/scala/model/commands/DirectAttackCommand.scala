@@ -10,6 +10,7 @@ import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
 
+//noinspection DuplicatedCode
 class DirectAttackCommand(controller: Controller, move: Move) extends Command {
   var memento: FieldInterface = controller.field
   var errorMsg: String = ""
@@ -18,7 +19,7 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
       memento = controller.field
       val newField = controller.field.reduceHp(1, controller.field.players.head.fieldbar.cardArea.
         slot(move.fieldSlotActive).get.attValue).reduceAttackCount(move.fieldSlotActive)
-      if newField.players(0).isHpEmpty || newField.players(1).isHpEmpty
+      if newField.players.head.isHpEmpty || newField.players(1).isHpEmpty
       then controller.nextState()
       Success(newField)
     } else

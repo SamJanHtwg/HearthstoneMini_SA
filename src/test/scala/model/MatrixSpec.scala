@@ -8,7 +8,7 @@ import org.scalatest.wordspec.AnyWordSpec
 class MatrixSpec extends AnyWordSpec with Matchers {
    "Matrix" when {
     "empty" should {
-      var matrix = new Matrix[String](20, 60, "|")
+      val matrix = new Matrix[String](20, 60, "|")
       val eol = sys.props("line.separator")
       "should have size and no Content" in {
         matrix.rowSize should be(20)

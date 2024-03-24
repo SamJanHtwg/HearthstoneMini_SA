@@ -19,8 +19,8 @@ import java.text.Annotation
 import scala.util.{Failure, Success, Try}
 
 case class Controller @Inject() (var field: FieldInterface) extends ControllerInterface {
-     val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
-     val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
+      private val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
+      private val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
      var gameState: GameState = GameState.CHOOSEMODE
      var errorMsg: Option[String] = None
      private val undoManager: UndoManager = new UndoManager
@@ -37,7 +37,8 @@ case class Controller @Inject() (var field: FieldInterface) extends ControllerIn
 
      private def doStep(command: Command): Unit = {
           command.doStep match {
-               case Success(newField) => {
+               case Success(newField) => //noinspection RedundantBlock
+               {
                     field = newField
                     undoManager.doStep(command)
                     errorMsg = None
@@ -70,7 +71,7 @@ case class Controller @Inject() (var field: FieldInterface) extends ControllerIn
                case GameState.MAINGAME => gameState = GameState.WIN
           }
      }
-     def setStrategy(strat: Strategy) = {
+     def setStrategy(strat: Strategy): Unit = {
           field = strat match {
                case Strategy.normal =>  field.setHpValues(30).setManaValues(1)
                case Strategy.hardcore =>  field.setHpValues(10).setManaValues(10)

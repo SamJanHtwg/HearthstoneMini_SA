@@ -23,5 +23,4 @@ build.properties
 *.semanticdb
 
 # mac
-.DS_Store
 

@@ -17,7 +17,7 @@ import _root_.hearthstoneMini.model.Move
 
 
 class ControllerSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
+  val testCards: List[Card] = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""))
 
@@ -35,7 +35,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           gamebar = Gamebar(hand = testCards)).resetAndIncreaseMana(),
           Player(id = 2))))
       controller.placeCard(Move(2, 2))
-      controller.field.players(0).fieldbar.cardArea.row(2).isDefined should be(true)
+      controller.field.players.head.fieldbar.cardArea.row(2).isDefined should be(true)
     }
     "draw a card" in {
       val controller = Controller(Field(slotNum = 5,
@@ -43,7 +43,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           gamebar = Gamebar(hand = testCards)).resetAndIncreaseMana(),
           Player(id = 2))))
       controller.drawCard()
-      controller.field.players(0).gamebar.hand.length should be(5)
+      controller.field.players.head.gamebar.hand.length should be(5)
     }
     "setting player names" in {
       val controller = Controller(Field(slotNum = 5,
@@ -51,7 +51,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           gamebar = Gamebar(hand = testCards)).resetAndIncreaseMana(),
           Player(id = 2))))
       controller.setPlayerNames(Move(p1 = "Jan", p2 = "Sam"))
-      controller.field.players(0).name should be("Jan")
+      controller.field.players.head.name should be("Jan")
       controller.field.players(1).name should be("Sam")
     }
     "attacking" in {
@@ -66,7 +66,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.placeCard(Move(2, 2))
       controller.switchPlayer()
       controller.attack(Move(fieldSlotActive = 2, fieldSlotInactive = 2))
-      controller.field.players(0).fieldbar.cardArea.row(3).isEmpty should be(true)
+      controller.field.players.head.fieldbar.cardArea.row(3).isEmpty should be(true)
     }
     "switching player" in {
       val controller = Controller(Field(slotNum = 5,
@@ -75,7 +75,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           Player(id = 2))))
       controller.setPlayerNames(Move(p2 = "Sam"))
       controller.switchPlayer()
-      controller.field.players(0).name should be("Sam")
+      controller.field.players.head.name should be("Sam")
     }
     "do a direct attack" in {
       val controller = Controller(Field(slotNum = 5,
@@ -93,9 +93,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           Player(id = 2))))
       controller.drawCard()
       controller.undo
-      controller.field.players(0).gamebar.hand.length should be(4)
+      controller.field.players.head.gamebar.hand.length should be(4)
       controller.redo
-      controller.field.players(0).gamebar.hand.length should be(5)
+      controller.field.players.head.gamebar.hand.length should be(5)
     }
     "setStrategy should set a strategy based on input" in {
       val controller = Controller(Field(slotNum = 5,
@@ -121,7 +121,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           Player(id = 2, gamebar = Gamebar(hand = testCards))), turns = 2))
       controller.placeCard(Move(2, 2))
       controller.directAttack(Move(fieldSlotActive = 2))
-      controller.getWinner().get should be(controller.field.players(0).name)
+      controller.getWinner().get should be(controller.field.players.head.name)
     }
 
   }
