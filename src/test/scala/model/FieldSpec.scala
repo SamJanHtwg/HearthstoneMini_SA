@@ -80,7 +80,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
     }
      "when hp value is set" in {
-       Field().setHpValues(34).players(0).hpValue should be (34)
+       Field().setHpValues(34).players.head.hpValue should be (34)
      }
     "when mana value is set" in {
       Field().setManaValues(45).players(1).manaValue should be (45)

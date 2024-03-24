@@ -45,6 +45,7 @@ object FieldObject {
   )
 }
 
+//noinspection DuplicatedCode
 case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObject.standartFieldHeight,
   FieldObject.standartFieldWidth, " "),
                            slotNum: Int = FieldObject.standartSlotNum,

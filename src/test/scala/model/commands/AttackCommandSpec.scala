@@ -8,7 +8,7 @@ import hearthstoneMini.model.commands.AttackCommand
 import hearthstoneMini.controller.component.controllerImpl.Controller
 
 class AttackCommandSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+  val testCards: List[Card] = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 10, 1, "testEffect1", "testRarety1", 1, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 1, 20, "testEffect1", "testRarety1", 1, ""))
 

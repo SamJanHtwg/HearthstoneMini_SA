@@ -16,7 +16,7 @@ import _root_.hearthstoneMini.model.Move
 
 
 class ControllerSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
+  val testCards: List[Card] = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0 , ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""))
 

@@ -8,7 +8,7 @@ import model.cardComponent.cardImpl.Card
 import model.fieldbarComponent.fieldbarImpl.Fieldbar
 
 class PlayerSpec extends AnyWordSpec with Matchers {
-  val testCards = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
+  val testCards: List[Card] = List[Card](Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""), Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""))
 

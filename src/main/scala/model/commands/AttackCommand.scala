@@ -8,6 +8,7 @@ import model.fieldComponent.FieldInterface
 import util.Command
 import scala.util.{Failure, Success, Try}
 
+//noinspection DuplicatedCode
 class AttackCommand(controller: Controller, move: Move) extends Command {
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _

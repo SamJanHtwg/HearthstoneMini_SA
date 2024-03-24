@@ -14,11 +14,11 @@ import hearthstoneMini.controller.component.ControllerInterface
 class Tui(controller: ControllerInterface) extends Observer {
   controller.add(this)
 
-  override def update(e: Event, msg: Option[String]) = {
+  override def update(e: Event, msg: Option[String]): Unit = {
     e match {
-      case Event.ERROR => msg.fold({})((msg) => println(msg))
+      case Event.ERROR => msg.fold({})(msg => println(msg))
       case Event.EXIT => println(Strings.endGameMsg)
-      case Event.PLAY => {
+      case Event.PLAY =>
         controller.gameState match {
           case GameState.CHOOSEMODE => println(Strings.chooseGameMode)
           case GameState.ENTERPLAYERNAMES => println(Strings.enterPlayerNames)
@@ -26,12 +26,11 @@ class Tui(controller: ControllerInterface) extends Observer {
           case GameState.WIN => println(Strings.zeilenUmbruch + controller.getWinner().getOrElse(" ")
             + Strings.gewonnenMsg)
         }
-      }
     }
   }
 
 
-  def onInput(input: String) = {
+  def onInput(input: String): Unit = {
     if checkInput(input) then {
       controller.gameState match {
         case GameState.CHOOSEMODE => setGameStrategy(input)
@@ -41,7 +40,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     }
   }
 
-  def setGameStrategy(input: String): Unit = {
+  private def setGameStrategy(input: String): Unit = {
     controller.setStrategy(input.toCharArray.head.asDigit match {
       case 1 => Strategy.normal
       case 2 => Strategy.hardcore
@@ -54,7 +53,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     controller.setPlayerNames(Move(p1 = splitInput(0), p2 = splitInput(1)))
   }
 
-  def printField(): Unit = {
+  private def printField(): Unit = {
     print(Strings.cleanScreen)
     println(controller.field.players(controller.field.activePlayerId).name + Strings.istDranMsg)
     println()
@@ -70,7 +69,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     }
   }
 
-  def EvalInput(input: String): Unit = {
+  private def EvalInput(input: String): Unit = {
     val chars = input.toCharArray
     chars(0) match
       case 'q' => controller.exitGame()

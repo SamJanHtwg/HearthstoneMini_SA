@@ -10,6 +10,7 @@ import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
 
+//noinspection DuplicatedCode
 class DirectAttackCommand(controller: Controller, move: Move) extends Command {
   var memento: FieldInterface = controller.field
   var errorMsg: String = ""

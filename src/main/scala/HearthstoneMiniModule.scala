@@ -14,9 +14,9 @@ import model.fileIOComponent.jsonIOImpl.FileIO as json
 import model.fileIOComponent.xmlIOImpl.FileIO as xml
 
 class HearthstoneMiniModule extends AbstractModule {
-  val defaultSize = 5
+  private val defaultSize = 5
 
-  override def configure() = {
+  override def configure(): Unit = {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind(classOf[ControllerInterface]).to(classOf[Controller])
     bind(classOf[FieldInterface]).toInstance(new Field(5))

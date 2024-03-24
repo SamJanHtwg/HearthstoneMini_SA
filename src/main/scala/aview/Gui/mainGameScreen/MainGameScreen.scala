@@ -19,18 +19,19 @@ import scalafx.scene.paint.Color.{Black, Blue, Green, Grey, Red, White}
 import scalafx.scene.shape.Rectangle
 import hearthstoneMini.model.cardComponent.CardInterface
 
+//noinspection DuplicatedCode
 class MainGameScreen(controller: ControllerInterface) extends GridPane {
   vgap = 20
   padding = Insets(20, 100, 10, 10)
 
-  val player1Grid: GridPane = renderPlayer(1)
-  val player2Grid: GridPane = renderPlayer(2)
+  private val player1Grid: GridPane = renderPlayer(1)
+  private val player2Grid: GridPane = renderPlayer(2)
 
   add(player1Grid, 0,0)
   add(player2Grid, 0,1)
   add(renderButtonGrid(),0,2)
 
-  def renderPlayer(idInt: Int): GridPane = new GridPane() {
+  private def renderPlayer(idInt: Int): GridPane = new GridPane() {
     id = idInt.toString
     vgap = 10
     hgap = 10
@@ -144,17 +145,17 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
     }
   }
 
-  def renderCard(card: Option[CardInterface]): Node = {
+  private def renderCard(card: Option[CardInterface]): Node = {
     val background1: Rectangle = new Rectangle() {
       height = 100
       width = 100
-      fill = if (card.isDefined) then Grey
+      fill = if card.isDefined then Grey
       else White
     }
 
     val mainGrid: GridPane = new GridPane() {
       add(background1, 0,0)
-      if (card.isDefined) then {
+      if card.isDefined then {
         val valueGrid: GridPane = new GridPane() {
           val label = new Label(card.get.name)
           val cost = new Label("cost: " + card.get.manaCost.toString)
@@ -165,24 +166,24 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
         add(valueGrid,0,0)
       }
     }
-    mainGrid.onDragDetected = (event) => {
+    mainGrid.onDragDetected = event => {
       mainGrid.startFullDrag()
     }
 
-    mainGrid.onMouseDragReleased = (event) => {
+    mainGrid.onMouseDragReleased = event => {
       val thisNodesX = getColumnIndex(event.getSource.asInstanceOf[Node])
       val thatNodesX = getColumnIndex(event.getGestureSource.asInstanceOf[Node])
-      if (event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
-        event.getGestureSource.asInstanceOf[Node].getParent.getId == "hand") then {
-        if (event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString &&
-          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString)
+      if event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
+        event.getGestureSource.asInstanceOf[Node].getParent.getId == "hand" then {
+        if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString &&
+          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString
         then {
           controller.placeCard(Move(handSlot = thatNodesX, fieldSlotActive = thisNodesX))
         }
-      } else if (event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
-        event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar") then {
-        if (event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
-          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString)
+      } else if event.getSource.asInstanceOf[Node].getParent.getId == "fieldbar" &&
+        event.getGestureSource.asInstanceOf[Node].getParent.getId == "fieldbar" then {
+        if event.getSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.players(1).id.toString &&
+          event.getGestureSource.asInstanceOf[Node].getParent.getParent.getId == controller.field.activePlayerId.toString
         then {
           controller.attack(Move(fieldSlotInactive = thisNodesX, fieldSlotActive = thatNodesX))
         }
@@ -190,16 +191,16 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
     }
     mainGrid
   }
-  def renderButtonGrid(): GridPane = new GridPane {
+  private def renderButtonGrid(): GridPane = new GridPane {
     val saveButton = new Button("save")
-    saveButton.onMouseClicked = (_) => controller.saveField
+    saveButton.onMouseClicked = _ => controller.saveField
     hgap = 10
     val switchButton = new Button("end turn")
-    switchButton.onMouseClicked = (_) => controller.switchPlayer()
+    switchButton.onMouseClicked = _ => controller.switchPlayer()
     val undoButton = new Button("undo")
-    undoButton.onMouseClicked = (_) => controller.undo
+    undoButton.onMouseClicked = _ => controller.undo
     val redoButton = new Button("redo")
-    redoButton.onMouseClicked = (_) => controller.redo
+    redoButton.onMouseClicked = _ => controller.redo
 
     add(switchButton,0,2)
     add(undoButton,1,2)

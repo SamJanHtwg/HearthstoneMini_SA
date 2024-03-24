@@ -13,7 +13,7 @@ import util.Observer
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 
-class SwitchPlayerSpec extends AnyWordSpec with Matchers {
+class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "when switching players" in {
       val controller = Controller(Field(slotNum = 5, players = Map[Int,Player]((1, Player(id = 1).resetAndIncreaseMana()),
