@@ -59,8 +59,7 @@ case class Field @Inject()(matrix: Matrix[String] = new Matrix[String](FieldObje
       Player(id = 2, manaValue = 0)))
 
   override def placeCard(handSlot: Int, fieldSlot: Int): Field =
-    copy(players = players.updated(0, players.head.placeCard(handSlot, fieldSlot).reduceMana(players.head.gamebar
-      .hand(handSlot).manaCost)))
+    copy(players = players.updated(0, players.head.placeCard(handSlot, fieldSlot).reduceMana(players.head.hand(handSlot).manaCost)))
 
   override def drawCard(): Field = copy(players = players.updated(0, players.head.drawCard()))
 
