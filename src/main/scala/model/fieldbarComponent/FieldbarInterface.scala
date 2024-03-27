@@ -13,7 +13,7 @@ trait FieldbarInterface {
   val size: Int
   val cardArea: CardAreaInterface
   val matrix: MatrixInterface
-  
+
   def placeCard(slot: Int, card: CardInterface): FieldbarInterface
   def removeCard(slot: Int): FieldbarInterface
   def toMatrix: Matrix[String]

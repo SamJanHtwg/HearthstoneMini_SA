@@ -13,76 +13,97 @@ import scala.xml.Node
 import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
 
 object Card {
-    @nowarn
-    given cardReads: Reads[Option[Card]] = (o:JsValue) => {
-        (o \ "type").validate[String] match
-            case JsSuccess("MINION", _) => JsSuccess(Some(Card(name = (o \ "name").as[String].grouped(10).toList.head,
-                (o \ "cost").as[Int], (o \ "attack").as[Int], (o \ "health").as[Int],
-                "Effect", "Rarity", id = (o \ "id").as[String])))
-            case JsSuccess(_, _) => JsSuccess(None)
-    }
-
-    def fromJSON(json: JsValue): Option[Card] = {
-        val jsonObj = (json \ "card").get
-        jsonObj.toString.replace("\"", "") match
-            case "none" => None
-            case _ => Some(
-                Card(
-                    name = (jsonObj \ "name").get.toString.replace("\"", ""),
-                    manaCost = (jsonObj \ "manaCost").get.toString().toInt,
-                    attValue = (jsonObj \ "attValue").get.toString.toInt,
-                    defenseValue = (jsonObj \ "defenseValue").get.toString.toInt,
-                    effect = (jsonObj \ "effect").get.toString.replace("\"", ""),
-                    rarity = (jsonObj \ "rarity").get.toString.replace("\"", ""),
-                    id = (jsonObj \ "id").get.toString.replace("\"", "")
-                )
+  @nowarn
+  given cardReads: Reads[Option[Card]] = (o: JsValue) => {
+    (o \ "type").validate[String] match
+      case JsSuccess("MINION", _) =>
+        JsSuccess(
+          Some(
+            Card(
+              name = (o \ "name").as[String].grouped(10).toList.head,
+              (o \ "cost").as[Int],
+              (o \ "attack").as[Int],
+              (o \ "health").as[Int],
+              "Effect",
+              "Rarity",
+              id = (o \ "id").as[String]
             )
-    }
+          )
+        )
+      case JsSuccess(_, _) => JsSuccess(None)
+  }
 
+  def fromJSON(json: JsValue): Option[Card] = {
+    val jsonObj = (json \ "card").get
+    jsonObj.toString.replace("\"", "") match
+      case "none" => None
+      case _ =>
+        Some(
+          Card(
+            name = (jsonObj \ "name").get.toString.replace("\"", ""),
+            manaCost = (jsonObj \ "manaCost").get.toString().toInt,
+            attValue = (jsonObj \ "attValue").get.toString.toInt,
+            defenseValue = (jsonObj \ "defenseValue").get.toString.toInt,
+            effect = (jsonObj \ "effect").get.toString.replace("\"", ""),
+            rarity = (jsonObj \ "rarity").get.toString.replace("\"", ""),
+            id = (jsonObj \ "id").get.toString.replace("\"", "")
+          )
+        )
+  }
 
-    def fromXML(node: Node): Option[Card] = {
-        val nodeObj = node \\ "card"
-        nodeObj.head.text match {
-            case "none" => None
-            case _ => Some(
-                Card(
-                    name = (node \\ "name").head.text,
-                    manaCost = (node \\ "manaCost").head.text.toInt,
-                    attValue = (node \\ "attValue").head.text.toInt,
-                    defenseValue = (node \\ "defenseValue").head.text.toInt,
-                    effect = (node \\ "effect").head.text,
-                    rarity = (node \\ "rarity").head.text,
-                    id = (node \\ "id").head.text
-                )
-            )
-        }
+  def fromXML(node: Node): Option[Card] = {
+    val nodeObj = node \\ "card"
+    nodeObj.head.text match {
+      case "none" => None
+      case _ =>
+        Some(
+          Card(
+            name = (node \\ "name").head.text,
+            manaCost = (node \\ "manaCost").head.text.toInt,
+            attValue = (node \\ "attValue").head.text.toInt,
+            defenseValue = (node \\ "defenseValue").head.text.toInt,
+            effect = (node \\ "effect").head.text,
+            rarity = (node \\ "rarity").head.text,
+            id = (node \\ "id").head.text
+          )
+        )
     }
+  }
 }
-case class Card(name: String,
-                manaCost: Int, attValue: Int, defenseValue: Int,
-                effect: String, rarity: String,
-                var attackCount: Int  = 1, id: String)
-  extends CardInterface {
-    override def toString: String = name + " (" + manaCost + ")" + "#" + "atk: " + attValue + "#def: "
+case class Card(
+    name: String,
+    manaCost: Int,
+    attValue: Int,
+    defenseValue: Int,
+    effect: String,
+    rarity: String,
+    var attackCount: Int = 1,
+    id: String
+) extends CardInterface {
+  override def toString: String =
+    name + " (" + manaCost + ")" + "#" + "atk: " + attValue + "#def: "
       + defenseValue + "#" + effect + "#" + rarity
-    override def toMatrix: Matrix[String] = new Matrix[String](FieldObject.standartCardHeight,
-        FieldObject.standartCardWidth, " ").updateMatrix(0, 0,
-        toString().split("#").toList)
-    override def reduceHP(amount: Int): Card = copy(defenseValue = defenseValue - amount)
-    override def reduceAttackCount(): Card = copy(attackCount = attackCount - 1)
-    override def resetAttackCount(): Card = copy(attackCount = 1)
+  override def toMatrix: Matrix[String] = new Matrix[String](
+    FieldObject.standartCardHeight,
+    FieldObject.standartCardWidth,
+    " "
+  ).updateMatrix(0, 0, toString().split("#").toList)
+  override def reduceHP(amount: Int): Card =
+    copy(defenseValue = defenseValue - amount)
+  override def reduceAttackCount(): Card = copy(attackCount = attackCount - 1)
+  override def resetAttackCount(): Card = copy(attackCount = 1)
 
-    def toJson: JsValue = Json.obj(
-        "id" -> id,
-        "name" -> name,
-        "manaCost" -> manaCost,
-        "attValue" -> attValue,
-        "defenseValue" -> defenseValue,
-        "effect" -> effect,
-        "rarity" -> rarity
-    )
-    def toXML: Node =
-        <card>
+  def toJson: JsValue = Json.obj(
+    "id" -> id,
+    "name" -> name,
+    "manaCost" -> manaCost,
+    "attValue" -> attValue,
+    "defenseValue" -> defenseValue,
+    "effect" -> effect,
+    "rarity" -> rarity
+  )
+  def toXML: Node =
+    <card>
             <id>{id}</id>
             <name>{name}</name>
             <manaCost>{manaCost.toString}</manaCost>
@@ -93,19 +114,30 @@ case class Card(name: String,
         </card>
 }
 
-case class EmptyCard(name: String = "yolo", manaCost: Int = 0,
-                     attValue: Int = 0, defenseValue: Int = 0, effect: String = "", rarity: String = "",
-                     var attackCount: Int = 0, id: String)
-  extends CardInterface {
+case class EmptyCard(
+    name: String = "yolo",
+    manaCost: Int = 0,
+    attValue: Int = 0,
+    defenseValue: Int = 0,
+    effect: String = "",
+    rarity: String = "",
+    var attackCount: Int = 0,
+    id: String
+) extends CardInterface {
 
   override def toJson: JsValue = ???
 
   override def toXML: Node = ???
 
-    override def toMatrix: Matrix[String] = new Matrix[String](FieldObject.standartCardHeight,
-        FieldObject.standartCardWidth, " ")
+  override def toMatrix: Matrix[String] = new Matrix[String](
+    FieldObject.standartCardHeight,
+    FieldObject.standartCardWidth,
+    " "
+  )
 
-    override def reduceHP(amount: Int): EmptyCard = copy(defenseValue = defenseValue - amount)
-    override def reduceAttackCount(): EmptyCard = copy(attackCount = attackCount - 1)
-    override def resetAttackCount(): CardInterface = copy(attackCount = 0)
+  override def reduceHP(amount: Int): EmptyCard =
+    copy(defenseValue = defenseValue - amount)
+  override def reduceAttackCount(): EmptyCard =
+    copy(attackCount = attackCount - 1)
+  override def resetAttackCount(): CardInterface = copy(attackCount = 0)
 }

@@ -22,7 +22,6 @@ trait PlayerInterface {
   val maxManaValue: Int
   val fieldbar: FieldbarInterface
 
-
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): PlayerInterface
 
@@ -35,21 +34,21 @@ trait PlayerInterface {
   def reduceDefVal(slotNum: Int, amount: Int): PlayerInterface
 
   def resetAttackCount(): PlayerInterface
-  
+
   def destroyCard(fieldSlot: Int): PlayerInterface
 
   // hp
   def reduceHp(amount: Int): PlayerInterface
 
   def setHpValue(amount: Int): PlayerInterface
-  
+
   def increaseHp(amount: Int): PlayerInterface
-  
+
   def isHpEmpty: Boolean
 
   // mana
   def reduceMana(amount: Int): PlayerInterface
-  
+
   def increaseMana(amount: Int): PlayerInterface
 
   def resetAndIncreaseMana(): PlayerInterface
@@ -66,7 +65,6 @@ trait PlayerInterface {
   def renderEvenId(): Matrix[String]
 
   def menueBar(): Matrix[String]
-  
 
   def toJson: JsValue
 

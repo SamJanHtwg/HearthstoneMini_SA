@@ -5,7 +5,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class MoveSpec extends AnyWordSpec with Matchers {
-   "A Move" when {
+  "A Move" when {
     "Created" should {
       "be created with Empty constructor and have default values" in {
         val move = Move()

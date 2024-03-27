@@ -9,15 +9,13 @@ import scala.util.Try
 import scala.util.Success
 import model.fieldComponent.fieldImpl.Field
 
-
 class TuiSpec extends AnyWordSpec with Matchers {
   "The Tui" when {
     val tui = new Tui(Controller(Field()))
     "checkInput is used" should {
       "return a Try" in {
-        tui.checkInput("1")should be (true)
+        tui.checkInput("1") should be(true)
       }
     }
   }
 }
-

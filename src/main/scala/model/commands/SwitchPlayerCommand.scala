@@ -17,7 +17,7 @@ class SwitchPlayerCommand(controller: Controller) extends Command {
   override def undoStep: Unit = {
     val new_memento = controller.field
     controller.field = memento
-    memento = new_memento  
+    memento = new_memento
   }
 
   override def redoStep: Unit = {

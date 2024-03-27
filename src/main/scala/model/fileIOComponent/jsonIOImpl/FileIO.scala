@@ -11,7 +11,7 @@ import scala.io.Source
 class FileIO extends FileIOInterface {
   override def load: Field = {
     val source = Source.fromFile("field.json")
-    val json = Json.parse( source.getLines().mkString )
+    val json = Json.parse(source.getLines().mkString)
     source.close()
     FieldObject.fromJson(json)
   }

@@ -12,15 +12,22 @@ import scalafx.scene.Node
 import scalafx.scene.control.{Button, RadioButton, ToggleGroup}
 import scalafx.scene.layout.GridPane
 
-class ModeSelectionScreenImpl(controller: ControllerInterface) extends GridPane with ModeSelectionScreenInterface {
+class ModeSelectionScreenImpl(controller: ControllerInterface)
+    extends GridPane
+    with ModeSelectionScreenInterface {
   val fileio = new FileIO
-  override val radiobuttons: Seq[RadioButton] = List(new RadioButton("Normal"), new RadioButton("Hardcore"),
-    new RadioButton("Debug"))
+  override val radiobuttons: Seq[RadioButton] = List(
+    new RadioButton("Normal"),
+    new RadioButton("Hardcore"),
+    new RadioButton("Debug")
+  )
   override val radiogroup: ToggleGroup = new ToggleGroup()
   radiobuttons.foreach(_.setToggleGroup(radiogroup))
   override val nextbutton: Button = new Button("next")
   nextbutton.onMouseClicked = _ =>
-    controller.setStrategy(radiogroup.getSelectedToggle.getUserData.asInstanceOf[Strategy])
+    controller.setStrategy(
+      radiogroup.getSelectedToggle.getUserData.asInstanceOf[Strategy]
+    )
 
   private val loadButton: Button = new Button("load")
   loadButton.onMouseClicked = _ => controller.loadField
@@ -33,10 +40,10 @@ class ModeSelectionScreenImpl(controller: ControllerInterface) extends GridPane 
   hgap = 10
   padding = Insets(20, 100, 10, 10)
 
-  add(radiobuttons.head,0,0)
-  add(radiobuttons(1),0,1)
-  add(radiobuttons(2),0,2)
-  add(nextbutton,1,3)
-  add(loadButton, 3,3)
+  add(radiobuttons.head, 0, 0)
+  add(radiobuttons(1), 0, 1)
+  add(radiobuttons(2), 0, 2)
+  add(nextbutton, 1, 3)
+  add(loadButton, 3, 3)
 
 }

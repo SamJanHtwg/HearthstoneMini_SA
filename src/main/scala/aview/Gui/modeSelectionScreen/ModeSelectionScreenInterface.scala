@@ -11,6 +11,12 @@ trait ModeSelectionScreenInterface extends scalafx.scene.layout.GridPane {
   val radiobuttons: Seq[RadioButton]
   val nextbutton: Button
 
-  override def add(child: Node, columnIndex: Int, rowIndex: Int, colspan: Int, rowspan: Int): Unit =
+  override def add(
+      child: Node,
+      columnIndex: Int,
+      rowIndex: Int,
+      colspan: Int,
+      rowspan: Int
+  ): Unit =
     super.add(child, columnIndex, rowIndex, colspan, rowspan)
 }

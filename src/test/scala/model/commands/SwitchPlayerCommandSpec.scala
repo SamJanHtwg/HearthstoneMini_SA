@@ -1,4 +1,3 @@
-
 package hearthstoneMini
 package model.commands
 
@@ -16,23 +15,37 @@ import model.fieldComponent.fieldImpl.Field
 class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "when switching players" in {
-      val controller = Controller(Field(slotNum = 5, players = Map[Int,Player]((1, Player(id = 1).resetAndIncreaseMana()),
-          (2, Player(id = 2)))))
+      val controller = Controller(
+        Field(
+          slotNum = 5,
+          players = Map[Int, Player](
+            (1, Player(id = 1).resetAndIncreaseMana()),
+            (2, Player(id = 2))
+          )
+        )
+      )
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.doStep
-      switchPlayer.memento should be (testField)
+      switchPlayer.memento should be(testField)
     }
     "undo / redo step" in {
-      val controller = Controller(Field(slotNum = 5, players = Map[Int,Player]((1, Player(id = 1).resetAndIncreaseMana()),
-          (2, Player(id = 2)))))
+      val controller = Controller(
+        Field(
+          slotNum = 5,
+          players = Map[Int, Player](
+            (1, Player(id = 1).resetAndIncreaseMana()),
+            (2, Player(id = 2))
+          )
+        )
+      )
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.undoStep
-      switchPlayer.memento should be (testField)
+      switchPlayer.memento should be(testField)
 
       switchPlayer.redoStep
-      switchPlayer.memento should be (testField)
+      switchPlayer.memento should be(testField)
     }
   }
 }

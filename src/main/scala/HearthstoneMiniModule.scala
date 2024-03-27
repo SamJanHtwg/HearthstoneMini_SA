@@ -21,6 +21,6 @@ class HearthstoneMiniModule extends AbstractModule {
     bind(classOf[ControllerInterface]).to(classOf[Controller])
     bind(classOf[FieldInterface]).toInstance(new Field(5))
     bind(classOf[FileIOInterface]).to(classOf[json])
-    //bind[FileIOInterface].to[jsonIOImpl.FileIO]
+    // bind[FileIOInterface].to[jsonIOImpl.FileIO]
   }
 }

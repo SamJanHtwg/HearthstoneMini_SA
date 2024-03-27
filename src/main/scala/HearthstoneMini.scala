@@ -13,30 +13,31 @@ import scalafx.scene.text.FontWeight.Bold
 import hearthstoneMini.controller.component.ControllerInterface
 
 object HearthstoneMini {
-  private val hearthstoneMiniRunner = new HearthstoneMiniRunner(initGUI = true, initTUI = true)
+  private val hearthstoneMiniRunner =
+    new HearthstoneMiniRunner(initGUI = true, initTUI = true)
 
   def main(args: Array[String]): Unit = {
     hearthstoneMiniRunner.play()
   }
 }
 
-class HearthstoneMiniRunner(initGUI: Boolean = false, initTUI: Boolean = false) {
+class HearthstoneMiniRunner(
+    initGUI: Boolean = false,
+    initTUI: Boolean = false
+) {
   val controller: ControllerInterface = Controller(new Field(5))
-  private val optionalTui: Option[Tui] = if (initTUI) Some(new Tui(controller)) else None
-  val optionalGUI: Option[GuiApp] = if (initGUI) Some(new GuiApp(controller)) else None
-  
+  private val optionalTui: Option[Tui] =
+    if (initTUI) Some(new Tui(controller)) else None
+  val optionalGUI: Option[GuiApp] =
+    if (initGUI) Some(new GuiApp(controller)) else None
+
   def play(): Unit = {
-    optionalTui.fold(null)( 
-      tui => 
-        tui.update(Event.PLAY, None)
-        while controller.gameState != GameState.EXIT && controller.gameState != GameState.WIN do {
-          tui.onInput(StdIn.readLine())
-        }
+    optionalTui.fold(null)(tui =>
+      tui.update(Event.PLAY, None)
+      while controller.gameState != GameState.EXIT && controller.gameState != GameState.WIN
+      do {
+        tui.onInput(StdIn.readLine())
+      }
     )
   }
 }
-
-
-
-
-
