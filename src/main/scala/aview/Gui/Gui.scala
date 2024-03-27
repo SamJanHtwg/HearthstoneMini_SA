@@ -16,9 +16,7 @@ import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.{Image, ImageView}
 import hearthstoneMini.controller.component.ControllerInterface
 
-
-class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3
-{
+class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3 {
   override def start(): Unit = {
     stage = new JFXApp3.PrimaryStage {
       title = "HearthstoneMini"
@@ -30,11 +28,14 @@ class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3
         Platform.runLater {
           () -> {
             controller.gameState match {
-              case GameState.CHOOSEMODE => content = new ModeSelectionScreenImpl(controller = controller)
-              case GameState.ENTERPLAYERNAMES => content = new EnterPlayerNamesImpl(controller = controller)
-              case GameState.MAINGAME => content = new MainGameScreen(controller = controller)
+              case GameState.CHOOSEMODE =>
+                content = new ModeSelectionScreenImpl(controller = controller)
+              case GameState.ENTERPLAYERNAMES =>
+                content = new EnterPlayerNamesImpl(controller = controller)
+              case GameState.MAINGAME =>
+                content = new MainGameScreen(controller = controller)
               case GameState.WIN =>
-                content =  new MainGameScreen(controller = controller)
+                content = new MainGameScreen(controller = controller)
                 showWinDialog()
             }
           }
@@ -57,13 +58,13 @@ class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3
     }
   }
 
-  
   private def showWinDialog(): Unit = {
     val exitButton = new ButtonType("Exit")
     val alert = new Alert(AlertType.Confirmation) {
       title = "Congratulations!"
       headerText = " "
-      contentText = s"${controller.getWinner().getOrElse(" ")} has won the Game!"
+      contentText =
+        s"${controller.getWinner().getOrElse(" ")} has won the Game!"
       graphic = new ImageView(new Image("/gifs/congrats.gif"))
       buttonTypes = Seq(exitButton)
     }
@@ -73,8 +74,5 @@ class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3
       case _ => stopApp()
     }
   }
-  override def stopApp():Unit = System.exit( 0 )
+  override def stopApp(): Unit = System.exit(0)
 }
-
-
-

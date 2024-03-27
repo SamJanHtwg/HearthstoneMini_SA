@@ -7,6 +7,14 @@ trait MatrixInterface {
   val rowSize: Int
   val colSize: Int
 
-  def updateMatrix(rowStart: Int, colStart: Int, stringList: List[String]): Matrix[String]
-  def updateMatrixWithMatrix(rowStart: Int, colStart: Int, insertMatrix: Matrix[String]): Matrix[String]
+  def updateMatrix(
+      rowStart: Int,
+      colStart: Int,
+      stringList: List[String]
+  ): Matrix[String]
+  def updateMatrixWithMatrix(
+      rowStart: Int,
+      colStart: Int,
+      insertMatrix: Matrix[String]
+  ): Matrix[String]
 }

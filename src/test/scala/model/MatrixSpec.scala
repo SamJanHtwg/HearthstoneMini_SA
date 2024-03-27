@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class MatrixSpec extends AnyWordSpec with Matchers {
-   "Matrix" when {
+  "Matrix" when {
     "empty" should {
       val matrix = new Matrix[String](20, 60, "|")
       val eol = sys.props("line.separator")
@@ -18,6 +18,6 @@ class MatrixSpec extends AnyWordSpec with Matchers {
         val newMa = matrix.updateMatrix(0, 0, string.split("#").toList)
       }
 
-      }
     }
   }
+}

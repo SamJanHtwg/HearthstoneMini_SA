@@ -9,7 +9,8 @@ import util.Command
 import scala.util.{Failure, Success, Try}
 import hearthstoneMini.controller.component.ControllerInterface
 
-class PlaceCardCommand(controller: ControllerInterface, move: Move) extends Command {
+class PlaceCardCommand(controller: ControllerInterface, move: Move)
+    extends Command {
   var memento: FieldInterface = controller.field
   override def doStep: Try[FieldInterface] = if checkConditions then {
     memento = controller.field
@@ -19,7 +20,7 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move) extends Comm
   override def undoStep: Unit = {
     val new_memento = controller.field
     controller.field = memento
-    memento = new_memento  
+    memento = new_memento
   }
 
   override def redoStep: Unit = {
@@ -28,9 +29,19 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move) extends Comm
     memento = new_memento
   }
 
-  override def checkConditions: Boolean = controller.field.players(controller.field.activePlayerId).fieldbar.cardArea
-      .slot(move.fieldSlotActive).isEmpty
-    && move.handSlot < controller.field.players(controller.field.activePlayerId).hand.length
+  override def checkConditions: Boolean = controller.field
+    .players(controller.field.activePlayerId)
+    .fieldbar
+    .cardArea
+    .slot(move.fieldSlotActive)
+    .isEmpty
+    && move.handSlot < controller.field
+      .players(controller.field.activePlayerId)
+      .hand
+      .length
     && controller.field.players(controller.field.activePlayerId).manaValue
-      >= controller.field.players(controller.field.activePlayerId).hand(move.handSlot).manaCost
+    >= controller.field
+      .players(controller.field.activePlayerId)
+      .hand(move.handSlot)
+      .manaCost
 }

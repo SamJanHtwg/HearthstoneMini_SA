@@ -16,12 +16,12 @@ trait FieldInterface {
   val matrix: Matrix[String]
   val slotNum: Int
   val turns: Int
-  
+
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): FieldInterface
 
   def getInactivePlayerId: Int
-  
+
   def drawCard(): FieldInterface
 
   def destroyCard(player: Int, slot: Int): FieldInterface
@@ -54,7 +54,6 @@ trait FieldInterface {
 
   def resetAndIncreaseMana(): FieldInterface
   def setManaValues(amount: Int): FieldInterface
-
 
   // matrix
   def toMatrix: Matrix[String]

@@ -25,5 +25,5 @@ trait ControllerInterface extends Observable {
   override def toString(): String
   def getWinner(): Option[String]
   def loadField: Unit
-  def saveField:Unit
+  def saveField: Unit
 }
