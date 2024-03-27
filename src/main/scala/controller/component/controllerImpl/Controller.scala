@@ -30,9 +30,10 @@ case class Controller @Inject() (var field: FieldInterface)
 
   def placeCard(move: Move): Unit = doStep(new PlaceCardCommand(this, move))
   def drawCard(): Unit = doStep(new DrawCardCommand(this))
-  def setPlayerNames(move: Move): Unit = {
+  def setPlayerNames(playername1: String, playername2: String): Unit = {
     nextState()
-    field = field.setPlayerNames(move.p1, move.p2)
+    field = field.setPlayerNames(playername1, playername2)
+    notifyObservers(Event.PLAY, msg = None)
   }
   def attack(move: Move): Unit = doStep(new AttackCommand(this, move))
   def directAttack(move: Move): Unit = doStep(

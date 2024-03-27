@@ -13,7 +13,7 @@ trait ControllerInterface extends Observable {
   var gameState: GameState
   def placeCard(move: Move): Unit
   def drawCard(): Unit
-  def setPlayerNames(move: Move): Unit
+  def setPlayerNames(playername1: String, playername2: String): Unit
   def attack(move: Move): Unit
   def directAttack(move: Move): Unit
   def switchPlayer(): Unit
