@@ -28,6 +28,9 @@ case class Controller @Inject() (var field: FieldInterface)
   var errorMsg: Option[String] = None
   private val undoManager: UndoManager = new UndoManager
 
+  def canUndo: Boolean = undoManager.canUndo
+  def canRedo: Boolean = undoManager.canRedo
+
   def placeCard(move: Move): Unit = doStep(new PlaceCardCommand(this, move))
   def drawCard(): Unit = doStep(new DrawCardCommand(this))
   def setPlayerNames(move: Move): Unit = {

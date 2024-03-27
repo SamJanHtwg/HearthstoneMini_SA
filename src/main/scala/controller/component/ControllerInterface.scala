@@ -11,6 +11,8 @@ trait ControllerInterface extends Observable {
   var errorMsg: Option[String]
   var field: FieldInterface
   var gameState: GameState
+  def canUndo: Boolean
+  def canRedo: Boolean
   def placeCard(move: Move): Unit
   def drawCard(): Unit
   def setPlayerNames(move: Move): Unit

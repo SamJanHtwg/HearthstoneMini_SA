@@ -57,8 +57,7 @@ case class Player(
     deck: List[CardInterface] =
       new CardProvider("/json/cards.json").getCards(30),
     friedhof: Array[CardInterface] = Array[CardInterface](),
-    field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None },
-
+    field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None }
 ) extends PlayerInterface {
 
   // player
@@ -74,7 +73,9 @@ case class Player(
     copy(hand = hand.appended(deck(0)), deck = deck.slice(1, deck.length))
 
   override def reduceAttackCount(slotNum: Int): Player =
-    copy(field = field.updated(slotNum, field(slotNum).map(_.reduceAttackCount())))
+    copy(field =
+      field.updated(slotNum, field(slotNum).map(_.reduceAttackCount()))
+    )
 
   override def resetAttackCount(): Player =
     copy(field = field.map(card => card.map(_.resetAttackCount())))
@@ -124,11 +125,11 @@ case class Player(
   )
     .updateMatrixWithMatrix(0, 0, menueBar())
 
-    // .updateMatrixWithMatrix(
-    //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
-    //   0,
-    //   field.toMatrix
-    // )
+  // .updateMatrixWithMatrix(
+  //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
+  //   0,
+  //   field.toMatrix
+  // )
 
   override def renderEvenId(): Matrix[String] = new Matrix[String](
     FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
@@ -165,7 +166,7 @@ case class Player(
 
   override def toJson: JsValue = Json.obj(
     "name" -> name,
-    "id" -> id,
+    "id" -> id
     // "field" -> field.toJson
   )
 
