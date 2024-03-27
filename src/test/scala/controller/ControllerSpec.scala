@@ -47,9 +47,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.placeCard(Move(2, 2))
       controller.field
         .players(controller.field.activePlayerId)
-        .fieldbar
-        .cardArea
-        .row(2)
+        .field(2)
         .isDefined should be(true)
     }
     "draw a card" in {
@@ -103,9 +101,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.attack(Move(fieldSlotActive = 2, fieldSlotInactive = 2))
       controller.field
         .players(controller.field.activePlayerId)
-        .fieldbar
-        .cardArea
-        .row(3)
+        .field(3)
         .isEmpty should be(true)
     }
     "switching player" in {

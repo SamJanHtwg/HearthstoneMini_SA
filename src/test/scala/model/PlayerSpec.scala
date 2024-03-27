@@ -5,7 +5,7 @@ import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import model.cardComponent.cardImpl.Card
-import model.fieldbarComponent.fieldbarImpl.Fieldbar
+import hearthstoneMini.model.cardComponent.CardInterface
 
 class PlayerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
@@ -23,8 +23,8 @@ class PlayerSpec extends AnyWordSpec with Matchers {
         player1.id should be(1)
       }
 
-      "have a fieldbar" in {
-        player1.fieldbar shouldBe a[Fieldbar]
+      "have a field" in {
+        player1.field shouldBe a[Vector[Option[CardInterface]]]
       }
       "have name Player by default" in {
         player1.name should be("Player")
@@ -36,14 +36,14 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       }
 
       "have a fieldbar" in {
-        player2.fieldbar shouldBe a[Fieldbar]
+        player2.field shouldBe a[Vector[Option[CardInterface]]]
       }
       "have name Player by default" in {
         player2.name should be("Player")
       }
     }
     "placing a card" in {
-      player1.placeCard(2, 2).fieldbar.cardArea.row(2).isDefined should be(true)
+      player1.placeCard(2, 2).field(2).isDefined should be(true)
     }
     "drawing a card" in {
       player1.drawCard().hand.length.intValue should be(5)

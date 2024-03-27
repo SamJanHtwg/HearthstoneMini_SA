@@ -6,8 +6,6 @@ import play.api.libs.json.JsValue
 
 import scala.xml.Node
 import scala.compiletime.ops.int
-import hearthstoneMini.model.fieldbarComponent.FieldbarInterface
-import hearthstoneMini.model.cardareaComponent.CardAreaInterface
 import hearthstoneMini.model.cardComponent.CardInterface
 
 trait PlayerInterface {
@@ -20,7 +18,7 @@ trait PlayerInterface {
   val maxHpValue: Int
   val manaValue: Int
   val maxManaValue: Int
-  val fieldbar: FieldbarInterface
+  val field: Vector[Option[CardInterface]]
 
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): PlayerInterface

@@ -31,9 +31,7 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move)
 
   override def checkConditions: Boolean = controller.field
     .players(controller.field.activePlayerId)
-    .fieldbar
-    .cardArea
-    .slot(move.fieldSlotActive)
+    .field(move.fieldSlotActive)
     .isEmpty
     && move.handSlot < controller.field
       .players(controller.field.activePlayerId)

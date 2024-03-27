@@ -19,16 +19,12 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
       val difference = Math.abs(
         controller.field
           .players(controller.field.activePlayerId)
-          .fieldbar
-          .cardArea
-          .slot(move.fieldSlotActive)
+          .field(move.fieldSlotActive)
           .get
           .attValue
           - controller.field
             .players(controller.field.getInactivePlayerId)
-            .fieldbar
-            .cardArea
-            .slot(move.fieldSlotInactive)
+            .field(move.fieldSlotInactive)
             .get
             .defenseValue
       )
@@ -36,18 +32,14 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
         move.fieldSlotInactive,
         controller.field
           .players(controller.field.activePlayerId)
-          .fieldbar
-          .cardArea
-          .slot(move.fieldSlotActive)
+          .field(move.fieldSlotActive)
           .get
           .attValue
       )
       newField = newField.reduceAttackCount(move.fieldSlotActive)
       if newField
           .players(controller.field.getInactivePlayerId)
-          .fieldbar
-          .cardArea
-          .slot(move.fieldSlotInactive)
+          .field(move.fieldSlotInactive)
           .get
           .defenseValue <= 0
       then
@@ -79,23 +71,17 @@ class AttackCommand(controller: Controller, move: Move) extends Command {
   override def checkConditions: Boolean =
     if controller.field
         .players(controller.field.activePlayerId)
-        .fieldbar
-        .cardArea
-        .slot(move.fieldSlotActive)
+        .field(move.fieldSlotActive)
         .isDefined
     then
       if controller.field
           .players(controller.field.getInactivePlayerId)
-          .fieldbar
-          .cardArea
-          .slot(move.fieldSlotInactive)
+          .field(move.fieldSlotInactive)
           .isDefined
       then
         if controller.field
             .players(controller.field.activePlayerId)
-            .fieldbar
-            .cardArea
-            .slot(move.fieldSlotActive)
+            .field(move.fieldSlotActive)
             .get
             .attackCount >= 1
         then
