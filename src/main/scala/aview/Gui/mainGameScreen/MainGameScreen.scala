@@ -124,9 +124,7 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
 
     controller.field
       .getPlayerById(idInt)
-      .fieldbar
-      .cardArea
-      .row
+      .field
       .zipWithIndex
       .foreach(card => {
         fieldbar.add(renderCard(card(0)), card(1), 0)

@@ -47,9 +47,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field0
           .placeCard(0, 0)
           .players(field.activePlayerId)
-          .fieldbar
-          .cardArea
-          .row(0)
+          .field(0)
           .isDefined should be(true)
       }
       "have no Card in slot 1 when remove a card in slot 1" in {
@@ -57,9 +55,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field1
           .destroyCard(0, 0)
           .players(field.activePlayerId)
-          .fieldbar
-          .cardArea
-          .row(0)
+          .field(0)
           .isDefined should be(false)
 
       }

@@ -1,10 +1,10 @@
 package hearthstoneMini
 package model.playerComponent.playerImpl
 
+import scala.collection.immutable.Vector
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.{Field, FieldObject}
 import model.playerComponent.PlayerInterface
-import model.fieldbarComponent.fieldbarImpl.Fieldbar
 import model.fieldComponent.fieldImpl.{Field, FieldObject}
 import model.fieldComponent.FieldInterface
 import model.matrixComponent.matrixImpl.Matrix
@@ -14,14 +14,15 @@ import hearthstoneMini.model.cardComponent.CardInterface
 
 import java.awt.MenuBar
 import scala.xml.Node
-import hearthstoneMini.model.fieldbarComponent.FieldbarInterface
 import hearthstoneMini.util.CardProvider
+import hearthstoneMini.model.cardComponent.cardImpl.Card
 
 /** TODO:
   *   - Serialisierbarkeit Mana
   *   - Serialisierbarkeit Hp
   *   - Check ob drawCard() logik passt
   *   - karten zum friedhof hinzufügen sollte kein optional bekommen
+  *   - renderEvenId() und renderUnevenId() fix field
   */
 
 object Player {
@@ -31,7 +32,7 @@ object Player {
     maxHpValue = 0,
     id = (json \\ "id").head.toString().toInt,
     manaValue = 0,
-    fieldbar = Fieldbar.fromJson((json \\ "fieldbar").head)
+    field = (json \\ "fieldbar").map(card => Card.fromJSON(card)).toVector
   )
 
   def fromXML(node: Node): Player = Player(
@@ -40,7 +41,7 @@ object Player {
     maxHpValue = 0,
     id = (node \\ "id").head.text.toInt,
     manaValue = 0,
-    fieldbar = Fieldbar.fromXML((node \\ "fieldbar").head)
+    field = (node \\ "field").map(card => Card.fromXML(card)).toVector
   )
 }
 
@@ -56,13 +57,13 @@ case class Player(
     deck: List[CardInterface] =
       new CardProvider("/json/cards.json").getCards(30),
     friedhof: Array[CardInterface] = Array[CardInterface](),
-    fieldbar: FieldbarInterface =
-      new Fieldbar(FieldObject.standartSlotNum, None)
+    field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None },
+
 ) extends PlayerInterface {
 
   // player
   override def placeCard(handSlot: Int, fieldSlot: Int): Player = copy(
-    fieldbar = fieldbar.placeCard(fieldSlot, hand(handSlot)),
+    field = field.updated(fieldSlot, Some(hand(handSlot))),
     hand = removeCardFromHand(handSlot)
   )
 
@@ -73,14 +74,14 @@ case class Player(
     copy(hand = hand.appended(deck(0)), deck = deck.slice(1, deck.length))
 
   override def reduceAttackCount(slotNum: Int): Player =
-    copy(fieldbar = fieldbar.reduceAttackCount(slotNum))
+    copy(field = field.updated(slotNum, field(slotNum).map(_.reduceAttackCount())))
 
   override def resetAttackCount(): Player =
-    copy(fieldbar = fieldbar.resetAttackCount())
+    copy(field = field.map(card => card.map(_.resetAttackCount())))
 
   override def destroyCard(fieldSlot: Int): Player = copy(
-    fieldbar = fieldbar.removeCard(fieldSlot),
-    friedhof = friedhof.appended(fieldbar.cardArea.row(fieldSlot).get)
+    field = field.updated(fieldSlot, None),
+    friedhof = friedhof.appended(field(fieldSlot).get)
   )
 
   override def setName(name: String): Player = copy(name = name)
@@ -122,18 +123,19 @@ case class Player(
     " "
   )
     .updateMatrixWithMatrix(0, 0, menueBar())
-    .updateMatrixWithMatrix(
-      FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
-      0,
-      fieldbar.toMatrix
-    )
+
+    // .updateMatrixWithMatrix(
+    //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
+    //   0,
+    //   field.toMatrix
+    // )
 
   override def renderEvenId(): Matrix[String] = new Matrix[String](
     FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
     FieldObject.standartFieldWidth,
     " "
   )
-    .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
+    // .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
     .updateMatrixWithMatrix(
       FieldObject.standartFieldBarHeight + FieldObject.standartGameBarHeight,
       0,
@@ -141,7 +143,7 @@ case class Player(
     )
 
   override def reduceDefVal(slotNum: Int, amount: Int): Player = copy(
-    fieldbar = fieldbar.reduceDefVal(slotNum, amount)
+    field = field.updated(slotNum, field(slotNum).map(_.reduceHP(amount)))
   )
 
   override def menueBar(): Matrix[String] = new Matrix[String](
@@ -164,7 +166,7 @@ case class Player(
   override def toJson: JsValue = Json.obj(
     "name" -> name,
     "id" -> id,
-    "fieldbar" -> fieldbar.toJson
+    // "field" -> field.toJson
   )
 
   override def toXML: Node =
@@ -173,10 +175,10 @@ case class Player(
         {name}
       </name>
       <id>
-        {id.toString}
+        // {id.toString}
       </id>
-      <fieldbar>
-        {fieldbar.toXML}
-      </fieldbar>
+      <field>
+        // {field}
+      </field>
     </Player>
 }

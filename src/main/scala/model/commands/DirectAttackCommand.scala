@@ -22,9 +22,7 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
           controller.field.getInactivePlayerId,
           controller.field
             .players(controller.field.activePlayerId)
-            .fieldbar
-            .cardArea
-            .slot(move.fieldSlotActive)
+            .field(move.fieldSlotActive)
             .get
             .attValue
         )
@@ -50,23 +48,17 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
   override def checkConditions: Boolean =
     if controller.field
         .players(controller.field.activePlayerId)
-        .fieldbar
-        .cardArea
-        .slot(move.fieldSlotActive)
+        .field(move.fieldSlotActive)
         .isDefined
     then
       if !(controller.field
           .players(controller.field.getInactivePlayerId)
-          .fieldbar
-          .cardArea
-          .row
+          .field
           .count(_.isDefined) > 0)
       then
         if controller.field
             .players(controller.field.activePlayerId)
-            .fieldbar
-            .cardArea
-            .slot(move.fieldSlotActive)
+            .field(move.fieldSlotActive)
             .get
             .attackCount >= 1
         then

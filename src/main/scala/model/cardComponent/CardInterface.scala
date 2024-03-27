@@ -25,6 +25,7 @@ trait CardInterface {
     FieldObject.standartCardWidth,
     " "
   )
+
   def toJson: JsValue
   def toXML: Node
 }
