@@ -32,7 +32,7 @@ case class Controller @Inject() (var field: FieldInterface)
   def drawCard(): Unit = doStep(new DrawCardCommand(this))
   def setPlayerNames(move: Move): Unit = {
     nextState()
-    doStep(new SetPlayerNamesCommand(this, move))
+    field = field.setPlayerNames(move.p1, move.p2)
   }
   def attack(move: Move): Unit = doStep(new AttackCommand(this, move))
   def directAttack(move: Move): Unit = doStep(
