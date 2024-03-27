@@ -86,7 +86,7 @@ case class Player(name: String = "Player",
 
   override def increaseHp(amount: Int): Player = copy(hpValue = Math.min(hpValue + amount, maxHpValue))
 
-  override def setHpValue(amount: Int): Player = copy(hpValue = amount)
+  override def setHpValue(amount: Int): Player = copy(hpValue = amount, maxHpValue = amount)
 
   override def isHpEmpty: Boolean = hpValue <= 0
 
@@ -99,7 +99,7 @@ case class Player(name: String = "Player",
 
   override def isManaEmpty: Boolean = manaValue <= 0
 
-  override def setManaValue(amount: Int): Player = copy(manaValue = amount)
+  override def setManaValue(amount: Int): Player = copy(manaValue = amount, maxManaValue = amount)
 
   // matrix
   override def toMatrix: Matrix[String] = if (id % 2) == 1 then renderUnevenId() else renderEvenId()

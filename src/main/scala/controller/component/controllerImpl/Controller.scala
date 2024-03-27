@@ -19,8 +19,8 @@ import java.text.Annotation
 import scala.util.{Failure, Success, Try}
 
 case class Controller @Inject() (var field: FieldInterface) extends ControllerInterface {
-      private val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
-      private val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
+     private val injector: Injector = Guice.createInjector(new HearthstoneMiniModule)
+     private val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
      var gameState: GameState = GameState.CHOOSEMODE
      var errorMsg: Option[String] = None
      private val undoManager: UndoManager = new UndoManager
@@ -82,12 +82,11 @@ case class Controller @Inject() (var field: FieldInterface) extends ControllerIn
           notifyObservers(Event.PLAY, msg = None)
      }
      def getWinner(): Option[String] = {
-          val p1Hp = field.players.head.isHpEmpty
-          val p2Hp = field.players(1).isHpEmpty
-
-          if p1Hp then Some(field.players(1).name)
-          else if p2Hp then Some(field.players.head.name)
-          else None
+          val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
+          playersWithHp.values.size match {
+               case 1 => Some(playersWithHp.values.head.name) 
+               case _ => None 
+          }
      }
      def saveField:Unit = {
           fileIO.save(this.field)

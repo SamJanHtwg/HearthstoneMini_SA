@@ -17,9 +17,9 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
   override def doStep: Try[FieldInterface] = {
     if checkConditions then {
       memento = controller.field
-      val newField = controller.field.reduceHp(1, controller.field.players.head.fieldbar.cardArea.
+      val newField = controller.field.reduceHp(controller.field.getInactivePlayerId, controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.
         slot(move.fieldSlotActive).get.attValue).reduceAttackCount(move.fieldSlotActive)
-      if newField.players.head.isHpEmpty || newField.players(1).isHpEmpty
+      if newField.players.values.filter(_.isHpEmpty).size != 0
       then controller.nextState()
       Success(newField)
     } else
@@ -40,9 +40,9 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
   }
 
   override def checkConditions: Boolean =
-    if controller.field.players.head.fieldbar.cardArea.slot(move.fieldSlotActive).isDefined then
-      if !(controller.field.players(1).fieldbar.cardArea.row.count(_.isDefined) > 0) then
-        if controller.field.players.head.fieldbar.cardArea.slot(move.fieldSlotActive).get.attackCount >= 1 then
+    if controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).isDefined then
+      if !(controller.field.players(controller.field.getInactivePlayerId).fieldbar.cardArea.row.count(_.isDefined) > 0) then
+        if controller.field.players(controller.field.activePlayerId).fieldbar.cardArea.slot(move.fieldSlotActive).get.attackCount >= 1 then
           if controller.field.turns > 1 then return true
           else
             errorMsg = "No player can attack in his first turn!"

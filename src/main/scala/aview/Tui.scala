@@ -55,7 +55,7 @@ class Tui(controller: ControllerInterface) extends Observer {
 
   private def printField(): Unit = {
     print(Strings.cleanScreen)
-    println(controller.field.players.head.name + Strings.istDranMsg)
+    println(controller.field.players(controller.field.activePlayerId).name + Strings.istDranMsg)
     println()
     println(controller.field.toString + Strings.zeilenUmbruch)
     println(Strings.commands)
@@ -83,7 +83,7 @@ class Tui(controller: ControllerInterface) extends Observer {
       case 'y' => controller.redo
   }
 
-  override def toString: String = controller.field.players.head.name + Strings.istDranMsg +
+  override def toString(): String = controller.field.players(controller.field.activePlayerId).name + Strings.istDranMsg +
     Strings.zeilenUmbruch + controller.field.toString + Strings.commands
 }
 

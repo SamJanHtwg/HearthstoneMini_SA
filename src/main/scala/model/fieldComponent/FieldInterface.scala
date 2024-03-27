@@ -11,7 +11,8 @@ import scala.xml.Node
 import hearthstoneMini.model.playerComponent.PlayerInterface
 
 trait FieldInterface {
-  val players: List[PlayerInterface]
+  val players: Map[Int, PlayerInterface]
+  val activePlayerId: Int
   val matrix: Matrix[String]
   val slotNum: Int
   val turns: Int
@@ -19,6 +20,8 @@ trait FieldInterface {
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): FieldInterface
 
+  def getInactivePlayerId: Int
+  
   def drawCard(): FieldInterface
 
   def destroyCard(player: Int, slot: Int): FieldInterface

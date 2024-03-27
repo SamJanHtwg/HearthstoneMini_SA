@@ -15,16 +15,16 @@ import model.fieldComponent.fieldImpl.Field
 class SetPlayerNamesSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "when setting names" in {
-      val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1)
-        .resetAndIncreaseMana(), Player(id = 2))))
+      val controller = Controller(Field(slotNum = 5, players = Map[Int, Player]((1, Player(id = 1)
+        .resetAndIncreaseMana()), (2,Player(id = 2)))))
       val setPlayerNames = new SetPlayerNamesCommand(controller, Move(p1 = "Sam", p2 = "Jan"))
       val testField = controller.field
       setPlayerNames.doStep
       setPlayerNames.memento should be (testField)
     }
     "undo / redo step" in {
-      val controller = Controller(Field(slotNum = 5, players = List[Player](Player(id = 1)
-        .resetAndIncreaseMana(), Player(id = 2))))
+      val controller = Controller(Field(slotNum = 5, players = Map[Int, Player]((1, Player(id = 1)
+        .resetAndIncreaseMana()), (2,Player(id = 2)))))
       val setPlayerNames = new SetPlayerNamesCommand(controller, Move(p1 = "Sam", p2 = "Jan"))
       val testField = controller.field
       setPlayerNames.undoStep
