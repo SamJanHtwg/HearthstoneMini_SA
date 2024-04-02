@@ -5,6 +5,10 @@ package util
 class UndoManager {
   private var undoStack: List[Command] = Nil
   private var redoStack: List[Command] = Nil
+
+  def canUndo: Boolean = undoStack.nonEmpty
+  def canRedo: Boolean = redoStack.nonEmpty
+
   def doStep(command: Command): Unit = {
     undoStack = command :: undoStack
   }

@@ -299,8 +299,10 @@ class MainGameScreen(controller: ControllerInterface) extends GridPane {
     switchButton.onMouseClicked = _ => controller.switchPlayer()
     val undoButton = new Button("undo")
     undoButton.onMouseClicked = _ => controller.undo
+    undoButton.disable = !controller.canUndo
     val redoButton = new Button("redo")
     redoButton.onMouseClicked = _ => controller.redo
+    redoButton.disable = !controller.canRedo
 
     add(switchButton, 0, 2)
     add(undoButton, 1, 2)

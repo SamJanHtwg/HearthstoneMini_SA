@@ -23,36 +23,33 @@ import model.fileIOComponent.jsonIOImpl.FileIO
 class EnterPlayerNamesImpl(controller: ControllerInterface)
     extends GridPane
     with EnterPlayerNamesScreenInterface {
-  override val textfields: Seq[TextField] = Seq(
-    new TextField() { promptText = "Player 1" },
-    new TextField() { promptText = "Player 2" }
+  override val textfields: Seq[TextField] = Seq.tabulate(2)(index =>
+    new TextField() { promptText = s"Player ${index + 1}" }
   )
   override val labels: Seq[Label] =
-    Seq(new Label("Player1"), new Label("Player2"))
+    Seq.tabulate(2)(index => new Label("Player" + (index + 1)))
   override val nextButton: Button = new Button("next")
 
-  nextButton.disable = true
-  private var bool1, bool2: Boolean = false
+  private def updateDisabledState: Unit = {
+    nextButton.disable = textfields.exists(_.text.value.trim.isEmpty)
+  }
+
+  updateDisabledState
+
   nextButton.onMouseClicked = _ => {
     controller.setPlayerNames(
       playername1 = textfields.head.text.value,
       playername2 = textfields(1).text.value
     )
   }
-  textfields.head.text.onChange { // noinspection DuplicatedCode
-    (_, _, newValue) =>
+
+  textfields.map(textField =>
+    textField.text.onChange { (_, _, newValue) =>
       {
-        bool1 = newValue.trim().isEmpty
-        nextButton.disable = bool1 && bool2
+        updateDisabledState
       }
-  }
-  textfields(1).text.onChange { // noinspection DuplicatedCode
-    (_, _, newValue) =>
-      {
-        bool2 = newValue.trim().isEmpty
-        nextButton.disable = bool1 && bool2
-      }
-  }
+    }
+  )
 
   vgap = 10
   hgap = 10
