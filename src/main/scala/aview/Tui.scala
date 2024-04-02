@@ -51,7 +51,10 @@ class Tui(controller: ControllerInterface) extends Observer {
 
   def setPlayerNames(input: String): Unit = {
     val splitInput = input.split(" ")
-    controller.setPlayerNames(Move(p1 = splitInput(0), p2 = splitInput(1)))
+    controller.setPlayerNames(
+      playername1 = splitInput(0),
+      playername2 = splitInput(1)
+    )
   }
 
   private def printField(): Unit = {

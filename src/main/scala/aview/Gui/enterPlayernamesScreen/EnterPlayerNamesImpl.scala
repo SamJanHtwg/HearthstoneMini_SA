@@ -38,7 +38,8 @@ class EnterPlayerNamesImpl(controller: ControllerInterface)
 
   nextButton.onMouseClicked = _ => {
     controller.setPlayerNames(
-      Move(p1 = textfields.head.text.value, p2 = textfields(1).text.value)
+      playername1 = textfields.head.text.value,
+      playername2 = textfields(1).text.value
     )
   }
 
