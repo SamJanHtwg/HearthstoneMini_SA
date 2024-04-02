@@ -76,13 +76,13 @@ class FieldSpec extends AnyWordSpec with Matchers {
         )
       }
       "have 1 Mana when increased" in {
-        field = field.copy(players = field.players.updated(1, field.players(1).copy(manaValue = 1, maxManaValue = 1)))
-        field.increaseMana(20).players(1).manaValue should be(1)
+        field = field.copy(players = field.players.updated(1, field.players(1).copy(manaValue = 1, maxManaValue = 2)))
+        field.increaseMana(20).players(1).manaValue should be(2)
       }
       "switch the active player" in {
         val fieldAfterMove = field.switchPlayer()
         fieldAfterMove.activePlayerId should be(
-          field.players(field.getInactivePlayerId).id
+         field.getInactivePlayerId
         )
         val fieldAfter2ndMove = fieldAfterMove.switchPlayer()
         fieldAfter2ndMove.players(field.activePlayerId).manaValue should be(3)
