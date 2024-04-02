@@ -1,32 +1,55 @@
 package hearthstoneMini
-package model.commands
+package util.commands.commandImpl
 
 import model.Move
 import controller.GameState
 import controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.Card
-import util.Command
 import model.fieldComponent.FieldInterface
-import model.fieldComponent.fieldImpl.Field
-import scala.util.{Success, Try, Failure}
+import scala.util.{Failure, Success, Try}
+import hearthstoneMini.util.commands.CommandInterface
 
 //noinspection DuplicatedCode
-class DirectAttackCommand(controller: Controller, move: Move) extends Command {
+class AttackCommand(controller: Controller, move: Move) extends CommandInterface {
   var memento: FieldInterface = controller.field
+  var newField: FieldInterface = _
   var errorMsg: String = ""
+
   override def doStep: Try[FieldInterface] = {
     if checkConditions then {
-      memento = controller.field
-      val newField = controller.field
-        .reduceHp(
-          controller.field.getInactivePlayerId,
-          controller.field
-            .players(controller.field.activePlayerId)
-            .field(move.fieldSlotActive)
+      val difference = Math.abs(
+        controller.field
+          .players(controller.field.activePlayerId)
+          .field(move.fieldSlotActive)
+          .get
+          .attValue
+          - controller.field
+            .players(controller.field.getInactivePlayerId)
+            .field(move.fieldSlotInactive)
             .get
-            .attValue
-        )
-        .reduceAttackCount(move.fieldSlotActive)
+            .defenseValue
+      )
+      newField = controller.field.reduceDefVal(
+        move.fieldSlotInactive,
+        controller.field
+          .players(controller.field.activePlayerId)
+          .field(move.fieldSlotActive)
+          .get
+          .attValue
+      )
+      newField = newField.reduceAttackCount(move.fieldSlotActive)
+      if newField
+          .players(controller.field.getInactivePlayerId)
+          .field(move.fieldSlotInactive)
+          .get
+          .defenseValue <= 0
+      then
+        newField = newField
+          .destroyCard(
+            controller.field.getInactivePlayerId,
+            move.fieldSlotInactive
+          )
+          .reduceHp(controller.field.getInactivePlayerId, difference)
+
       if newField.players.values.filter(_.isHpEmpty).size != 0
       then controller.nextState()
       Success(newField)
@@ -51,10 +74,10 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
         .field(move.fieldSlotActive)
         .isDefined
     then
-      if !(controller.field
+      if controller.field
           .players(controller.field.getInactivePlayerId)
-          .field
-          .count(_.isDefined) > 0)
+          .field(move.fieldSlotInactive)
+          .isDefined
       then
         if controller.field
             .players(controller.field.activePlayerId)
@@ -65,9 +88,7 @@ class DirectAttackCommand(controller: Controller, move: Move) extends Command {
           if controller.field.turns > 1 then return true
           else errorMsg = "No player can attack in his first turn!"
         else errorMsg = "Each Card can only attack once each turn!"
-      else
-        errorMsg =
-          "Make sure your Opponents field is empty before you attack directly"
+      else errorMsg = "Make sure you select a Card of your Opponent"
     else errorMsg = "You cant attack with an empty Card slot!"
     false
 }

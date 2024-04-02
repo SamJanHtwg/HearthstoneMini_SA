@@ -5,8 +5,8 @@ import hearthstoneMini.model.playerComponent.playerImpl
 import hearthstoneMini.controller.component.controllerImpl.Controller
 import hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import hearthstoneMini.model.playerComponent.playerImpl.Player
-import hearthstoneMini.model.commands.DirectAttackCommand
 import hearthstoneMini.model.Move
+import hearthstoneMini.util.commands.commandImpl.DirectAttackCommand
 
 class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {

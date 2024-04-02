@@ -1,15 +1,16 @@
 package hearthstoneMini
 package util
+import hearthstoneMini.util.commands.CommandInterface
 
 //noinspection UnitMethodIsParameterless
 class UndoManager {
-  private var undoStack: List[Command] = Nil
-  private var redoStack: List[Command] = Nil
+  private var undoStack: List[CommandInterface] = Nil
+  private var redoStack: List[CommandInterface] = Nil
 
   def canUndo: Boolean = undoStack.nonEmpty
   def canRedo: Boolean = redoStack.nonEmpty
 
-  def doStep(command: Command): Unit = {
+  def doStep(command: CommandInterface): Unit = {
     undoStack = command :: undoStack
   }
   def undoStep: Unit = {
