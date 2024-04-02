@@ -1,21 +1,16 @@
 package hearthstoneMini
 package model.playerComponent.playerImpl
 
-import scala.collection.immutable.Vector
-import model.fieldComponent.FieldInterface
-import model.fieldComponent.fieldImpl.{Field, FieldObject}
-import model.playerComponent.PlayerInterface
-import model.fieldComponent.fieldImpl.{Field, FieldObject}
-import model.fieldComponent.FieldInterface
-import model.matrixComponent.matrixImpl.Matrix
-import play.api.libs.json.*
-import aview.Strings
 import hearthstoneMini.model.cardComponent.CardInterface
-
-import java.awt.MenuBar
-import scala.xml.Node
-import hearthstoneMini.util.CardProvider
 import hearthstoneMini.model.cardComponent.cardImpl.Card
+import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
+import hearthstoneMini.model.matrixComponent.matrixImpl.Matrix
+import hearthstoneMini.model.playerComponent.PlayerInterface
+import hearthstoneMini.util.CardProvider
+import play.api.libs.json.*
+
+import scala.collection.immutable.Vector
+import scala.xml.Node
 
 /** TODO:
   *   - Serialisierbarkeit Mana
@@ -60,6 +55,23 @@ case class Player(
     field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None }
 ) extends PlayerInterface {
 
+  private enum ValueType {
+    case HP, MANA
+  }
+
+  private def updateValue(valueType: ValueType): Int => Player = {
+    (amount: Int) => {
+      val updatedValue = valueType match {
+        case ValueType.HP => Math.max(Math.min(hpValue + amount, maxHpValue), 0)
+        case ValueType.MANA => Math.min(Math.max(manaValue + amount, 0), maxManaValue)
+      }
+      valueType match {
+        case ValueType.HP => copy(hpValue = updatedValue)
+        case ValueType.MANA => copy(manaValue = updatedValue)
+      }
+    }
+  }
+
   // player
   override def placeCard(handSlot: Int, fieldSlot: Int): Player = copy(
     field = field.updated(fieldSlot, Some(hand(handSlot))),
@@ -70,7 +82,7 @@ case class Player(
     hand.filter(_ != hand(index))
 
   override def drawCard(): Player =
-    copy(hand = hand.appended(deck(0)), deck = deck.slice(1, deck.length))
+    copy(hand = hand.appended(deck.head), deck = deck.slice(1, deck.length))
 
   override def reduceAttackCount(slotNum: Int): Player =
     copy(field =
@@ -87,32 +99,25 @@ case class Player(
 
   override def setName(name: String): Player = copy(name = name)
 
-  // hp
-  override def reduceHp(amount: Int): Player =
-    copy(hpValue = Math.max(hpValue - amount, 0))
+  // HP
+  override def reduceHp(amount: Int): Player = updateValue(ValueType.HP)(-amount)
 
-  override def increaseHp(amount: Int): Player =
-    copy(hpValue = Math.min(hpValue + amount, maxHpValue))
+  override def increaseHp(amount: Int): Player = updateValue(ValueType.HP)(amount)
 
-  override def setHpValue(amount: Int): Player =
-    copy(hpValue = amount, maxHpValue = amount)
+  override def setHpValue(amount: Int): Player = copy(hpValue = amount, maxHpValue = amount)
 
   override def isHpEmpty: Boolean = hpValue <= 0
 
-  // mana
-  override def reduceMana(amount: Int): Player =
-    copy(manaValue = Math.max(manaValue - amount, 0))
+  // Mana
+  override def reduceMana(amount: Int): Player = updateValue(ValueType.MANA)(-amount)
 
-  override def increaseMana(amount: Int): Player =
-    copy(manaValue = Math.min(manaValue + amount, maxManaValue))
+  override def increaseMana(amount: Int): Player = updateValue(ValueType.MANA)(amount)
 
-  override def resetAndIncreaseMana(): Player =
-    copy(manaValue = maxManaValue + 1, maxManaValue = maxManaValue + 1)
+  override def resetAndIncreaseMana(): Player = copy(manaValue = maxManaValue + 1, maxManaValue = maxManaValue + 1)
 
   override def isManaEmpty: Boolean = manaValue <= 0
 
-  override def setManaValue(amount: Int): Player =
-    copy(manaValue = amount, maxManaValue = amount)
+  override def setManaValue(amount: Int): Player = copy(manaValue = amount, maxManaValue = amount)
 
   // matrix
   override def toMatrix: Matrix[String] =
