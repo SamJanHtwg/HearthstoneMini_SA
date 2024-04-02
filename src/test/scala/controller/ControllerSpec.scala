@@ -76,7 +76,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           )
         )
       )
-      controller.setPlayerNames(Move(p1 = "Jan", p2 = "Sam"))
+      controller.setPlayerNames(playername1 = "Jan", playername2 = "Sam")
       controller.field.players(controller.field.activePlayerId).name should be(
         "Jan"
       )
@@ -109,15 +109,14 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Field(
           slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
+            (1, Player(id = 1, name = 1.toString()).resetAndIncreaseMana()),
+            (2, Player(id = 2,name = 2.toString()))
           )
         )
       )
-      controller.setPlayerNames(Move(p2 = "Sam"))
       controller.switchPlayer()
       controller.field.players(controller.field.activePlayerId).name should be(
-        "Sam"
+        "2"
       )
     }
     "do a direct attack" in {
