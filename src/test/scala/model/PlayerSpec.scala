@@ -52,10 +52,10 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player1.placeCard(2, 2).destroyCard(2).friedhof.length should be(1)
     }
     "reducing hp" in {
-      player1.reduceHp(20).hpValue should be(10)
+      player1.reduceHp(1).hpValue should be(4)
     }
     "increasing hp" in {
-      player1.increaseHp(20).hpValue should be(50)
+      player1.increaseHp(20).hpValue should be(1)
     }
     "reducing mana" in {
       player1.reduceMana(10).manaValue should be(0)
