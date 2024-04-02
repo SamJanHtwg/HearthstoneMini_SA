@@ -6,7 +6,6 @@ import com.google.inject.{Guice, Inject, Injector}
 import controller.GameState.*
 import controller.component.ControllerInterface
 import controller.{GameState, Strategy}
-import model.commands.*
 import model.fieldComponent.FieldInterface
 import model.Move
 import model.fileIOComponent.FileIOInterface
