@@ -11,6 +11,7 @@ import util.Observer
 import model.fieldComponent.FieldInterface
 import model.Move
 import model.fieldComponent.fieldImpl.Field
+import hearthstoneMini.util.commands.commandImpl.PlaceCardCommand
 
 class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {

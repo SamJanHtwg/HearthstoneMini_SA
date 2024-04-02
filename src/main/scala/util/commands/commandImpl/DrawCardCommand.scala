@@ -1,14 +1,14 @@
 package hearthstoneMini
-package model.commands
+package util.commands.commandImpl
 
 import controller.component.controllerImpl.Controller
 import model.Move
 import model.fieldComponent.FieldInterface
-import util.Command
+import hearthstoneMini.util.commands.CommandInterface
 
 import scala.util.{Failure, Try, Success}
 
-class DrawCardCommand(controller: Controller) extends Command {
+class DrawCardCommand(controller: Controller) extends CommandInterface {
   var memento: FieldInterface = controller.field
   override def doStep: Try[FieldInterface] =
     if checkConditions then {

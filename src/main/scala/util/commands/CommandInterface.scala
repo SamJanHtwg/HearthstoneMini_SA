@@ -1,11 +1,12 @@
 package hearthstoneMini
-package util
+package util.commands
+
 import model.fieldComponent.FieldInterface
 
 import scala.util.Try
 
 //noinspection UnitMethodIsParameterless,MutatorLikeMethodIsParameterless
-trait Command {
+trait CommandInterface {
   def doStep: Try[FieldInterface]
   def undoStep: Unit
   def redoStep: Unit

@@ -12,11 +12,13 @@ import model.Move
 import model.fileIOComponent.FileIOInterface
 import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
-import util.{Command, Event, Observable, UndoManager}
+import util.{Event, Observable, UndoManager}
+import util.commands.CommandInterface
 
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}
+import util.commands.commandImpl.{PlaceCardCommand, DirectAttackCommand, DrawCardCommand, SwitchPlayerCommand, AttackCommand}
 
 case class Controller @Inject() (var field: FieldInterface)
     extends ControllerInterface {
@@ -44,7 +46,7 @@ case class Controller @Inject() (var field: FieldInterface)
   )
   def switchPlayer(): Unit = doStep(new SwitchPlayerCommand(this))
 
-  private def doStep(command: Command): Unit = {
+  private def doStep(command: CommandInterface): Unit = {
     command.doStep match {
       case Success(newField) => // noinspection RedundantBlock
         {

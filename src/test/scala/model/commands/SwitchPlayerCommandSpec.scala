@@ -11,6 +11,7 @@ import model.playerComponent.playerImpl.Player
 import util.Observer
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
+import hearthstoneMini.util.commands.commandImpl.SwitchPlayerCommand
 
 class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {

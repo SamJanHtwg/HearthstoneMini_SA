@@ -1,15 +1,15 @@
 package hearthstoneMini
-package model.commands
+package util.commands.commandImpl
 
 import model.Move
 import controller.GameState
 import controller.component.controllerImpl.Controller
 import model.fieldComponent.FieldInterface
-import util.Command
 import scala.util.{Failure, Success, Try}
+import hearthstoneMini.util.commands.CommandInterface
 
 //noinspection DuplicatedCode
-class AttackCommand(controller: Controller, move: Move) extends Command {
+class AttackCommand(controller: Controller, move: Move) extends CommandInterface {
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _
   var errorMsg: String = ""
