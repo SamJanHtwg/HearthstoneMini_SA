@@ -77,7 +77,7 @@ case class Card(
     defenseValue: Int,
     effect: String,
     rarity: String,
-    var attackCount: Int = 1,
+    val attackCount: Int = 1,
     id: String
 ) extends CardInterface {
   override def toString: String =
@@ -121,7 +121,7 @@ case class EmptyCard(
     defenseValue: Int = 0,
     effect: String = "",
     rarity: String = "",
-    var attackCount: Int = 0,
+    val attackCount: Int = 0,
     id: String
 ) extends CardInterface {
 

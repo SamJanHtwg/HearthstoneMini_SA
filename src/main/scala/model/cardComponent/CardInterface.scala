@@ -15,7 +15,7 @@ trait CardInterface {
   val id: String
   val effect: String
   val rarity: String
-  var attackCount: Int
+  val attackCount: Int
 
   def reduceHP(amount: Int): CardInterface
   def reduceAttackCount(): CardInterface
