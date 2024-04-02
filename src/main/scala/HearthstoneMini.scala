@@ -32,12 +32,14 @@ class HearthstoneMiniRunner(
     if (initGUI) Some(new GuiApp(controller)) else None
 
   def play(): Unit = {
-    optionalTui.fold(null)(tui =>
-      tui.update(Event.PLAY, None)
-      while controller.gameState != GameState.EXIT && controller.gameState != GameState.WIN
-      do {
-        tui.onInput(StdIn.readLine())
-      }
-    )
+    optionalTui match {
+      case None => {} 
+      case Some(tui) =>
+        tui.update(Event.PLAY, None)
+        while controller.gameState != GameState.EXIT && controller.gameState != GameState.WIN
+        do {
+          tui.onInput(StdIn.readLine())
+        }
+    }
   }
 }
