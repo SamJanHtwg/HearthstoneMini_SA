@@ -15,10 +15,10 @@ import _root_.hearthstoneMini.model.Move
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
-    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "")
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, "")
   )
 
   "The Controller" should {
@@ -39,11 +39,13 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Field(
           slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, manaValue = 100)),
             (2, Player(id = 2))
-          )
+          ),
+          turns = 3,
         )
       )
+      controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
       controller.field
         .players(controller.field.activePlayerId)
@@ -80,7 +82,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.players(controller.field.activePlayerId).name should be(
         "Jan"
       )
-      controller.field.players(1).name should be("Sam")
+      controller.field.players(2).name should be("Sam")
     }
     "attacking" in {
       val controller = Controller(
@@ -124,21 +126,23 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Field(
           slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, manaValue = 100, hand = testCards)),
             (2, Player(id = 2))
-          )
-        )
+            ),
+            turns = 3,
+          ),
       )
+      controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
       controller.directAttack(Move(fieldSlotActive = 2))
-      controller.field.players(1).hpValue should be(30)
+      controller.field.players(2).hpValue should be(4)
     }
     "undo step / redo step" in {
       val controller = Controller(
         Field(
           slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, hand = List.empty)),
             (2, Player(id = 2))
           )
         )
@@ -148,12 +152,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field
         .players(controller.field.activePlayerId)
         .hand
-        .length should be(4)
+        .length should be(0)
       controller.redo
       controller.field
         .players(controller.field.activePlayerId)
         .hand
-        .length should be(5)
+        .length should be(1)
     }
     "setStrategy should set a strategy based on input" in {
       val controller = Controller(
@@ -187,16 +191,15 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Field(
           slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, hpValue = 0)),
             (2, Player(id = 2))
           ),
           turns = 2
         )
       )
-      controller.placeCard(Move(2, 2))
-      controller.directAttack(Move(fieldSlotActive = 2))
-      controller.getWinner().get should be(
-        controller.field.players(controller.field.activePlayerId).name
+
+      controller.getWinner() should be(
+        Some(controller.field.players(controller.field.activePlayerId).name)
       )
     }
 
