@@ -1,5 +1,5 @@
 # HearthstoneMini
-[![codecov](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini/branch/main/graph/badge.svg?token=D1E8JI84DX)](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini)
+[![codecov](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini_SA/graph/badge.svg?token=V5BEOV9XX5)](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini_SA)
 
 1. Make sure you have Docker installed and the deamon is running. 
 2. Install X11 for macOS to use the display from docker 
