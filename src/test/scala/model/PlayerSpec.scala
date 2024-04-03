@@ -16,8 +16,8 @@ class PlayerSpec extends AnyWordSpec with Matchers {
   )
 
   "A Player" when {
-    val player1 = Player(id = 1, hand = testCards).resetAndIncreaseMana()
-    val player2 = Player(id = 2)
+    var player1 = Player(id = 1, hand = testCards).resetAndIncreaseMana()
+    var player2 = Player(id = 2)
     "created player with ID = 1" should {
       "have ID 1" in {
         player1.id should be(1)
@@ -52,10 +52,12 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player1.placeCard(2, 2).destroyCard(2).friedhof.length should be(1)
     }
     "reducing hp" in {
+      player1 = player1.copy(hpValue = 5, maxHpValue = 5)
       player1.reduceHp(1).hpValue should be(4)
     }
     "increasing hp" in {
-      player1.increaseHp(20).hpValue should be(1)
+      player1 = player1.copy(hpValue = 1, maxHpValue = 5)
+      player1.increaseHp(20).hpValue should be(5)
     }
     "reducing mana" in {
       player1.reduceMana(10).manaValue should be(0)

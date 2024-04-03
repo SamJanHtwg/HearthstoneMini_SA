@@ -62,6 +62,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field.drawCard().players(field.activePlayerId).hand.length should be(6)
       }
       "have 4 Hp when reduced by 1" in {
+        field = field.copy(players = field.players.updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25)))
         field.reduceHp(1, 1).players(field.activePlayerId).hpValue should be(
           4
         )

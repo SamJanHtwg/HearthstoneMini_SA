@@ -127,7 +127,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1, manaValue = 100, hand = testCards)),
-            (2, Player(id = 2))
+            (2, Player(id = 2, hpValue = 5, maxHpValue = 5))
             ),
             turns = 3,
           ),
