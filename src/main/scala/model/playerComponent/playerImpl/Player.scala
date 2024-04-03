@@ -22,12 +22,16 @@ import scala.xml.Node
 
 object Player {
   def fromJson(json: JsValue): Player = Player(
-    name = (json \\ "name").head.toString.replace("\"", ""),
-    hpValue = 0,
-    maxHpValue = 0,
     id = (json \\ "id").head.toString().toInt,
-    manaValue = 0,
-    field = (json \\ "fieldbar").map(card => Card.fromJSON(card)).toVector
+    name = (json \\ "name").head.toString.replace("\"", ""),
+    hand = (json \ "hand").validate[JsArray].get.value.map(card => Card.fromJSON(card).get).toList,
+    deck = (json \ "deck").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card).get).toList,
+    friedhof = (json \\ "friedhof").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card).get).toArray,
+    hpValue = (json \\ "hpValue").head.toString().toInt,
+    maxHpValue = (json \\ "maxHpValue").head.toString().toInt,
+    manaValue = (json \\ "manaValue").head.toString().toInt,
+    maxManaValue = (json \\ "maxManaValue").head.toString().toInt,
+    field = (json \\ "field").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card)).toVector
   )
 
   def fromXML(node: Node): Player = Player(
@@ -171,8 +175,15 @@ case class Player(
 
   override def toJson: JsValue = Json.obj(
     "name" -> name,
-    "id" -> id
-    // "field" -> field.toJson
+    "id" ->  id,
+    "hand" -> hand.map(_.toJson),
+    "deck" -> deck.map(_.toJson),
+    "friedhof" -> friedhof.map(_.toJson),
+    "hpValue" -> Json.toJson(hpValue),
+    "maxHpValue" -> Json.toJson(maxHpValue),
+    "manaValue" -> Json.toJson(manaValue),
+    "maxManaValue" -> Json.toJson(maxManaValue),
+    "field" -> field.map(_.map(_.toJson))
   )
 
   override def toXML: Node =
@@ -181,10 +192,31 @@ case class Player(
         {name}
       </name>
       <id>
-        // {id.toString}
+        {id.toString}
       </id>
+      <hpValue>
+        {hpValue.toString}
+      </hpValue>
+      <maxHpValue>
+        {maxHpValue.toString}
+      </maxHpValue>
+      <manaValue>
+        {manaValue.toString}
+      </manaValue>
+      <maxManaValue>
+        {maxManaValue.toString}
+      </maxManaValue>
+      <hand>
+        {hand.map(_.toXML)}
+      </hand>
+      <deck>
+        {deck.map(_.toXML)}
+      </deck>
+      <friedhof>
+        {friedhof.map(_.toXML)}
+      </friedhof>
       <field>
-        // {field}
+        {field.map(_.map(_.toXML))}
       </field>
     </Player>
 }

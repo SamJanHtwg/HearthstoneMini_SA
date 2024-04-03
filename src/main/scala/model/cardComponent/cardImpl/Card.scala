@@ -34,19 +34,18 @@ object Card {
   }
 
   def fromJSON(json: JsValue): Option[Card] = {
-    val jsonObj = (json \ "card").get
-    jsonObj.toString.replace("\"", "") match
+    json.toString.replace("\"", "") match
       case "none" => None
       case _ =>
         Some(
           Card(
-            name = (jsonObj \ "name").get.toString.replace("\"", ""),
-            manaCost = (jsonObj \ "manaCost").get.toString().toInt,
-            attValue = (jsonObj \ "attValue").get.toString.toInt,
-            defenseValue = (jsonObj \ "defenseValue").get.toString.toInt,
-            effect = (jsonObj \ "effect").get.toString.replace("\"", ""),
-            rarity = (jsonObj \ "rarity").get.toString.replace("\"", ""),
-            id = (jsonObj \ "id").get.toString.replace("\"", "")
+            name = (json \ "name").get.toString.replace("\"", ""),
+            manaCost = (json \ "manaCost").get.toString().toInt,
+            attValue = (json \ "attValue").get.toString.toInt,
+            defenseValue = (json \ "defenseValue").get.toString.toInt,
+            effect = (json \ "effect").get.toString.replace("\"", ""),
+            rarity = (json \ "rarity").get.toString.replace("\"", ""),
+            id = (json \ "id").get.toString.replace("\"", "")
           )
         )
   }
