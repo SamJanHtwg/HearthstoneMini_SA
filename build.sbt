@@ -51,12 +51,12 @@ lazy val root = project
       JacocoThresholds(),
       Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML), // note XML formatter
       "utf-8"),
-    jacocoExcludes := Seq("aview.*.*",
-      "model.playerComponent.PlayerInterface",
-      "model.cardComponent.CardInterface",
-      "model.fieldComponent.FieldInterface",
-      "model.matrixComponent.MatrixInterface",
-      "HearthstoneMini*")
+    jacocoExcludes := Seq(
+      "*Tui",
+      "*Strings",
+      "*Interface",
+      "*view.*.*"
+    )
   )
 
 
