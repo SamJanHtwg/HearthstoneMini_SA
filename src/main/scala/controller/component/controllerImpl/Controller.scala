@@ -115,7 +115,7 @@ case class Controller @Inject() (var field: FieldInterface)
         errorMsg = None
         notifyObservers(Event.PLAY, msg = None)
       case Failure(exception) =>
-        errorMsg = Some(exception.getMessage)
+        errorMsg = Some("Sieht so aus als wäre die Datei beschädigt.")
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
   }
