@@ -4,7 +4,7 @@ package model.commands
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.{Card, EmptyCard}
+import model.cardComponent.cardImpl.{Card}
 
 import model.playerComponent.playerImpl.Player
 import util.Observer

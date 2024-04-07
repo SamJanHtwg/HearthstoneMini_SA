@@ -11,6 +11,9 @@ import scala.annotation.nowarn
 import scala.collection.View.Empty
 import scala.xml.Node
 import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
+import scala.util.Try
+import scala.util.Failure
+import scala.util.Success
 
 object Card {
   @nowarn
@@ -33,24 +36,20 @@ object Card {
       case JsSuccess(_, _) => JsSuccess(None)
   }
 
-  def fromJSON(json: JsValue): Option[Card] = {
-    json.toString.replace("\"", "") match
-      case "none" => None
-      case _ =>
-        Some(
-          Card(
-            name = (json \ "name").get.toString.replace("\"", ""),
-            manaCost = (json \ "manaCost").get.toString().toInt,
-            attValue = (json \ "attValue").get.toString.toInt,
-            defenseValue = (json \ "defenseValue").get.toString.toInt,
-            effect = (json \ "effect").get.toString.replace("\"", ""),
-            rarity = (json \ "rarity").get.toString.replace("\"", ""),
-            id = (json \ "id").get.toString.replace("\"", "")
-          )
-        )
+  def fromJson(json: JsValue): Card = {
+    val jsonCard = json \ "card"
+    Card(
+      name = jsonCard("name").toString().replace("\"", ""),
+      manaCost = jsonCard("manaCost").toString().toInt,
+      attValue = jsonCard("attValue").toString.toInt,
+      defenseValue = jsonCard("defenseValue").toString.toInt,
+      effect = jsonCard("effect").toString.replace("\"", ""),
+      rarity = jsonCard("rarity").toString.replace("\"", ""),
+      id = jsonCard("id").toString.replace("\"", "")
+    )
   }
 
-  def fromXML(node: Node): Option[Card] = {
+  def fromXml(node: Node): Option[Card] = {
     val nodeObj = node \\ "card"
     nodeObj.head.text match {
       case "none" => None
@@ -69,6 +68,7 @@ object Card {
     }
   }
 }
+
 case class Card(
     name: String,
     manaCost: Int,
@@ -93,14 +93,17 @@ case class Card(
   override def resetAttackCount(): Card = copy(attackCount = 1)
 
   def toJson: JsValue = Json.obj(
-    "id" -> id,
-    "name" -> name,
-    "manaCost" -> manaCost,
-    "attValue" -> attValue,
-    "defenseValue" -> defenseValue,
-    "effect" -> effect,
-    "rarity" -> rarity
+    "card" -> Json.obj(
+      "id" -> Json.toJson(id),
+      "name" -> Json.toJson(name),
+      "manaCost" -> Json.toJson(manaCost),
+      "attValue" -> Json.toJson(attValue),
+      "defenseValue" -> Json.toJson(defenseValue),
+      "effect" -> Json.toJson(effect),
+      "rarity" -> Json.toJson(rarity)
+    )
   )
+
   def toXML: Node =
     <card>
             <id>{id}</id>
@@ -111,32 +114,4 @@ case class Card(
             <effect>{effect}</effect>
             <rarity>{rarity}</rarity>
         </card>
-}
-
-case class EmptyCard(
-    name: String = "yolo",
-    manaCost: Int = 0,
-    attValue: Int = 0,
-    defenseValue: Int = 0,
-    effect: String = "",
-    rarity: String = "",
-    val attackCount: Int = 0,
-    id: String
-) extends CardInterface {
-
-  override def toJson: JsValue = ???
-
-  override def toXML: Node = ???
-
-  override def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  )
-
-  override def reduceHP(amount: Int): EmptyCard =
-    copy(defenseValue = defenseValue - amount)
-  override def reduceAttackCount(): EmptyCard =
-    copy(attackCount = attackCount - 1)
-  override def resetAttackCount(): CardInterface = copy(attackCount = 0)
 }

@@ -42,7 +42,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
             (1, Player(id = 1, manaValue = 100)),
             (2, Player(id = 2))
           ),
-          turns = 3,
+          turns = 3
         )
       )
       controller.gameState = GameState.MAINGAME
@@ -112,7 +112,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1, name = 1.toString()).resetAndIncreaseMana()),
-            (2, Player(id = 2,name = 2.toString()))
+            (2, Player(id = 2, name = 2.toString()))
           )
         )
       )
@@ -128,9 +128,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
           players = Map[Int, Player](
             (1, Player(id = 1, manaValue = 100, hand = testCards)),
             (2, Player(id = 2, hpValue = 5, maxHpValue = 5))
-            ),
-            turns = 3,
           ),
+          turns = 3
+        )
       )
       controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))

@@ -11,7 +11,8 @@ import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
 
 //noinspection DuplicatedCode
-class DirectAttackCommand(controller: Controller, move: Move) extends CommandInterface {
+class DirectAttackCommand(controller: Controller, move: Move)
+    extends CommandInterface {
   var memento: FieldInterface = controller.field
   var errorMsg: String = ""
   override def doStep: Try[FieldInterface] = {

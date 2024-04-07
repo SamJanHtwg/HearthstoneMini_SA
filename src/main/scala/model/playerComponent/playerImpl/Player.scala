@@ -11,6 +11,7 @@ import play.api.libs.json.*
 
 import scala.collection.immutable.Vector
 import scala.xml.Node
+import scala.util.Try
 
 /** TODO:
   *   - Serialisierbarkeit Mana
@@ -21,26 +22,33 @@ import scala.xml.Node
   */
 
 object Player {
-  def fromJson(json: JsValue): Player = Player(
-    id = (json \\ "id").head.toString().toInt,
-    name = (json \\ "name").head.toString.replace("\"", ""),
-    hand = (json \ "hand").validate[JsArray].get.value.map(card => Card.fromJSON(card).get).toList,
-    deck = (json \ "deck").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card).get).toList,
-    friedhof = (json \\ "friedhof").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card).get).toArray,
-    hpValue = (json \\ "hpValue").head.toString().toInt,
-    maxHpValue = (json \\ "maxHpValue").head.toString().toInt,
-    manaValue = (json \\ "manaValue").head.toString().toInt,
-    maxManaValue = (json \\ "maxManaValue").head.toString().toInt,
-    field = (json \\ "field").head.validate[Iterable[JsValue]].get.map(card => Card.fromJSON(card)).toVector
-  )
+  def fromJson(json: JsValue): Player =
+    Player(
+      name = (json \ "name").as[String],
+      hpValue = (json \ "hpValue").as[Int],
+      maxHpValue = (json \ "maxHpValue").as[Int],
+      id = (json \ "id").as[Int],
+      manaValue = (json \ "manaValue").as[Int],
+      maxManaValue = (json \ "maxManaValue").as[Int],
+      hand = (json \ "hand").as[List[JsValue]].map(card => Card.fromJson(card)),
+      deck = (json \ "deck").as[List[JsValue]].map(card => Card.fromJson(card)),
+      friedhof = (json \ "friedhof")
+        .as[List[JsValue]]
+        .map(card => Card.fromJson(card))
+        .toArray,
+      field = (json \ "field")
+        .as[List[JsValue]]
+        .map(card => Try(Card.fromJson(card)).toOption)
+        .toVector
+    )
 
-  def fromXML(node: Node): Player = Player(
+  def fromXml(node: Node): Player = Player(
     name = (node \\ "name").head.text,
     hpValue = 0,
     maxHpValue = 0,
     id = (node \\ "id").head.text.toInt,
     manaValue = 0,
-    field = (node \\ "field").map(card => Card.fromXML(card)).toVector
+    field = (node \\ "field").map(card => Card.fromXml(card)).toVector
   )
 }
 
@@ -64,16 +72,19 @@ case class Player(
   }
 
   private def updateValue(valueType: ValueType): Int => Player = {
-    (amount: Int) => {
-      val updatedValue = valueType match {
-        case ValueType.HP => Math.max(Math.min(hpValue + amount, maxHpValue), 0)
-        case ValueType.MANA => Math.min(Math.max(manaValue + amount, 0), maxManaValue)
+    (amount: Int) =>
+      {
+        val updatedValue = valueType match {
+          case ValueType.HP =>
+            Math.max(Math.min(hpValue + amount, maxHpValue), 0)
+          case ValueType.MANA =>
+            Math.min(Math.max(manaValue + amount, 0), maxManaValue)
+        }
+        valueType match {
+          case ValueType.HP   => copy(hpValue = updatedValue)
+          case ValueType.MANA => copy(manaValue = updatedValue)
+        }
       }
-      valueType match {
-        case ValueType.HP => copy(hpValue = updatedValue)
-        case ValueType.MANA => copy(manaValue = updatedValue)
-      }
-    }
   }
 
   // player
@@ -104,24 +115,31 @@ case class Player(
   override def setName(name: String): Player = copy(name = name)
 
   // HP
-  override def reduceHp(amount: Int): Player = updateValue(ValueType.HP)(-amount)
+  override def reduceHp(amount: Int): Player =
+    updateValue(ValueType.HP)(-amount)
 
-  override def increaseHp(amount: Int): Player = updateValue(ValueType.HP)(amount)
+  override def increaseHp(amount: Int): Player =
+    updateValue(ValueType.HP)(amount)
 
-  override def setHpValue(amount: Int): Player = copy(hpValue = amount, maxHpValue = amount)
+  override def setHpValue(amount: Int): Player =
+    copy(hpValue = amount, maxHpValue = amount)
 
   override def isHpEmpty: Boolean = hpValue <= 0
 
   // Mana
-  override def reduceMana(amount: Int): Player = updateValue(ValueType.MANA)(-amount)
+  override def reduceMana(amount: Int): Player =
+    updateValue(ValueType.MANA)(-amount)
 
-  override def increaseMana(amount: Int): Player = updateValue(ValueType.MANA)(amount)
+  override def increaseMana(amount: Int): Player =
+    updateValue(ValueType.MANA)(amount)
 
-  override def resetAndIncreaseMana(): Player = copy(manaValue = maxManaValue + 1, maxManaValue = maxManaValue + 1)
+  override def resetAndIncreaseMana(): Player =
+    copy(manaValue = maxManaValue + 1, maxManaValue = maxManaValue + 1)
 
   override def isManaEmpty: Boolean = manaValue <= 0
 
-  override def setManaValue(amount: Int): Player = copy(manaValue = amount, maxManaValue = amount)
+  override def setManaValue(amount: Int): Player =
+    copy(manaValue = amount, maxManaValue = amount)
 
   // matrix
   override def toMatrix: Matrix[String] =
@@ -175,7 +193,7 @@ case class Player(
 
   override def toJson: JsValue = Json.obj(
     "name" -> name,
-    "id" ->  id,
+    "id" -> id,
     "hand" -> hand.map(_.toJson),
     "deck" -> deck.map(_.toJson),
     "friedhof" -> friedhof.map(_.toJson),
@@ -186,7 +204,7 @@ case class Player(
     "field" -> field.map(_.map(_.toJson))
   )
 
-  override def toXML: Node =
+  override def toXml: Node =
     <Player>
       <name>
         {name}

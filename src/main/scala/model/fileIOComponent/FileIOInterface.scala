@@ -2,8 +2,9 @@ package hearthstoneMini
 package model.fileIOComponent
 
 import model.fieldComponent.FieldInterface
+import scala.util.Try
 
 trait FileIOInterface {
-  def load: FieldInterface
+  def load: Try[FieldInterface]
   def save(field: FieldInterface): Unit
 }

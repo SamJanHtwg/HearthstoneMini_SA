@@ -1,4 +1,3 @@
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import _root_.hearthstoneMini.model.cardComponent.cardImpl.Card

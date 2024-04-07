@@ -30,13 +30,18 @@ object FieldObject {
     val fieldJs = json \ "field"
     Field(
       activePlayerId = (fieldJs \ "activePlayerId").get.toString.toInt,
-      players = (fieldJs \ "players").validate[Iterable[JsValue]].get.map(player => Player.fromJson(player)).map(player => (player.id, player)).toMap,
+      players = (fieldJs \ "players")
+        .validate[Iterable[JsValue]]
+        .get
+        .map(player => Player.fromJson(player))
+        .map(player => (player.id, player))
+        .toMap,
       turns = (fieldJs \ "turns").get.toString.toInt,
       slotNum = (fieldJs \ "slotnum").get.toString.toInt
     )
   }
 
-  def fromXML(node: Node): Field = Field(
+  def fromXml(node: Node): Field = Field(
     activePlayerId = (node \ "activePlayerId").head.text.toInt,
     players = Map[Int, Player](),
     // players = (node \\ "players" \ "entry").map(player => Player.fromXML(player)).toMap[String, Player],
@@ -231,7 +236,6 @@ case class Field @Inject() (
     "slotnum" -> Json.toJson(slotNum),
     "turns" -> Json.toJson(turns),
     "activePlayerId" -> Json.toJson(activePlayerId)
-
   )
 
   override def toXML: Node =
@@ -239,7 +243,7 @@ case class Field @Inject() (
       <players>
         {
       players.map((id, player) => <entry>
-        {player.toXML}
+        {player.toXml}
       </entry>)
     }
       </players>
