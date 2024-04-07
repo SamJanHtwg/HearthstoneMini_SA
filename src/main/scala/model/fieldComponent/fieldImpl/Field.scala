@@ -41,11 +41,12 @@ object FieldObject {
     )
   }
 
-  def fromXml(node: Node): Field = 
+  def fromXml(node: Node): Field =
     Field(
       activePlayerId = (node \ "activePlayerId").text.trim.toInt,
       players = (node \ "players")
-        .map(player => node \\ "player").flatten
+        .map(player => node \\ "player")
+        .flatten
         .map(player => Player.fromXml(player))
         .map(player => (player.id, player))
         .toMap[Int, Player],

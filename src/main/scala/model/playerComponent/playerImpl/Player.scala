@@ -49,10 +49,27 @@ object Player {
     id = (node \ "id").text.trim.toInt,
     manaValue = (node \ "manaValue").text.trim.toInt,
     maxManaValue = (node \ "maxManaValue").text.trim.toInt,
-    hand = (node \ "hand").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toList,
-    deck = (node \ "deck").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toList,
-    friedhof = (node \ "friedhof").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toArray,
-    field = (node \ "field").map(card => card \ "card").flatten.map(card => Try(Card.fromXml(card)).toOption).toList.toVector
+    hand = (node \ "hand")
+      .map(card => card \ "card")
+      .flatten
+      .map(card => Card.fromXml(card))
+      .toList,
+    deck = (node \ "deck")
+      .map(card => card \ "card")
+      .flatten
+      .map(card => Card.fromXml(card))
+      .toList,
+    friedhof = (node \ "friedhof")
+      .map(card => card \ "card")
+      .flatten
+      .map(card => Card.fromXml(card))
+      .toArray,
+    field = (node \ "field")
+      .map(card => card \ "card")
+      .flatten
+      .map(card => Try(Card.fromXml(card)).toOption)
+      .toList
+      .toVector
   )
 }
 
