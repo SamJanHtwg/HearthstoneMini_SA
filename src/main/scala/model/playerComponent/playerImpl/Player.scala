@@ -14,9 +14,6 @@ import scala.xml.Node
 import scala.util.Try
 
 /** TODO:
-  *   - Serialisierbarkeit Mana
-  *   - Serialisierbarkeit Hp
-  *   - Check ob drawCard() logik passt
   *   - karten zum friedhof hinzufügen sollte kein optional bekommen
   *   - renderEvenId() und renderUnevenId() fix field
   */
