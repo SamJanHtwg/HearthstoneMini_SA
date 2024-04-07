@@ -41,13 +41,17 @@ object FieldObject {
     )
   }
 
-  def fromXml(node: Node): Field = Field(
-    activePlayerId = (node \ "activePlayerId").head.text.toInt,
-    players = Map[Int, Player](),
-    // players = (node \\ "players" \ "entry").map(player => Player.fromXML(player)).toMap[String, Player],
-    turns = (node \ "turns").head.text.toInt,
-    slotNum = (node \ "slotnum").head.text.toInt
-  )
+  def fromXml(node: Node): Field = 
+    Field(
+      activePlayerId = (node \ "activePlayerId").text.trim.toInt,
+      players = (node \ "players")
+        .map(player => node \\ "player").flatten
+        .map(player => Player.fromXml(player))
+        .map(player => (player.id, player))
+        .toMap[Int, Player],
+      turns = (node \ "turns").text.trim.toInt,
+      slotNum = (node \ "slotnum").text.trim.toInt
+    )
 }
 
 //noinspection DuplicatedCode
@@ -239,13 +243,9 @@ case class Field @Inject() (
   )
 
   override def toXML: Node =
-    <Field>
+    <field>
       <players>
-        {
-      players.map((id, player) => <entry>
-        {player.toXml}
-      </entry>)
-    }
+        {players.map((id, player) => player.toXml)}
       </players>
       <slotnum>
         {slotNum.toString}
@@ -253,5 +253,8 @@ case class Field @Inject() (
       <turns>
         {turns.toString}
       </turns>
-    </Field>
+      <activePlayerId>
+        {activePlayerId.toString}
+      </activePlayerId>
+    </field>
 }

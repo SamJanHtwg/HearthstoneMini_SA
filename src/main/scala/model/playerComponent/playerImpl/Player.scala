@@ -43,12 +43,16 @@ object Player {
     )
 
   def fromXml(node: Node): Player = Player(
-    name = (node \\ "name").head.text,
-    hpValue = 0,
-    maxHpValue = 0,
-    id = (node \\ "id").head.text.toInt,
-    manaValue = 0,
-    field = (node \\ "field").map(card => Card.fromXml(card)).toVector
+    name = (node \ "name").text.trim,
+    hpValue = (node \ "hpValue").text.trim.toInt,
+    maxHpValue = (node \ "maxHpValue").text.trim.toInt,
+    id = (node \ "id").text.trim.toInt,
+    manaValue = (node \ "manaValue").text.trim.toInt,
+    maxManaValue = (node \ "maxManaValue").text.trim.toInt,
+    hand = (node \ "hand").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toList,
+    deck = (node \ "deck").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toList,
+    friedhof = (node \ "friedhof").map(card => card \ "card").flatten.map(card => Card.fromXml(card)).toArray,
+    field = (node \ "field").map(card => card \ "card").flatten.map(card => Try(Card.fromXml(card)).toOption).toList.toVector
   )
 }
 
@@ -205,24 +209,24 @@ case class Player(
   )
 
   override def toXml: Node =
-    <Player>
+    <player>
       <name>
         {name}
       </name>
       <id>
-        {id.toString}
+        {id}
       </id>
       <hpValue>
-        {hpValue.toString}
+        {hpValue}
       </hpValue>
       <maxHpValue>
-        {maxHpValue.toString}
+        {maxHpValue}
       </maxHpValue>
       <manaValue>
-        {manaValue.toString}
+        {manaValue}
       </manaValue>
       <maxManaValue>
-        {maxManaValue.toString}
+        {maxManaValue}
       </maxManaValue>
       <hand>
         {hand.map(_.toXML)}
@@ -234,7 +238,7 @@ case class Player(
         {friedhof.map(_.toXML)}
       </friedhof>
       <field>
-        {field.map(_.map(_.toXML))}
+        {field.map(_.map(_.toXML).getOrElse(<card> </card>))}
       </field>
-    </Player>
+    </player>
 }

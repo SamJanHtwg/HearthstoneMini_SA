@@ -49,23 +49,16 @@ object Card {
     )
   }
 
-  def fromXml(node: Node): Option[Card] = {
-    val nodeObj = node \\ "card"
-    nodeObj.head.text match {
-      case "none" => None
-      case _ =>
-        Some(
-          Card(
-            name = (node \\ "name").head.text,
-            manaCost = (node \\ "manaCost").head.text.toInt,
-            attValue = (node \\ "attValue").head.text.toInt,
-            defenseValue = (node \\ "defenseValue").head.text.toInt,
-            effect = (node \\ "effect").head.text,
-            rarity = (node \\ "rarity").head.text,
-            id = (node \\ "id").head.text
-          )
-        )
-    }
+  def fromXml(node: Node): Card = {
+    Card(
+      name = (node \ "name").text,
+      manaCost = (node \ "manaCost").text.trim.toInt,
+      attValue = (node \ "attValue").text.trim.toInt,
+      defenseValue = (node \ "defenseValue").text.trim.toInt,
+      effect = (node \ "effect").text,
+      rarity = (node \ "rarity").text,
+      id = (node \ "id").text
+    )
   }
 }
 
