@@ -8,6 +8,7 @@ import model.fieldComponent.FieldInterface
 import scala.util.{Failure, Success, Try}
 import hearthstoneMini.util.commands.CommandInterface
 import org.checkerframework.checker.units.qual.s
+import hearthstoneMini.model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
 class AttackCommand(controller: Controller, move: Move)
@@ -15,7 +16,46 @@ class AttackCommand(controller: Controller, move: Move)
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _
 
-  override def doStep: Try[FieldInterface] = {
+  override def doStep: Try[FieldInterface] = checkConditions(
+    (attackingCard: CardInterface, defendingCard: CardInterface) => {
+      val currentField = controller.field
+      val difference =
+        attackingCard.attValue
+          - defendingCard.defenseValue
+
+      newField = {
+        if (difference > 0) {
+           currentField
+            .destroyCard(
+              currentField.getInactivePlayerId,
+              move.fieldSlotInactive
+            )
+            .reduceHp(
+              currentField.getInactivePlayerId,
+              Math.abs(difference)
+            )
+        } else {
+           currentField
+            .reduceDefVal(
+              move.fieldSlotInactive,
+              attackingCard.attValue
+            )
+        }
+      }.reduceAttackCount(move.fieldSlotActive)
+
+      if (newField.players.values.filter(_.isHpEmpty).size != 0) {
+        controller.nextState()
+      }
+      newField
+    }
+  )
+
+  def checkConditions(
+      onSuccess: (
+          attackingCard: CardInterface,
+          defendingCard: CardInterface
+      ) => FieldInterface
+  ): Try[FieldInterface] = {
     val currentField = controller.field
 
     val activeFieldSlot = currentField
@@ -26,64 +66,32 @@ class AttackCommand(controller: Controller, move: Move)
       .players(currentField.getInactivePlayerId)
       .field(move.fieldSlotInactive)
 
-    activeFieldSlot match {
-      case None =>
-        return Failure(
-          Exception("Stelle sicher, dass du eine Karte ausgewählt hast!")
-        )
-      case Some(attackingCard) =>
-        inactiveFieldSlot match {
-          case None =>
-            return Failure(Exception("Du kannst kein leeres Feld angreifen!"))
-          case Some(defendingCard) =>
+    activeFieldSlot
+      .toRight(Exception("Stelle sicher, dass du eine Karte ausgewählt hast!"))
+      .flatMap(attackingCard =>
+        inactiveFieldSlot
+          .toRight(Exception("Du kannst kein leeres Feld angreifen!"))
+          .flatMap(defendingCard =>
             attackingCard.attackCount > 0 match {
               case false =>
-                return Failure(
+                Left(
                   Exception("Jede Karte kann nur einmal pro Zug angreifen!")
                 )
               case true =>
-                controller.field.turns > 1 match {
+                currentField.turns > 1 match {
                   case false =>
-                    return Failure(
+                    Left(
                       Exception(
                         "Kein Spieler kann in seineim ersten Zug angreifen!"
                       )
                     )
-                  case true => {
-                    val difference =
-                      attackingCard.attValue
-                        - defendingCard.defenseValue
-
-                    if (difference < 0) {
-                      newField = currentField
-                        .destroyCard(
-                          currentField.getInactivePlayerId,
-                          move.fieldSlotInactive
-                        )
-                        .reduceHp(
-                          currentField.getInactivePlayerId,
-                          Math.abs(difference)
-                        )
-                    } else {
-                      newField = currentField
-                        .reduceDefVal(
-                          move.fieldSlotInactive,
-                          attackingCard.attValue
-                        )
-                        .reduceAttackCount(move.fieldSlotActive)
-                    }
-
-                    if newField.players.values.filter(_.isHpEmpty).size != 0
-                    then controller.nextState()
-                    Success(newField)
-                  }
+                  case true => Right(onSuccess(attackingCard, defendingCard))
                 }
             }
-        }
-    }
+          )
+      )
+      .toTry
   }
-
-  override def checkConditions: Boolean = ???
 
   override def undoStep: Unit = {
     val new_memento = controller.field

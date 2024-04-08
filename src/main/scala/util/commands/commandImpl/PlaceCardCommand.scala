@@ -12,10 +12,14 @@ import hearthstoneMini.controller.component.ControllerInterface
 class PlaceCardCommand(controller: ControllerInterface, move: Move)
     extends CommandInterface {
   var memento: FieldInterface = controller.field
-  override def doStep: Try[FieldInterface] = if checkConditions then {
-    memento = controller.field
-    Success(controller.field.placeCard(move.handSlot, move.fieldSlotActive))
-  } else Failure(Exception("Unable to place a card!"))
+  override def doStep: Try[FieldInterface] =
+    Option
+      .when(checkConditions) {
+        memento = controller.field
+        controller.field.placeCard(move.handSlot, move.fieldSlotActive)
+      }
+      .toRight(Exception("Unable to place a card!"))
+      .toTry
 
   override def undoStep: Unit = {
     val new_memento = controller.field
@@ -29,17 +33,24 @@ class PlaceCardCommand(controller: ControllerInterface, move: Move)
     memento = new_memento
   }
 
-  override def checkConditions: Boolean = controller.field
-    .players(controller.field.activePlayerId)
-    .field(move.fieldSlotActive)
-    .isEmpty
-    && move.handSlot < controller.field
-      .players(controller.field.activePlayerId)
-      .hand
-      .length
-    && controller.field.players(controller.field.activePlayerId).manaValue
-    >= controller.field
-      .players(controller.field.activePlayerId)
-      .hand(move.handSlot)
-      .manaCost
+  def checkConditions: Boolean = {
+    val currentField = controller.field
+    val activePlayer =
+      currentField.players(currentField.activePlayerId)
+
+    val isSlotEmpty = activePlayer
+      .field(move.fieldSlotActive)
+      .isEmpty
+
+    val isInRange = move.handSlot < activePlayer.hand.length
+
+    val hasMana = activePlayer.manaValue
+      >= activePlayer
+        .hand(move.handSlot)
+        .manaCost
+
+    isSlotEmpty
+    && isInRange
+    && hasMana
+  }
 }
