@@ -128,5 +128,11 @@ class FieldSpec extends AnyWordSpec with Matchers {
         45
       )
     }
+    "restored from xml" in {
+      val field = new Field(5, "1", "2")
+      val xml = field.toXML
+      val fromXml = FieldObject.fromXml(xml)
+      assert(field.toString === fromXml.toString)
+    }
   }
 }

@@ -19,7 +19,6 @@ class FileIO extends FileIOInterface {
     Try {
       val field = loadFile("field.xml")
       FieldObject.fromXml(field)
-
     }
 
   override def save(field: FieldInterface): Unit = {

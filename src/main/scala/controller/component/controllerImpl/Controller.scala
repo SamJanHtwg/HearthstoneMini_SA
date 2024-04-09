@@ -100,7 +100,9 @@ case class Controller @Inject() (var field: FieldInterface)
   def getWinner(): Option[String] = {
     val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
     playersWithHp.values.size match {
-      case 1 => Some(playersWithHp.values.head.name)
+      case 1 => 
+        gameState = GameState.WIN
+        Some(playersWithHp.values.head.name)
       case _ => None
     }
   }
