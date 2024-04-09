@@ -66,5 +66,5 @@ trait PlayerInterface {
 
   def toJson: JsValue
 
-  def toXML: Node
+  def toXml: Node
 }

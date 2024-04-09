@@ -30,20 +30,29 @@ object FieldObject {
     val fieldJs = json \ "field"
     Field(
       activePlayerId = (fieldJs \ "activePlayerId").get.toString.toInt,
-      players =
-        Map[Int, Player](), // (fieldJs \ "players").validate[List[JsValue]].get.map(player => Player.fromJson(player)),
+      players = (fieldJs \ "players")
+        .validate[Iterable[JsValue]]
+        .get
+        .map(player => Player.fromJson(player))
+        .map(player => (player.id, player))
+        .toMap,
       turns = (fieldJs \ "turns").get.toString.toInt,
       slotNum = (fieldJs \ "slotnum").get.toString.toInt
     )
   }
 
-  def fromXML(node: Node): Field = Field(
-    activePlayerId = (node \ "activePlayerId").head.text.toInt,
-    players = Map[Int, Player](),
-    // players = (node \\ "players" \ "entry").map(player => Player.fromXML(player)).toMap[String, Player],
-    turns = (node \ "turns").head.text.toInt,
-    slotNum = (node \ "slotnum").head.text.toInt
-  )
+  def fromXml(node: Node): Field =
+    Field(
+      activePlayerId = (node \ "activePlayerId").text.trim.toInt,
+      players = (node \ "players")
+        .map(player => node \\ "player")
+        .flatten
+        .map(player => Player.fromXml(player))
+        .map(player => (player.id, player))
+        .toMap[Int, Player],
+      turns = (node \ "turns").text.trim.toInt,
+      slotNum = (node \ "slotnum").text.trim.toInt
+    )
 }
 
 //noinspection DuplicatedCode
@@ -230,17 +239,14 @@ case class Field @Inject() (
   override def toJson: JsValue = Json.obj(
     "players" -> players.map((id, player) => player.toJson),
     "slotnum" -> Json.toJson(slotNum),
-    "turns" -> Json.toJson(turns)
+    "turns" -> Json.toJson(turns),
+    "activePlayerId" -> Json.toJson(activePlayerId)
   )
 
   override def toXML: Node =
-    <Field>
+    <field>
       <players>
-        {
-      players.map((id, player) => <entry>
-        {player.toXML}
-      </entry>)
-    }
+        {players.map((id, player) => player.toXml)}
       </players>
       <slotnum>
         {slotNum.toString}
@@ -248,5 +254,8 @@ case class Field @Inject() (
       <turns>
         {turns.toString}
       </turns>
-    </Field>
+      <activePlayerId>
+        {activePlayerId.toString}
+      </activePlayerId>
+    </field>
 }

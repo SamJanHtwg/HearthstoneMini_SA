@@ -62,13 +62,19 @@ class FieldSpec extends AnyWordSpec with Matchers {
         field.drawCard().players(field.activePlayerId).hand.length should be(6)
       }
       "have 4 Hp when reduced by 1" in {
-        field = field.copy(players = field.players.updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25)))
+        field = field.copy(players =
+          field.players
+            .updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25))
+        )
         field.reduceHp(1, 1).players(field.activePlayerId).hpValue should be(
           4
         )
       }
       "have 25 Hp when increased by 20" in {
-        field = field.copy(players = field.players.updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25)))
+        field = field.copy(players =
+          field.players
+            .updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25))
+        )
         field.increaseHp(20).players(field.activePlayerId).hpValue should be(25)
       }
       "have 0 Mana when reduced by 10" in {
@@ -77,13 +83,16 @@ class FieldSpec extends AnyWordSpec with Matchers {
         )
       }
       "have 1 Mana when increased" in {
-        field = field.copy(players = field.players.updated(1, field.players(1).copy(manaValue = 1, maxManaValue = 2)))
+        field = field.copy(players =
+          field.players
+            .updated(1, field.players(1).copy(manaValue = 1, maxManaValue = 2))
+        )
         field.increaseMana(20).players(1).manaValue should be(2)
       }
       "switch the active player" in {
         val fieldAfterMove = field.switchPlayer()
         fieldAfterMove.activePlayerId should be(
-         field.getInactivePlayerId
+          field.getInactivePlayerId
         )
         val fieldAfter2ndMove = fieldAfterMove.switchPlayer()
         fieldAfter2ndMove.players(field.activePlayerId).manaValue should be(3)
@@ -110,10 +119,14 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
     }
     "when hp value is set" in {
-      new Field(5, "1", "2").setHpValues(34).players.head._2.hpValue should be(34)
+      new Field(5, "1", "2").setHpValues(34).players.head._2.hpValue should be(
+        34
+      )
     }
     "when mana value is set" in {
-      new Field(5, "1", "2").setManaValues(45).players(1).manaValue should be(45)
+      new Field(5, "1", "2").setManaValues(45).players(1).manaValue should be(
+        45
+      )
     }
   }
 }

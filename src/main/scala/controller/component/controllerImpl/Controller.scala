@@ -17,7 +17,13 @@ import util.commands.CommandInterface
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}
-import util.commands.commandImpl.{PlaceCardCommand, DirectAttackCommand, DrawCardCommand, SwitchPlayerCommand, AttackCommand}
+import util.commands.commandImpl.{
+  PlaceCardCommand,
+  DirectAttackCommand,
+  DrawCardCommand,
+  SwitchPlayerCommand,
+  AttackCommand
+}
 
 case class Controller @Inject() (var field: FieldInterface)
     extends ControllerInterface {
@@ -102,10 +108,15 @@ case class Controller @Inject() (var field: FieldInterface)
     fileIO.save(this.field)
   }
   def loadField: Unit = {
-    this.field = fileIO.load
-    nextState()
-    nextState()
-    errorMsg = None
-    notifyObservers(Event.PLAY, msg = None)
+    fileIO.load match {
+      case Success(value) =>
+        this.field = value
+        gameState = GameState.MAINGAME
+        errorMsg = None
+        notifyObservers(Event.PLAY, msg = None)
+      case Failure(exception) =>
+        errorMsg = Some("Sieht so aus als wäre die Datei beschädigt.")
+        notifyObservers(Event.ERROR, msg = errorMsg)
+    }
   }
 }

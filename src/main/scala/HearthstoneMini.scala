@@ -33,7 +33,7 @@ class HearthstoneMiniRunner(
 
   def play(): Unit = {
     optionalTui match {
-      case None => {} 
+      case None => {}
       case Some(tui) =>
         tui.update(Event.PLAY, None)
         while controller.gameState != GameState.EXIT && controller.gameState != GameState.WIN

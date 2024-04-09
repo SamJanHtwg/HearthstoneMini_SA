@@ -9,7 +9,8 @@ import scala.util.{Failure, Success, Try}
 import hearthstoneMini.util.commands.CommandInterface
 
 //noinspection DuplicatedCode
-class AttackCommand(controller: Controller, move: Move) extends CommandInterface {
+class AttackCommand(controller: Controller, move: Move)
+    extends CommandInterface {
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _
   var errorMsg: String = ""

@@ -12,12 +12,15 @@ import model.fieldComponent.fieldImpl.{Field, FieldObject}
 import java.io.{File, PrintWriter}
 import scala.xml.XML.loadFile
 import scala.xml.{NodeSeq, PrettyPrinter}
+import scala.util.Try
 
 class FileIO extends FileIOInterface {
-  override def load: Field = {
-    val field = loadFile("field.xml")
-    FieldObject.fromXML(field)
-  }
+  override def load: Try[Field] =
+    Try {
+      val field = loadFile("field.xml")
+      FieldObject.fromXml(field)
+
+    }
 
   override def save(field: FieldInterface): Unit = {
     val pw = new PrintWriter(new File("field.xml"))
