@@ -1,23 +1,17 @@
 name: Scala CI
 
-
-
 on:
   push:
     branches: [ main, development]
   pull_request:
-
-    branches: [ main, development]
+    branches: [ main, development ]
 
 permissions:
   contents: read
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
@@ -35,7 +29,7 @@ jobs:
         run:
           sbt clean jacoco
       - name: Upload report to Codecov
-        run: |
-          curl -s https://codecov.io/bash > .codecov
-          chmod +x .codecov
-          bash .codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+       
