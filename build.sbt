@@ -53,9 +53,11 @@ lazy val root = project
       "utf-8"),
     jacocoExcludes := Seq(
       "*Tui",
-      "*Strings",
+      "*Strings*",
       "*Interface",
-      "*view.*.*"
+      "*view.*.*",
+      "src/main/scala/HearthstoneMiniModule.scala",
+      "src/main/scala/HearthstoneMini.scala"
     )
   )
 

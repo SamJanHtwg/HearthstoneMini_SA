@@ -201,7 +201,21 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getWinner() should be(
         Some(controller.field.players(controller.field.activePlayerId).name)
       )
+      controller.gameState should be (GameState.WIN)
     }
+    "should be able to save & load" in {
+      val field = Field(
+        slotNum = 5,
+        players = Map[Int, Player](
+          (1, Player(id = 1)),
+          (2, Player(id = 2))
+        )
+      )
 
+      val controller = Controller(field)
+      val saved: Unit = controller.saveField
+      val loaded: Unit = controller.loadField
+      assert(saved === loaded)
+    }
   }
 }
