@@ -11,10 +11,13 @@ import scala.util.{Failure, Try, Success}
 class DrawCardCommand(controller: Controller) extends CommandInterface {
   var memento: FieldInterface = controller.field
   override def doStep: Try[FieldInterface] =
-    if checkConditions then {
-      memento = controller.field
-      Success(controller.field.drawCard())
-    } else Failure(Exception("Your hand is full!"))
+    Option
+      .when(checkConditions)({
+        memento = controller.field
+        controller.field.drawCard()
+      })
+      .toRight(new Exception("Your hand is full!"))
+      .toTry
 
   override def undoStep: Unit = {
     val new_memento = controller.field
@@ -28,6 +31,6 @@ class DrawCardCommand(controller: Controller) extends CommandInterface {
     memento = new_memento
   }
 
-  override def checkConditions: Boolean =
+  def checkConditions: Boolean =
     controller.field.players(controller.field.activePlayerId).hand.length < 5
 }

@@ -25,6 +25,4 @@ class SwitchPlayerCommand(controller: Controller) extends CommandInterface {
     controller.field = memento
     memento = new_memento
   }
-
-  override def checkConditions: Boolean = true
 }
