@@ -13,7 +13,6 @@ import hearthstoneMini.model.playerComponent.PlayerInterface
 trait FieldInterface {
   val players: Map[Int, PlayerInterface]
   val activePlayerId: Int
-  val matrix: Matrix[String]
   val slotNum: Int
   val turns: Int
 
@@ -54,9 +53,6 @@ trait FieldInterface {
 
   def resetAndIncreaseMana(): FieldInterface
   def setManaValues(amount: Int): FieldInterface
-
-  // matrix
-  def toMatrix: Matrix[String]
 
   def toJson: JsValue
 

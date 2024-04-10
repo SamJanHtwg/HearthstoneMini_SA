@@ -10,22 +10,9 @@ import javax.inject.Inject
 import scala.xml.Node
 import scalafx.scene.input.KeyCode.M
 
-/** Serialisierbarkeit players
-  */
-object FieldObject {
-  val offset: Int = 1
-  val standartSlotNum: Int = 5
-  val standartCardWidth: Int = 15
-  val standartCardHeight: Int = 5
-  val standartSlotWidth: Int = standartCardWidth + 2 // 2 for Margin
-  val standartFieldBarHeight: Int = standartCardHeight + 1 // + 2 for border
-  val standartGameBarHeight: Int = 7
-  val standartMenueBarHeight: Int = 2
-  val standartFieldWidth: Int = standartSlotNum * standartSlotWidth
-  val standartFieldHeight: Int =
-    (standartFieldBarHeight + standartGameBarHeight + standartMenueBarHeight) * 2
-      + FieldObject.offset
 
+object FieldObject {
+  val standartSlotNum: Int = 5
   def fromJson(json: JsValue): Field = {
     val fieldJs = json \ "field"
     Field(
@@ -57,11 +44,6 @@ object FieldObject {
 
 //noinspection DuplicatedCode
 case class Field @Inject() (
-    matrix: Matrix[String] = new Matrix[String](
-      FieldObject.standartFieldHeight,
-      FieldObject.standartFieldWidth,
-      " "
-    ),
     slotNum: Int = FieldObject.standartSlotNum,
     players: Map[Int, Player] = Map[Int, Player](),
     activePlayerId: Int = 1,
@@ -69,11 +51,6 @@ case class Field @Inject() (
 ) extends FieldInterface() {
 
   def this(size: Int, player1: String, player2: String) = this(
-    new Matrix[String](
-      FieldObject.standartFieldHeight,
-      FieldObject.standartSlotWidth * size,
-      " "
-    ),
     size,
     players = Map[Int, Player](
       (1, Player(name = player1, id = 1, manaValue = 0, maxManaValue = 1)),
@@ -83,11 +60,6 @@ case class Field @Inject() (
   )
 
   def this(size: Int) = this(
-    new Matrix[String](
-      FieldObject.standartFieldHeight,
-      FieldObject.standartSlotWidth * size,
-      " "
-    ),
     size,
     activePlayerId = 1,
     players = Map[Int, Player](
@@ -223,18 +195,10 @@ case class Field @Inject() (
     )
   )
 
-  override def toMatrix: Matrix[String] = matrix
-    .updateMatrix(0, 0, List[String]("-" * FieldObject.standartFieldWidth))
-    .updateMatrixWithMatrix(FieldObject.offset, 0, getPlayerById(1).toMatrix)
-    .updateMatrixWithMatrix(
-      FieldObject.offset + FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight
-        + FieldObject.standartFieldBarHeight,
-      0,
-      getPlayerById(2).toMatrix
-    )
-
-  override def toString: String =
-    toMatrix.rows.map(_.mkString("|", "", "|\n")).mkString
+  
+  // TODO FIX
+  // override def toString: String =
+  //   toMatrix.rows.map(_.mkString("|", "", "|\n")).mkString
 
   override def toJson: JsValue = Json.obj(
     "players" -> players.map((id, player) => player.toJson),

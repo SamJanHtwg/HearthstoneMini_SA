@@ -112,4 +112,28 @@ class Tui(controller: ControllerInterface) extends Observer {
     FieldObject.standartCardWidth,
     " "
   ).updateMatrix(0, 0, toString().split("#").toList)
+
+  // FIELD
+  override def toMatrix: Matrix[String] = matrix
+    .updateMatrix(0, 0, List[String]("-" * FieldObject.standartFieldWidth))
+    .updateMatrixWithMatrix(FieldObject.offset, 0, getPlayerById(1).toMatrix)
+    .updateMatrixWithMatrix(
+      FieldObject.offset + FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight
+        + FieldObject.standartFieldBarHeight,
+      0,
+      getPlayerById(2).toMatrix
+    )
+
+  val offset: Int = 1
+  
+  val standartCardWidth: Int = 15
+  val standartCardHeight: Int = 5
+  val standartSlotWidth: Int = standartCardWidth + 2 // 2 for Margin
+  val standartFieldBarHeight: Int = standartCardHeight + 1 // + 2 for border
+  val standartGameBarHeight: Int = 7
+  val standartMenueBarHeight: Int = 2
+  val standartFieldWidth: Int = standartSlotNum * standartSlotWidth
+  val standartFieldHeight: Int =
+    (standartFieldBarHeight + standartGameBarHeight + standartMenueBarHeight) * 2
+      + FieldObject.offset
  */
