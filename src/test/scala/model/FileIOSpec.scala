@@ -3,8 +3,8 @@ package model
 import hearthstoneMini.model.cardComponent.CardInterface
 import hearthstoneMini.model.cardComponent.cardImpl.Card
 import hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import hearthstoneMini.model.fileIOComponent.{FileIOInterface, xmlIOImpl}
-import hearthstoneMini.model.fileIOComponent.jsonIOImpl.FileIO
+import hearthstoneMini.model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
+import hearthstoneMini.model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
 import hearthstoneMini.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -31,13 +31,18 @@ class FileIOSpec extends AnyWordSpec with Matchers {
 
   val field2: Node = field.toXML
 
-  val fileIO = new FileIO()
+  val fileIOJson = new jsonImport
+  val fileIOXml = new xmlImport
 
   "Should be possible to save and load a field" when {
-    "saved & loaded field should be identical " in {
-      val saved: Unit = FileIO().save(field)
-      val loaded: Unit = FileIO().load
+    "with json variant" in {
+      val saved: Unit = fileIOJson.save(field)
+      val loaded: Unit = fileIOJson.load
       assert(saved === loaded)
+    }
+    "with xml variant" in {
+      val saved: Unit = fileIOXml.save(field)
+      val loaded: Unit = fileIOXml.load
     }
   }
 }
