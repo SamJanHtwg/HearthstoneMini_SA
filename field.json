@@ -5,51 +5,51 @@
       "id" : 1,
       "hand" : [ {
         "card" : {
-          "id" : "LETL_015H_03",
-          "name" : "Rexxar",
-          "manaCost" : 4,
-          "attValue" : 11,
-          "defenseValue" : 72,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TRLA_113t",
-          "name" : "Blutpakt",
-          "manaCost" : 0,
-          "attValue" : 0,
-          "defenseValue" : 0,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "GIL_202t",
-          "name" : "Königswach",
-          "manaCost" : 8,
-          "attValue" : 8,
+          "id" : "BT_196",
+          "name" : "Keli'dan d",
+          "manaCost" : 6,
+          "attValue" : 3,
           "defenseValue" : 3,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "AT_106",
-          "name" : "Champion d",
+          "id" : "DRGA_BOSS_30t2t",
+          "name" : "Rakete",
           "manaCost" : 3,
-          "attValue" : 4,
+          "attValue" : 5,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "OG_249",
+          "name" : "Infizierte",
+          "manaCost" : 4,
+          "attValue" : 2,
           "defenseValue" : 3,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "TB_GP_03",
-          "name" : "Neuer Scha",
-          "manaCost" : 0,
-          "attValue" : 0,
-          "defenseValue" : 4,
+          "id" : "TB_BaconUps_163",
+          "name" : "Leutnant G",
+          "manaCost" : 8,
+          "attValue" : 16,
+          "defenseValue" : 16,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "DALA_BOSS_51t2",
+          "name" : "Thoriumhüh",
+          "manaCost" : 3,
+          "attValue" : 5,
+          "defenseValue" : 1,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
@@ -96,51 +96,51 @@
       "id" : 2,
       "hand" : [ {
         "card" : {
-          "id" : "Story_03_OddTotem",
-          "name" : "Ungerades ",
+          "id" : "TB_BaconUps_303",
+          "name" : "Herold der",
+          "manaCost" : 6,
+          "attValue" : 10,
+          "defenseValue" : 10,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ICCA07_004",
+          "name" : "Wachsender",
+          "manaCost" : 1,
+          "attValue" : 1,
+          "defenseValue" : 1,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TRL_507",
+          "name" : "Haifischfl",
           "manaCost" : 2,
-          "attValue" : 0,
+          "attValue" : 2,
           "defenseValue" : 2,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "ULD_309",
-          "name" : "Zwergenarc",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TU5_CS2_179",
-          "name" : "Schildmeis",
+          "id" : "BARL_020H_01",
+          "name" : "Draka",
           "manaCost" : 4,
           "attValue" : 3,
-          "defenseValue" : 5,
+          "defenseValue" : 10,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "CS2_147",
-          "name" : "Gnomische ",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DMF_703t",
-          "name" : "Grubenmeis",
+          "id" : "DMF_111",
+          "name" : "Mosher der",
           "manaCost" : 3,
-          "attValue" : 1,
-          "defenseValue" : 2,
+          "attValue" : 3,
+          "defenseValue" : 4,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
