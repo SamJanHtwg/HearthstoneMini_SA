@@ -12,11 +12,6 @@ class CardSpec extends AnyWordSpec with Matchers {
       "have a String repesentation" in {
         card.toString() should be("test (2)#atk: 2#def: 2#Schmettern#rare")
       }
-      "have a Matrix repesentation" in {
-        card.toMatrix.toString should be(
-          "test (2)       \natk: 2         \ndef: 2         \nSchmettern     \nrare           \n"
-        )
-      }
       "have a name" in {
         card.name should be("test")
       }

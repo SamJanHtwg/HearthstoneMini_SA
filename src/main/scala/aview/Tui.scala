@@ -104,3 +104,12 @@ class Tui(controller: ControllerInterface) extends Observer {
     .name + Strings.istDranMsg +
     Strings.zeilenUmbruch + controller.field.toString + Strings.commands
 }
+
+/* 
+  // CARD
+  override def toMatrix: Matrix[String] = new Matrix[String](
+    FieldObject.standartCardHeight,
+    FieldObject.standartCardWidth,
+    " "
+  ).updateMatrix(0, 0, toString().split("#").toList)
+ */

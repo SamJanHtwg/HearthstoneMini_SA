@@ -75,11 +75,7 @@ case class Card(
   override def toString: String =
     name + " (" + manaCost + ")" + "#" + "atk: " + attValue + "#def: "
       + defenseValue + "#" + effect + "#" + rarity
-  override def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  ).updateMatrix(0, 0, toString().split("#").toList)
+
   override def reduceHP(amount: Int): Card =
     copy(defenseValue = defenseValue - amount)
   override def reduceAttackCount(): Card = copy(attackCount = attackCount - 1)

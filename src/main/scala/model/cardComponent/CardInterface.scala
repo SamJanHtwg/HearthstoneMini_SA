@@ -20,11 +20,6 @@ trait CardInterface {
   def reduceHP(amount: Int): CardInterface
   def reduceAttackCount(): CardInterface
   def resetAttackCount(): CardInterface
-  def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  )
 
   def toJson: JsValue
   def toXML: Node
