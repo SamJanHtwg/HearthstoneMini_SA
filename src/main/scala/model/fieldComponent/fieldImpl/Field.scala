@@ -187,10 +187,6 @@ case class Field @Inject() (
     )
   )
 
-  // TODO FIX
-  // override def toString: String =
-  //   toMatrix.rows.map(_.mkString("|", "", "|\n")).mkString
-
   override def toJson: JsValue = Json.obj(
     "players" -> players.map((id, player) => player.toJson),
     "turns" -> Json.toJson(turns),
