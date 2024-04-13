@@ -35,9 +35,6 @@ class FieldSpec extends AnyWordSpec with Matchers {
         val field0 = Field()
         field0.slotNum should be(5)
       }
-      "be created using default fieldsize 5 and 2 player names" in {
-        field.matrix.colSize should be(FieldObject.standartFieldWidth)
-      }
       "have a Card in slot 1 after placed 1 card in slot 1 from hand" in {
         field0
           .placeCard(0, 0)
@@ -102,11 +99,6 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
       "return player with id 1" in {
         field.getPlayerById(1) should be(field.players(field.activePlayerId))
-      }
-      "have a Matrix representation" in {
-        field1.toMatrix.colSize should be(85)
-        field1.toMatrix.rowSize should be(31)
-
       }
       "have reset and increased mana" in {
         val fieldAfterMove = field1.resetAndIncreaseMana()
