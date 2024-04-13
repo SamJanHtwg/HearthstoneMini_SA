@@ -25,7 +25,7 @@ class AttackCommand(controller: Controller, move: Move)
 
       newField = {
         if (difference > 0) {
-           currentField
+          currentField
             .destroyCard(
               currentField.getInactivePlayerId,
               move.fieldSlotInactive
@@ -35,7 +35,7 @@ class AttackCommand(controller: Controller, move: Move)
               Math.abs(difference)
             )
         } else {
-           currentField
+          currentField
             .reduceDefVal(
               move.fieldSlotInactive,
               attackingCard.attValue

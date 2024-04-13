@@ -9,7 +9,6 @@ import javax.inject.Inject
 import scala.xml.Node
 import scalafx.scene.input.KeyCode.M
 
-
 object FieldObject {
   val standartSlotNum: Int = 5
   def fromJson(json: JsValue): Field = {
@@ -194,7 +193,6 @@ case class Field @Inject() (
     )
   )
 
-  
   // TODO FIX
   // override def toString: String =
   //   toMatrix.rows.map(_.mkString("|", "", "|\n")).mkString

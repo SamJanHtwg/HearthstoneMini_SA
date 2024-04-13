@@ -1,8 +1,6 @@
 package hearthstoneMini
 package util.matrixComponent.matrixImpl
 
-
-
 case class Matrix[T](rows: Vector[Vector[String]]):
   def this(rowSize: Int, colSize: Int, filling: String) =
     this(Vector.tabulate(rowSize, colSize) { (row, col) => filling })

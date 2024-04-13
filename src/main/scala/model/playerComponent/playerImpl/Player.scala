@@ -162,7 +162,6 @@ case class Player(
     field = field.updated(slotNum, field(slotNum).map(_.reduceHP(amount)))
   )
 
-
   override def toJson: JsValue = Json.obj(
     "name" -> name,
     "id" -> id,

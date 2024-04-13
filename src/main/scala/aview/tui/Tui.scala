@@ -13,8 +13,8 @@ import hearthstoneMini.controller.component.ControllerInterface
 class Tui(controller: ControllerInterface) extends Observer {
   controller.add(this)
 
-  override def update(e: Event, msg: Option[String]): Unit = {
-    e match {
+  override def update(event: Event, msg: Option[String] = None): Unit = {
+    event match {
       case Event.ERROR => msg.fold({})(msg => println(msg))
       case Event.EXIT  => println(Strings.endGameMsg)
       case Event.PLAY =>
@@ -105,8 +105,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     Strings.zeilenUmbruch + controller.field.toString + Strings.commands
 }
 
-
-/* 
+/*
   // CARD
   override def toMatrix: Matrix[String] = new Matrix[String](
     FieldObject.standartCardHeight,
@@ -126,7 +125,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     )
 
   val offset: Int = 1
-  
+
   val standartCardWidth: Int = 15
   val standartCardHeight: Int = 5
   val standartSlotWidth: Int = standartCardWidth + 2 // 2 for Margin
