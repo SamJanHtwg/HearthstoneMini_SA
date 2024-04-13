@@ -3,7 +3,6 @@ package model.fieldComponent.fieldImpl
 
 import model.fieldComponent.FieldInterface
 import model.playerComponent.playerImpl.Player
-import model.matrixComponent.matrixImpl.Matrix
 import play.api.libs.json.*
 
 import javax.inject.Inject

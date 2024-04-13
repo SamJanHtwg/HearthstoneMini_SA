@@ -4,7 +4,6 @@ package model.cardComponent.cardImpl
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import model.cardComponent.CardInterface
-import model.matrixComponent.matrixImpl.Matrix
 import play.api.libs.json.*
 
 import scala.annotation.nowarn

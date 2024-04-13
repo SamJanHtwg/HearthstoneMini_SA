@@ -3,7 +3,6 @@ package model.fieldComponent
 
 import model.cardComponent.cardImpl.Card
 import model.playerComponent.playerImpl.Player
-import model.matrixComponent.matrixImpl.Matrix
 import model.fieldComponent
 import play.api.libs.json.JsValue
 

@@ -4,7 +4,6 @@ package model.playerComponent.playerImpl
 import hearthstoneMini.model.cardComponent.CardInterface
 import hearthstoneMini.model.cardComponent.cardImpl.Card
 import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
-import hearthstoneMini.model.matrixComponent.matrixImpl.Matrix
 import hearthstoneMini.model.playerComponent.PlayerInterface
 import hearthstoneMini.util.CardProvider
 import play.api.libs.json.*
@@ -159,55 +158,10 @@ case class Player(
   override def setManaValue(amount: Int): Player =
     copy(manaValue = amount, maxManaValue = amount)
 
-  // matrix
-  override def toMatrix: Matrix[String] =
-    if (id % 2) == 1 then renderUnevenId() else renderEvenId()
-
-  override def renderUnevenId(): Matrix[String] = new Matrix[String](
-    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
-    FieldObject.standartFieldWidth,
-    " "
-  )
-    .updateMatrixWithMatrix(0, 0, menueBar())
-
-  // .updateMatrixWithMatrix(
-  //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
-  //   0,
-  //   field.toMatrix
-  // )
-
-  override def renderEvenId(): Matrix[String] = new Matrix[String](
-    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
-    FieldObject.standartFieldWidth,
-    " "
-  )
-    // .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
-    .updateMatrixWithMatrix(
-      FieldObject.standartFieldBarHeight + FieldObject.standartGameBarHeight,
-      0,
-      menueBar()
-    )
-
   override def reduceDefVal(slotNum: Int, amount: Int): Player = copy(
     field = field.updated(slotNum, field(slotNum).map(_.reduceHP(amount)))
   )
 
-  override def menueBar(): Matrix[String] = new Matrix[String](
-    FieldObject.standartMenueBarHeight,
-    FieldObject.standartFieldWidth,
-    " "
-  )
-    .updateMatrix(
-      0,
-      0,
-      List[String](
-        name + " " +
-          "#" * ((FieldObject.standartFieldWidth - name.length - 1) *
-            hpValue / maxHpValue).asInstanceOf[Float].floor.asInstanceOf[Int],
-        "-" *
-          FieldObject.standartFieldWidth
-      )
-    )
 
   override def toJson: JsValue = Json.obj(
     "name" -> name,

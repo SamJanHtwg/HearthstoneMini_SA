@@ -3,7 +3,6 @@ package model.cardComponent
 
 import model.cardComponent.cardImpl.Card
 import model.fieldComponent.fieldImpl.FieldObject
-import model.matrixComponent.matrixImpl.Matrix
 import play.api.libs.json.JsValue
 import scala.xml.Node
 

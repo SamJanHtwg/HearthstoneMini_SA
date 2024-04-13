@@ -1,7 +1,6 @@
 package hearthstoneMini
 package model.playerComponent
 
-import model.matrixComponent.matrixImpl.Matrix
 import play.api.libs.json.JsValue
 
 import scala.xml.Node
@@ -54,15 +53,6 @@ trait PlayerInterface {
   def setManaValue(amount: Int): PlayerInterface
 
   def isManaEmpty: Boolean
-
-  // matrix
-  def toMatrix: Matrix[String]
-
-  def renderUnevenId(): Matrix[String]
-
-  def renderEvenId(): Matrix[String]
-
-  def menueBar(): Matrix[String]
 
   def toJson: JsValue
 
