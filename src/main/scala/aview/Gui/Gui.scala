@@ -1,9 +1,10 @@
 package hearthstoneMini
-package aview.Gui
+package aview.gui
 
-import aview.Gui.enterPlayernamesScreen.EnterPlayerNamesImpl
-import aview.Gui.mainGameScreen.MainGameScreen
-import aview.Gui.modeSelectionScreen.ModeSelectionScreenImpl
+import aview.gui.enterPlayernamesScreen.EnterPlayerNamesImpl
+import aview.gui.mainGameScreen.MainGameScreen
+import aview.gui.modeSelectionScreen.ModeSelectionScreenImpl
+import hearthstoneMini.aview.gui.GuiApp
 import controller.GameState
 import controller.component.controllerImpl.Controller
 import javafx.scene.control.DialogPane

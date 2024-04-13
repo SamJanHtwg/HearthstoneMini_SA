@@ -1,5 +1,6 @@
 package hearthstoneMini
-package aview.Gui.modeSelectionScreen
+package aview.gui.modeSelectionScreen
+
 import controller.Strategy
 import controller.component.ControllerInterface
 import controller.component.controllerImpl.Controller

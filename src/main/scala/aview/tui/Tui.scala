@@ -105,6 +105,7 @@ class Tui(controller: ControllerInterface) extends Observer {
     Strings.zeilenUmbruch + controller.field.toString + Strings.commands
 }
 
+
 /* 
   // CARD
   override def toMatrix: Matrix[String] = new Matrix[String](
@@ -136,4 +137,50 @@ class Tui(controller: ControllerInterface) extends Observer {
   val standartFieldHeight: Int =
     (standartFieldBarHeight + standartGameBarHeight + standartMenueBarHeight) * 2
       + FieldObject.offset
+
+
+  // PLAYER
+  override def toMatrix: Matrix[String] =
+    if (id % 2) == 1 then renderUnevenId() else renderEvenId()
+
+  override def renderUnevenId(): Matrix[String] = new Matrix[String](
+    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
+    FieldObject.standartFieldWidth,
+    " "
+  )
+    .updateMatrixWithMatrix(0, 0, menueBar())
+
+  // .updateMatrixWithMatrix(
+  //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
+  //   0,
+  //   field.toMatrix
+  // )
+
+  override def renderEvenId(): Matrix[String] = new Matrix[String](
+    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
+    FieldObject.standartFieldWidth,
+    " "
+  )
+    // .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
+    .updateMatrixWithMatrix(
+      FieldObject.standartFieldBarHeight + FieldObject.standartGameBarHeight,
+      0,
+      menueBar()
+    )
+    override def menueBar(): Matrix[String] = new Matrix[String](
+      FieldObject.standartMenueBarHeight,
+      FieldObject.standartFieldWidth,
+      " "
+    )
+      .updateMatrix(
+        0,
+        0,
+        List[String](
+          name + " " +
+            "#" * ((FieldObject.standartFieldWidth - name.length - 1) *
+              hpValue / maxHpValue).asInstanceOf[Float].floor.asInstanceOf[Int],
+          "-" *
+            FieldObject.standartFieldWidth
+        )
+      )
  */

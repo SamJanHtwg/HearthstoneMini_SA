@@ -1,5 +1,5 @@
 package hearthstoneMini
-package aview.Gui.enterPlayernamesScreen
+package aview.gui.enterPlayernamesScreen
 
 import controller.component.ControllerInterface
 import controller.Strategy

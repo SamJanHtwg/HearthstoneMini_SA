@@ -1,5 +1,5 @@
 package hearthstoneMini
-package aview.Gui.mainGameScreen
+package aview.gui.mainGameScreen
 
 import controller.component.ControllerInterface
 import controller.Strategy
