@@ -7,7 +7,6 @@ package model
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import controller.component.controllerImpl.Controller
-import util.Observer
 import _root_.hearthstoneMini.model.cardComponent.cardImpl.Card
 import _root_.hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import _root_.hearthstoneMini.model.playerComponent.playerImpl.Player
@@ -22,6 +21,10 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   )
 
   "The Controller" should {
+    "should have access to all game states" in {
+      val allStates = GameState.values.toList
+      assert(allStates.length == 5)
+    }
     "have a default gametstate of GameState.PREGAME" in {
       val controller = Controller(
         Field(
@@ -140,11 +143,13 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         )
       )
       controller.drawCard()
+      controller.canUndo should be (true)
       controller.undo
       controller.field
         .players(controller.field.activePlayerId)
         .hand
         .length should be(0)
+      controller.canRedo should be (true)
       controller.redo
       controller.field
         .players(controller.field.activePlayerId)
@@ -192,6 +197,20 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       )
       controller.gameState should be(GameState.WIN)
     }
+    "should return none when game dont have a winner" in {
+      val controller = Controller(
+        Field(
+          slotNum = 5,
+          players = Map[Int, Player](
+            (1, Player(id = 1)),
+            (2, Player(id = 2))
+          ),
+          turns = 2
+        )
+      )
+
+      controller.getWinner() should be (None)
+    }
     "should be able to save & load" in {
       val field = Field(
         players = Map[Int, Player](
@@ -204,6 +223,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val saved: Unit = controller.saveField
       val loaded: Unit = controller.loadField
       assert(saved === loaded)
+    }
+    "when unable to load, error should be triggered" in {
+      // TODO: add testcase
     }
   }
 }

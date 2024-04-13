@@ -13,14 +13,13 @@ object FieldObject {
   def fromJson(json: JsValue): Field = {
     val fieldJs = json \ "field"
     Field(
-      activePlayerId = (fieldJs \ "activePlayerId").get.toString.toInt,
-      players = (fieldJs \ "players")
-        .validate[Iterable[JsValue]]
-        .get
+      activePlayerId = fieldJs("activePlayerId").toString.toInt,
+      players = fieldJs("players")
+        .as[Seq[JsValue]]
         .map(player => Player.fromJson(player))
         .map(player => (player.id, player))
         .toMap,
-      turns = (fieldJs \ "turns").get.toString.toInt
+      turns = fieldJs("turns").toString.toInt,
     )
   }
 
@@ -158,20 +157,19 @@ case class Field @Inject() (
       )
   )
 
-  override def switchPlayer(): Field = if (turns != 0 && turns % 2 == 1)
-  then
+  override def switchPlayer(): Field = if (turns != 0 && turns % 2 == 1) {
     copy(
       players =
         players.mapValues((player) => player.resetAndIncreaseMana()).toMap,
       turns = turns + 1,
-      activePlayerId = players.find((id, player) => id != activePlayerId).get._1
+      activePlayerId = getInactivePlayerId
     )
-  else
+  } else {
     copy(
-      activePlayerId =
-        players.find((id, player) => id != activePlayerId).get._1,
+      activePlayerId = getInactivePlayerId,
       turns = turns + 1
     )
+  }
 
   override def getPlayerById(id: Int): Player = players(id)
 
