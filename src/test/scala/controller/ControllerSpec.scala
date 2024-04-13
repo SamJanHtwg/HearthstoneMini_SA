@@ -200,7 +200,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "should return none when game dont have a winner" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1)),
             (2, Player(id = 2))
