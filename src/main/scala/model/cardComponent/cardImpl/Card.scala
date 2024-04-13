@@ -9,7 +9,7 @@ import play.api.libs.json.*
 import scala.annotation.nowarn
 import scala.collection.View.Empty
 import scala.xml.Node
-import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
+import hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import scala.util.Try
 import scala.util.Failure
 import scala.util.Success

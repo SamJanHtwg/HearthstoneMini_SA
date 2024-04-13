@@ -9,7 +9,7 @@ import javax.inject.Inject
 import scala.xml.Node
 import scalafx.scene.input.KeyCode.M
 
-object FieldObject {
+object Field {
   def fromJson(json: JsValue): Field = {
     val fieldJs = json \ "field"
     Field(

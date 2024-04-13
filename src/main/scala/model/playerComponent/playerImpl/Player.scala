@@ -3,7 +3,7 @@ package model.playerComponent.playerImpl
 
 import hearthstoneMini.model.cardComponent.CardInterface
 import hearthstoneMini.model.cardComponent.cardImpl.Card
-import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
+import hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import hearthstoneMini.model.playerComponent.PlayerInterface
 import hearthstoneMini.util.CardProvider
 import play.api.libs.json.*
@@ -14,7 +14,6 @@ import scala.util.Try
 
 /** TODO:
   *   - karten zum friedhof hinzufügen sollte kein optional bekommen
-  *   - renderEvenId() und renderUnevenId() fix field
   */
 
 object Player {

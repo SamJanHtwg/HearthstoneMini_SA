@@ -8,7 +8,7 @@ import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import model.fieldComponent.fieldImpl.Field
-import model.fieldComponent.fieldImpl.FieldObject
+import model.fieldComponent.fieldImpl.Field
 
 class FieldSpec extends AnyWordSpec with Matchers {
   "A Field" when {
@@ -122,8 +122,8 @@ class FieldSpec extends AnyWordSpec with Matchers {
     "restored from xml" in {
       val field = new Field("1", "2")
       val xml = field.toXML
-      val fromXml = FieldObject.fromXml(xml)
-      assert(field.toString === fromXml.toString)
+      val fromXml = Field.fromXml(xml)
+      assert(field == fromXml)
     }
   }
 }
