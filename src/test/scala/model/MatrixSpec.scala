@@ -1,7 +1,7 @@
 package hearthstoneMini
 package model
 
-import util.matrixComponent.matrixImpl.Matrix
+import util.matrix.Matrix
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

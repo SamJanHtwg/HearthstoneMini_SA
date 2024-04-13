@@ -1,5 +1,5 @@
 package hearthstoneMini
-package util.matrixComponent.matrixImpl
+package util.matrix
 
 case class Matrix(rows: Vector[Vector[String]]):
   def this(rowSize: Int, colSize: Int, filling: String) =

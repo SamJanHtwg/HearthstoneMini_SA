@@ -9,7 +9,7 @@ import controller.Strategy
 import controller.component.controllerImpl.Controller
 import scala.util.{Failure, Success, Try}
 import hearthstoneMini.controller.component.ControllerInterface
-import hearthstoneMini.util.matrixComponent.matrixImpl.Matrix
+import hearthstoneMini.util.matrix.Matrix
 import hearthstoneMini.model.playerComponent.PlayerInterface
 import hearthstoneMini.aview.Tui.{
   zeilenUmbruch,
