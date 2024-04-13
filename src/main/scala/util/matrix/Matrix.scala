@@ -1,15 +1,15 @@
 package hearthstoneMini
-package model.matrixComponent.matrixImpl
+package util.matrixComponent.matrixImpl
 
-import model.matrixComponent.MatrixInterface
 
-case class Matrix[T](rows: Vector[Vector[String]]) extends MatrixInterface:
+
+case class Matrix[T](rows: Vector[Vector[String]]):
   def this(rowSize: Int, colSize: Int, filling: String) =
     this(Vector.tabulate(rowSize, colSize) { (row, col) => filling })
   val rowSize: Int = rows.size
   val colSize: Int = rows(0).length
 
-  override def updateMatrix(
+  def updateMatrix(
       rowStart: Int,
       colStart: Int,
       stringList: List[String]
@@ -27,7 +27,7 @@ case class Matrix[T](rows: Vector[Vector[String]]) extends MatrixInterface:
     )
   )
 
-  override def updateMatrixWithMatrix(
+  def updateMatrixWithMatrix(
       rowStart: Int,
       colStart: Int,
       insertMatrix: Matrix[String]
