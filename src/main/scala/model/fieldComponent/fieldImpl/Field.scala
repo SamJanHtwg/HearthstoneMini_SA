@@ -10,7 +10,6 @@ import scala.xml.Node
 import scalafx.scene.input.KeyCode.M
 
 object FieldObject {
-  val standartSlotNum: Int = 5
   def fromJson(json: JsValue): Field = {
     val fieldJs = json \ "field"
     Field(
@@ -21,8 +20,7 @@ object FieldObject {
         .map(player => Player.fromJson(player))
         .map(player => (player.id, player))
         .toMap,
-      turns = (fieldJs \ "turns").get.toString.toInt,
-      slotNum = (fieldJs \ "slotnum").get.toString.toInt
+      turns = (fieldJs \ "turns").get.toString.toInt
     )
   }
 
@@ -35,21 +33,18 @@ object FieldObject {
         .map(player => Player.fromXml(player))
         .map(player => (player.id, player))
         .toMap[Int, Player],
-      turns = (node \ "turns").text.trim.toInt,
-      slotNum = (node \ "slotnum").text.trim.toInt
+      turns = (node \ "turns").text.trim.toInt
     )
 }
 
 //noinspection DuplicatedCode
 case class Field @Inject() (
-    slotNum: Int = FieldObject.standartSlotNum,
     players: Map[Int, Player] = Map[Int, Player](),
     activePlayerId: Int = 1,
     turns: Int = 0
 ) extends FieldInterface() {
 
-  def this(size: Int, player1: String, player2: String) = this(
-    size,
+  def this(player1: String, player2: String) = this(
     players = Map[Int, Player](
       (1, Player(name = player1, id = 1, manaValue = 0, maxManaValue = 1)),
       (2, Player(name = player2, id = 2, manaValue = 0, maxManaValue = 1))
@@ -57,8 +52,7 @@ case class Field @Inject() (
     activePlayerId = 1
   )
 
-  def this(size: Int) = this(
-    size,
+  def this() = this(
     activePlayerId = 1,
     players = Map[Int, Player](
       (1, Player(id = 1, manaValue = 0, maxManaValue = 1)),
@@ -199,7 +193,6 @@ case class Field @Inject() (
 
   override def toJson: JsValue = Json.obj(
     "players" -> players.map((id, player) => player.toJson),
-    "slotnum" -> Json.toJson(slotNum),
     "turns" -> Json.toJson(turns),
     "activePlayerId" -> Json.toJson(activePlayerId)
   )
@@ -209,9 +202,6 @@ case class Field @Inject() (
       <players>
         {players.map((id, player) => player.toXml)}
       </players>
-      <slotnum>
-        {slotNum.toString}
-      </slotnum>
       <turns>
         {turns.toString}
       </turns>

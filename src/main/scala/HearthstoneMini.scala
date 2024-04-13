@@ -25,7 +25,7 @@ class HearthstoneMiniRunner(
     initGUI: Boolean = false,
     initTUI: Boolean = false
 ) {
-  val controller: ControllerInterface = Controller(new Field(5))
+  val controller: ControllerInterface = Controller(new Field())
   private val optionalTui: Option[Tui] =
     if (initTUI) Some(new Tui(controller)) else None
   val optionalGUI: Option[GuiApp] =

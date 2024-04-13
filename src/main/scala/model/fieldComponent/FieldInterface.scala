@@ -12,7 +12,6 @@ import hearthstoneMini.model.playerComponent.PlayerInterface
 trait FieldInterface {
   val players: Map[Int, PlayerInterface]
   val activePlayerId: Int
-  val slotNum: Int
   val turns: Int
 
   // player

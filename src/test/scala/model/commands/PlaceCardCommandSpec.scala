@@ -18,7 +18,6 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
     "do step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -36,7 +35,6 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
     "undo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -54,7 +52,6 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
     "redo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))

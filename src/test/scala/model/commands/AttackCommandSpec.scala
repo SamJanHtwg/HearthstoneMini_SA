@@ -18,7 +18,6 @@ class AttackCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     val controller = Controller(
       Field(
-        slotNum = 5,
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards)),
           (2, Player(id = 2, hand = testCards))

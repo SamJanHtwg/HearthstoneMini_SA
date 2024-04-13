@@ -21,19 +21,18 @@ class FieldSpec extends AnyWordSpec with Matchers {
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "")
       )
 
-      val field0 = new Field(5, "Player1", "Player2")
+      val field0 = new Field("Player1", "Player2")
       var field = new Field(
-        slotNum = 5,
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
           (2, Player(id = 2))
         )
       )
 
-      val field1 = new Field(5)
+      val field1 = new Field()
       "be created with empty constructor" in {
         val field0 = Field()
-        field0.slotNum should be(5)
+
       }
       "have a Card in slot 1 after placed 1 card in slot 1 from hand" in {
         field0
@@ -111,17 +110,17 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
     }
     "when hp value is set" in {
-      new Field(5, "1", "2").setHpValues(34).players.head._2.hpValue should be(
+      new Field("1", "2").setHpValues(34).players.head._2.hpValue should be(
         34
       )
     }
     "when mana value is set" in {
-      new Field(5, "1", "2").setManaValues(45).players(1).manaValue should be(
+      new Field("1", "2").setManaValues(45).players(1).manaValue should be(
         45
       )
     }
     "restored from xml" in {
-      val field = new Field(5, "1", "2")
+      val field = new Field("1", "2")
       val xml = field.toXML
       val fromXml = FieldObject.fromXml(xml)
       assert(field.toString === fromXml.toString)

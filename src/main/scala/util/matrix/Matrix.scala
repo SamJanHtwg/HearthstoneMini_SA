@@ -1,7 +1,7 @@
 package hearthstoneMini
 package util.matrixComponent.matrixImpl
 
-case class Matrix[T](rows: Vector[Vector[String]]):
+case class Matrix(rows: Vector[Vector[String]]):
   def this(rowSize: Int, colSize: Int, filling: String) =
     this(Vector.tabulate(rowSize, colSize) { (row, col) => filling })
   val rowSize: Int = rows.size
@@ -10,8 +10,8 @@ case class Matrix[T](rows: Vector[Vector[String]]):
   def updateMatrix(
       rowStart: Int,
       colStart: Int,
-      stringList: List[String]
-  ): Matrix[String] = copy(
+      stringList: Iterable[String]
+  ): Matrix = copy(
     rows.patch(
       rowStart,
       stringList.zipWithIndex.map((string1, index) =>
@@ -21,15 +21,15 @@ case class Matrix[T](rows: Vector[Vector[String]]):
           string1.replaceAll("(\\u001b\\[)\\d{0,3}(;)?\\d*.", "").length
         )
       ),
-      stringList.length
+      stringList.size
     )
   )
 
-  def updateMatrixWithMatrix(
+  def updateMatrix(
       rowStart: Int,
       colStart: Int,
-      insertMatrix: Matrix[String]
-  ): Matrix[String] = copy(
+      insertMatrix: Matrix
+  ): Matrix = copy(
     rows.patch(
       rowStart,
       insertMatrix.rows.zipWithIndex.map((vector, index) =>

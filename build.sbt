@@ -6,8 +6,8 @@ assemblyMergeStrategy in assembly := {
  case _                        => MergeStrategy.first
 }
 
-Compile/mainClass := Some("scala.HearthstoneMini")
-mainClass in (Compile, packageBin) := Some("scala.HearthstoneMini")
+Compile/mainClass := Some("hearthstoneMini.HearthstoneMini")
+mainClass in (Compile, packageBin) := Some("hearthstoneMini.HearthstoneMini")
 
 lazy val root = project
   .in(file("."))
