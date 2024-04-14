@@ -1,11 +1,11 @@
 package model
 
-import hearthstoneMini.model.cardComponent.CardInterface
-import hearthstoneMini.model.cardComponent.cardImpl.Card
-import hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import hearthstoneMini.model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
-import hearthstoneMini.model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
-import hearthstoneMini.model.playerComponent.playerImpl.Player
+import core.model.cardComponent.CardInterface
+import core.model.cardComponent.cardImpl.Card
+import core.model.fieldComponent.fieldImpl.Field
+import core.model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
+import core.model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
+import core.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

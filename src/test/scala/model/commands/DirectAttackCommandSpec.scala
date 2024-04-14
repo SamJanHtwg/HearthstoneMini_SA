@@ -1,12 +1,12 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import hearthstoneMini.model.playerComponent.playerImpl
-import hearthstoneMini.controller.component.controllerImpl.Controller
-import hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import hearthstoneMini.model.playerComponent.playerImpl.Player
-import hearthstoneMini.model.Move
-import hearthstoneMini.util.commands.commandImpl.DirectAttackCommand
+import core.model.playerComponent.playerImpl
+import core.controller.component.controllerImpl.Controller
+import core.model.fieldComponent.fieldImpl.Field
+import core.model.playerComponent.playerImpl.Player
+import core.model.Move
+import core.util.commands.commandImpl.DirectAttackCommand
 
 class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
