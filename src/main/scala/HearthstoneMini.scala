@@ -1,8 +1,7 @@
 package hearthstoneMini
 
-import model.*
-import controller.GameState
-import aview.Tui
+import c
+import core.controller.GameState
 import controller.component.controllerImpl.Controller
 import model.fieldComponent.fieldImpl.Field
 import scala.io.StdIn
@@ -10,7 +9,6 @@ import scala.io.StdIn.readLine
 import util.Event
 import scalafx.scene.text.FontWeight.Bold
 import hearthstoneMini.controller.component.ControllerInterface
-import hearthstoneMini.aview.gui.GuiApp
 
 object HearthstoneMini {
   private val hearthstoneMiniRunner =

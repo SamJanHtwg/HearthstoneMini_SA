@@ -9,6 +9,15 @@ assemblyMergeStrategy in assembly := {
 Compile/mainClass := Some("hearthstoneMini.HearthstoneMini")
 mainClass in (Compile, packageBin) := Some("hearthstoneMini.HearthstoneMini")
 
+//lazy val gui = project
+//  .in(file("modules/gui"))
+//
+//lazy val tui = project
+//  .in(file("modules/tui"))
+
+lazy val core = project
+  .in(file("modules/core"))
+
 lazy val root = project
   .in(file("."))
   .settings(
@@ -18,28 +27,10 @@ lazy val root = project
     assembly / mainClass := Some("scala.HearthstoneMini"),
     assembly / assemblyJarName := "HearthstoneMini.jar",
    
-    
-    //fork := true,
     scalaVersion := scala3Version,
 
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.12",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test",
-
-    libraryDependencies += "org.scalafx" % "scalafx_3" % "20.0.0-R31",
-    libraryDependencies ++= {
-      // Determine OS version of JavaFX binaries
-      // lazy val osName = System.getProperty("os.name") match {
-      //   case n if n.startsWith("Linux") => "linux"
-      //   case n if n.startsWith("Mac") => "mac"
-      //   case n if n.startsWith("Windows") => "win"
-      //   case _ => throw new Exception("Unknown platform!")
-      // }
-      Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-        .map(m => "org.openjfx" % s"javafx-$m" % "20")
-    },
-    
-    libraryDependencies += "com.google.inject.extensions" % "guice-assistedinject" % "5.1.0",
-    libraryDependencies += "net.codingwell" %% "scala-guice" % "5.1.1",
 
     libraryDependencies += "com.typesafe.play" %% "play-json" % "2.10.1",
 
@@ -51,16 +42,18 @@ lazy val root = project
       JacocoThresholds(),
       Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML), // note XML formatter
       "utf-8"),
-    jacocoExcludes := Seq(
-      "*Tui",
-      "*Interface",
-      "*view.*",
-      "*view.*.*",
-      "*view.*.*.*",
-      "hearthstoneMini.HearthstoneMiniModule.scala",
-      "hearthstoneMini.HearthstoneMini.scala"
-    )
+//    jacocoExcludes := Seq(
+//      "*Tui",
+//      "*Interface",
+//      "*view.*",
+//      "*view.*.*",
+//      "*view.*.*.*",
+////      "HearthstoneMiniModule.scala",
+//      "hearthstoneMini.HearthstoneMini.scala"
+//    )
   )
+  .dependsOn(core)
+  .aggregate(core)
 
 
 
