@@ -6,8 +6,8 @@ assemblyMergeStrategy in assembly := {
  case _                        => MergeStrategy.first
 }
 
-Compile/mainClass := Some("scala.HearthstoneMini")
-mainClass in (Compile, packageBin) := Some("scala.HearthstoneMini")
+Compile/mainClass := Some("hearthstoneMini.HearthstoneMini")
+mainClass in (Compile, packageBin) := Some("hearthstoneMini.HearthstoneMini")
 
 lazy val root = project
   .in(file("."))
@@ -53,11 +53,12 @@ lazy val root = project
       "utf-8"),
     jacocoExcludes := Seq(
       "*Tui",
-      "*Strings*",
       "*Interface",
+      "*view.*",
       "*view.*.*",
-      "src/main/scala/HearthstoneMiniModule.scala",
-      "src/main/scala/HearthstoneMini.scala"
+      "*view.*.*.*",
+      "hearthstoneMini.HearthstoneMiniModule.scala",
+      "hearthstoneMini.HearthstoneMini.scala"
     )
   )
 

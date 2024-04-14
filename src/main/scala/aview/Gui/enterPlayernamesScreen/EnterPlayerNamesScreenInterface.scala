@@ -1,5 +1,5 @@
 package hearthstoneMini
-package aview.Gui.enterPlayernamesScreen
+package aview.gui.enterPlayernamesScreen
 
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent

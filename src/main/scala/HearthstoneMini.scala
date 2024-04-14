@@ -1,6 +1,5 @@
 package hearthstoneMini
 
-import aview.Gui.GuiApp
 import model.*
 import controller.GameState
 import aview.Tui
@@ -11,6 +10,7 @@ import scala.io.StdIn.readLine
 import util.Event
 import scalafx.scene.text.FontWeight.Bold
 import hearthstoneMini.controller.component.ControllerInterface
+import hearthstoneMini.aview.gui.GuiApp
 
 object HearthstoneMini {
   private val hearthstoneMiniRunner =
@@ -25,7 +25,7 @@ class HearthstoneMiniRunner(
     initGUI: Boolean = false,
     initTUI: Boolean = false
 ) {
-  val controller: ControllerInterface = Controller(new Field(5))
+  val controller: ControllerInterface = Controller(new Field())
   private val optionalTui: Option[Tui] =
     if (initTUI) Some(new Tui(controller)) else None
   val optionalGUI: Option[GuiApp] =

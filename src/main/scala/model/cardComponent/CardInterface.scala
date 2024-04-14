@@ -2,8 +2,7 @@ package hearthstoneMini
 package model.cardComponent
 
 import model.cardComponent.cardImpl.Card
-import model.fieldComponent.fieldImpl.FieldObject
-import model.matrixComponent.matrixImpl.Matrix
+import model.fieldComponent.fieldImpl.Field
 import play.api.libs.json.JsValue
 import scala.xml.Node
 
@@ -20,11 +19,6 @@ trait CardInterface {
   def reduceHP(amount: Int): CardInterface
   def reduceAttackCount(): CardInterface
   def resetAttackCount(): CardInterface
-  def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  )
 
   def toJson: JsValue
   def toXML: Node

@@ -7,7 +7,7 @@ import model.fieldComponent.FieldInterface
 import net.codingwell.scalaguice.InjectorExtensions.*
 
 import model.fileIOComponent.FileIOInterface
-import model.fieldComponent.fieldImpl.{Field, FieldObject}
+import model.fieldComponent.fieldImpl.{Field}
 
 import java.io.{File, PrintWriter}
 import scala.xml.XML.loadFile
@@ -18,7 +18,7 @@ class FileIO extends FileIOInterface {
   override def load: Try[Field] =
     Try {
       val field = loadFile("field.xml")
-      FieldObject.fromXml(field)
+      Field.fromXml(field)
     }
 
   override def save(field: FieldInterface): Unit = {

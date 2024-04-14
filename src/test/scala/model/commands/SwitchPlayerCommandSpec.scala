@@ -18,7 +18,6 @@ class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
     "when switching players" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -33,7 +32,6 @@ class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
     "undo / redo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))

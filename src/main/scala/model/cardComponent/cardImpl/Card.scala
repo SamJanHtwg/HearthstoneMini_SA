@@ -4,13 +4,12 @@ package model.cardComponent.cardImpl
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import model.cardComponent.CardInterface
-import model.matrixComponent.matrixImpl.Matrix
 import play.api.libs.json.*
 
 import scala.annotation.nowarn
 import scala.collection.View.Empty
 import scala.xml.Node
-import hearthstoneMini.model.fieldComponent.fieldImpl.FieldObject
+import hearthstoneMini.model.fieldComponent.fieldImpl.Field
 import scala.util.Try
 import scala.util.Failure
 import scala.util.Success
@@ -75,11 +74,7 @@ case class Card(
   override def toString: String =
     name + " (" + manaCost + ")" + "#" + "atk: " + attValue + "#def: "
       + defenseValue + "#" + effect + "#" + rarity
-  override def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  ).updateMatrix(0, 0, toString().split("#").toList)
+
   override def reduceHP(amount: Int): Card =
     copy(defenseValue = defenseValue - amount)
   override def reduceAttackCount(): Card = copy(attackCount = attackCount - 1)

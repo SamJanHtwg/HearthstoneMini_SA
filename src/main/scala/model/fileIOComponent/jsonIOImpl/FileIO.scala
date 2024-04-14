@@ -1,7 +1,7 @@
 package hearthstoneMini
 package model.fileIOComponent.jsonIOImpl
 import model.fieldComponent.FieldInterface
-import model.fieldComponent.fieldImpl.{Field, FieldObject}
+import model.fieldComponent.fieldImpl.{Field}
 import model.fileIOComponent.FileIOInterface
 import play.api.libs.json.*
 
@@ -14,7 +14,7 @@ class FileIO extends FileIOInterface {
     val source = Source.fromFile("field.json")
     val json = Json.parse(source.getLines().mkString)
     source.close()
-    FieldObject.fromJson(json)
+    Field.fromJson(json)
   }
 
   override def save(field: FieldInterface): Unit = {

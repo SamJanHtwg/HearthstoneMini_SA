@@ -19,7 +19,7 @@ class HearthstoneMiniModule extends AbstractModule {
   override def configure(): Unit = {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind(classOf[ControllerInterface]).to(classOf[Controller])
-    bind(classOf[FieldInterface]).toInstance(new Field(5))
+    bind(classOf[FieldInterface]).toInstance(new Field())
     bind(classOf[FileIOInterface]).to(classOf[json])
   }
 }

@@ -1,19 +1,17 @@
 package hearthstoneMini
-package model.matrixComponent.matrixImpl
+package util.matrix
 
-import model.matrixComponent.MatrixInterface
-
-case class Matrix[T](rows: Vector[Vector[String]]) extends MatrixInterface:
+case class Matrix(rows: Vector[Vector[String]]):
   def this(rowSize: Int, colSize: Int, filling: String) =
     this(Vector.tabulate(rowSize, colSize) { (row, col) => filling })
   val rowSize: Int = rows.size
   val colSize: Int = rows(0).length
 
-  override def updateMatrix(
+  def updateMatrix(
       rowStart: Int,
       colStart: Int,
-      stringList: List[String]
-  ): Matrix[String] = copy(
+      stringList: Iterable[String]
+  ): Matrix = copy(
     rows.patch(
       rowStart,
       stringList.zipWithIndex.map((string1, index) =>
@@ -23,15 +21,15 @@ case class Matrix[T](rows: Vector[Vector[String]]) extends MatrixInterface:
           string1.replaceAll("(\\u001b\\[)\\d{0,3}(;)?\\d*.", "").length
         )
       ),
-      stringList.length
+      stringList.size
     )
   )
 
-  override def updateMatrixWithMatrix(
+  def updateMatrix(
       rowStart: Int,
       colStart: Int,
-      insertMatrix: Matrix[String]
-  ): Matrix[String] = copy(
+      insertMatrix: Matrix
+  ): Matrix = copy(
     rows.patch(
       rowStart,
       insertMatrix.rows.zipWithIndex.map((vector, index) =>

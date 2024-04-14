@@ -1,7 +1,6 @@
 package hearthstoneMini
-package aview.Gui
+package aview.gui
 
-import aview.Gui.Gui
 import controller.GameState
 import controller.component.controllerImpl.Controller
 import javafx.geometry.Side
