@@ -3,7 +3,7 @@ package enterPlayernamesScreen
 
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
-import model.Move
+import core.model.Move
 import scalafx.geometry.Insets
 import scalafx.scene.Node
 import scalafx.scene.control.{

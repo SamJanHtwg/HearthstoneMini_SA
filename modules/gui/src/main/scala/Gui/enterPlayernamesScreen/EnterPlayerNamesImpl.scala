@@ -1,12 +1,12 @@
 package gui
 package enterPlayernamesScreen
 
-import controller.component.ControllerInterface
-import controller.Strategy
-import controller.component.controllerImpl.Controller
+import core.controller.component.ControllerInterface
+import core.controller.Strategy
+import core.controller.component.controllerImpl.Controller
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
-import model.Move
+import core.model.Move
 import scalafx.geometry.Insets
 import scalafx.scene.Node
 import scalafx.scene.control.{
@@ -17,7 +17,7 @@ import scalafx.scene.control.{
   ToggleGroup
 }
 import scalafx.scene.layout.GridPane
-import model.fileIOComponent.jsonIOImpl.FileIO
+import core.model.fileIOComponent.jsonIOImpl.FileIO
 
 //noinspection DuplicatedCode
 class EnterPlayerNamesImpl(controller: ControllerInterface)

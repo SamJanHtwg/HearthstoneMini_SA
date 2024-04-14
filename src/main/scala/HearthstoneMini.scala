@@ -1,14 +1,15 @@
 package hearthstoneMini
 
-import c
-import core.controller.GameState
-import controller.component.controllerImpl.Controller
-import model.fieldComponent.fieldImpl.Field
 import scala.io.StdIn
 import scala.io.StdIn.readLine
-import util.Event
-import scalafx.scene.text.FontWeight.Bold
-import hearthstoneMini.controller.component.ControllerInterface
+import core.controller.component.ControllerInterface
+import core.model.fieldComponent.fieldImpl.Field
+import core.controller.component.controllerImpl.Controller
+import tui.Tui
+import gui.GuiApp
+import core.util.Event
+import core.controller.GameState
+
 
 object HearthstoneMini {
   private val hearthstoneMiniRunner =

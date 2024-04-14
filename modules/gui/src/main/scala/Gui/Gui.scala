@@ -4,8 +4,8 @@ import gui.enterPlayernamesScreen.EnterPlayerNamesImpl
 import gui.mainGameScreen.MainGameScreen
 import gui.modeSelectionScreen.ModeSelectionScreenImpl
 import gui.GuiApp
-import controller.GameState
-import controller.component.controllerImpl.Controller
+import core.controller.GameState
+import core.controller.component.controllerImpl.Controller
 import javafx.scene.control.DialogPane
 import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.Scene
@@ -14,7 +14,7 @@ import scalafx.scene.paint.Color.*
 import scalafx.scene.control.Alert
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.{Image, ImageView}
-import hearthstoneMini.controller.component.ControllerInterface
+import core.controller.component.ControllerInterface
 
 class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3 {
   override def start(): Unit = {

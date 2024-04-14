@@ -1,7 +1,7 @@
 package gui
 
-import controller.GameState
-import controller.component.controllerImpl.Controller
+import core.controller.GameState
+import core.controller.component.controllerImpl.Controller
 import javafx.geometry.Side
 import javafx.scene.layout.{
   BackgroundImage,
@@ -15,8 +15,8 @@ import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.Image
 import scalafx.scene.layout.Background
 import scalafx.scene.paint.Color
-import util.{Event, Observer}
-import hearthstoneMini.controller.component.ControllerInterface
+import core.util.{Event, Observer}
+import core.controller.component.ControllerInterface
 
 class GuiApp(val controller: ControllerInterface) extends Observer {
   override def update(e: Event, msg: Option[String]): Unit = {

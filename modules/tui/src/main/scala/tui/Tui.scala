@@ -1,17 +1,16 @@
 package tui
 
-import 
-import model.Move
-import util.Observer
-import util.Event
-import controller.GameState
-import controller.Strategy
-import controller.component.controllerImpl.Controller
+import core.model.Move
+import core.util.Observer
+import core.util.Event
+import core.controller.GameState
+import core.controller.Strategy
+import core.controller.component.controllerImpl.Controller
 import scala.util.{Failure, Success, Try}
-import hearthstoneMini.controller.component.ControllerInterface
-import hearthstoneMini.util.matrix.Matrix
-import hearthstoneMini.model.playerComponent.PlayerInterface
-import hearthstoneMini.aview.Tui.{
+import core.controller.component.ControllerInterface
+import core.util.matrix.Matrix
+import core.model.playerComponent.PlayerInterface
+import Tui.{
   zeilenUmbruch,
   endGameMsg,
   chooseGameMode,
