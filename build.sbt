@@ -1,66 +1,85 @@
-import sbt.Keys.libraryDependencies
-val scala3Version = "3.3.1"
+import sbt.Keys.*
+import sbtassembly.AssemblyPlugin.autoImport.*
 
-assemblyMergeStrategy in assembly := {
- case PathList("META-INF", _*) => MergeStrategy.discard
- case _                        => MergeStrategy.first
+val scala3Version = "3.3.3"
+
+val jacocoSettings = Seq(
+  jacocoReportSettings := JacocoReportSettings(
+    "Jacoco Coverage Report",
+    None,
+    JacocoThresholds(),
+    Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML),
+    "utf-8"
+  ),
+  jacocoExcludes := Seq(
+    "*Tui",
+    "*Interface",
+    "*view.*",
+    "*view.*.*",
+    "*view.*.*.*",
+    "hearthstoneMini.HearthstoneMini.scala"
+  )
+)
+
+assembly / assemblyMergeStrategy := {
+  case PathList("META-INF", _*) => MergeStrategy.discard
+  case _                        => MergeStrategy.first
 }
 
-Compile/mainClass := Some("hearthstoneMini.HearthstoneMini")
-mainClass in (Compile, packageBin) := Some("hearthstoneMini.HearthstoneMini")
+ThisBuild / scalaVersion := scala3Version
+ThisBuild / version := "1.0"
+
+Compile / mainClass := Some("hearthstoneMini.HearthstoneMini")
+Compile / packageBin / mainClass := Some("hearthstoneMini.HearthstoneMini")
+
+lazy val commonDependencies = Seq(
+  libraryDependencies ++= Seq(
+    "org.scalactic" %% "scalactic" % "3.2.18",
+    "org.scalatest" %% "scalatest" % "3.2.18" % "test",
+    "com.typesafe.play" %% "play-json" % "2.10.4",
+    "org.scala-lang.modules" %% "scala-xml" % "2.2.0",
+    "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
+    "net.codingwell" %% "scala-guice" % "7.0.0",
+    "javax.inject" % "javax.inject" % "1",
+    "org.scalafx" % "scalafx_3" % "20.0.0-R31"
+  ) ++ Seq(
+    "base", "controls", "fxml", "graphics", "media", "swing", "web"
+  ).map(m => "org.openjfx" % s"javafx-$m" % "20")
+)
+
+lazy val gui = project
+  .in(file("./modules/gui"))
+  .settings(
+    name := "gui",
+    commonDependencies
+  )
+  .dependsOn(core)
+
+lazy val tui = project
+  .in(file("./modules/tui"))
+  .settings(
+    name := "tui",
+    commonDependencies
+  )
+  .dependsOn(core)
+
+lazy val core = project
+  .in(file("./modules/core"))
+  .settings(
+    name := "core",
+    commonDependencies
+  )
 
 lazy val root = project
   .in(file("."))
   .settings(
     name := "HearthstoneMini",
     version := "1.0",
-    resourceDirectory in Compile := file(".") / "./src/main/resources",
+    Compile / resourceDirectory := file(".") / "./src/main/resources",
     assembly / mainClass := Some("scala.HearthstoneMini"),
     assembly / assemblyJarName := "HearthstoneMini.jar",
-   
-    
-    //fork := true,
     scalaVersion := scala3Version,
-
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.12",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.12" % "test",
-
-    libraryDependencies += "org.scalafx" % "scalafx_3" % "20.0.0-R31",
-    libraryDependencies ++= {
-      // Determine OS version of JavaFX binaries
-      // lazy val osName = System.getProperty("os.name") match {
-      //   case n if n.startsWith("Linux") => "linux"
-      //   case n if n.startsWith("Mac") => "mac"
-      //   case n if n.startsWith("Windows") => "win"
-      //   case _ => throw new Exception("Unknown platform!")
-      // }
-      Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-        .map(m => "org.openjfx" % s"javafx-$m" % "20")
-    },
-    
-    libraryDependencies += "com.google.inject.extensions" % "guice-assistedinject" % "5.1.0",
-    libraryDependencies += "net.codingwell" %% "scala-guice" % "5.1.1",
-
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.10.1",
-
-    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
-
-    jacocoReportSettings := JacocoReportSettings(
-      "Jacoco Coverage Report",
-      None,
-      JacocoThresholds(),
-      Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML), // note XML formatter
-      "utf-8"),
-    jacocoExcludes := Seq(
-      "*Tui",
-      "*Interface",
-      "*view.*",
-      "*view.*.*",
-      "*view.*.*.*",
-      "hearthstoneMini.HearthstoneMiniModule.scala",
-      "hearthstoneMini.HearthstoneMini.scala"
-    )
+    commonDependencies,
+    jacocoSettings
   )
-
-
-
+  .dependsOn(core, tui, gui)

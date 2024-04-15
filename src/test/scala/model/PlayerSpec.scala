@@ -1,11 +1,11 @@
 package hearthstoneMini
 package model
 
-import model.playerComponent.playerImpl.Player
+import core.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import model.cardComponent.cardImpl.Card
-import hearthstoneMini.model.cardComponent.CardInterface
+import core.model.cardComponent.cardImpl.Card
+import core.model.cardComponent.CardInterface
 
 class PlayerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List(

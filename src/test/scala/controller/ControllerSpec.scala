@@ -1,16 +1,15 @@
 package hearthstoneMini
 package controller
-
-package hearthstoneMini
 package model
 
+import core.controller.{GameState, Strategy}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import controller.component.controllerImpl.Controller
-import _root_.hearthstoneMini.model.cardComponent.cardImpl.Card
-import _root_.hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import _root_.hearthstoneMini.model.playerComponent.playerImpl.Player
-import _root_.hearthstoneMini.model.Move
+import core.controller.component.controllerImpl.Controller
+import core.model.cardComponent.cardImpl.Card
+import core.model.fieldComponent.fieldImpl.Field
+import core.model.playerComponent.playerImpl.Player
+import core.model.Move
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
@@ -25,7 +24,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val allStates = GameState.values.toList
       assert(allStates.length == 5)
     }
-    "have a default gametstate of GameState.PREGAME" in {
+    "have a default game state of GameState.PREGAME" in {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
@@ -108,8 +107,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1, name = 1.toString()).resetAndIncreaseMana()),
-            (2, Player(id = 2, name = 2.toString()))
+            (1, Player(id = 1, name = 1.toString).resetAndIncreaseMana()),
+            (2, Player(id = 2, name = 2.toString))
           )
         )
       )
@@ -123,7 +122,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         Field(
           players = Map[Int, Player](
             (1, Player(id = 1, manaValue = 100, hand = testCards)),
-            (2, Player(id = 2, hpValue = 5, maxHpValue = 5))
+            (2, Player(id = 2, hpValue = 5))
           ),
           turns = 3
         )
@@ -169,7 +168,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.getPlayerById(1).hpValue should be(100)
       controller.field.getPlayerById(1).manaValue should be(100)
     }
-    "should set gamestate to Exit" in {
+    "should set game state to Exit" in {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
