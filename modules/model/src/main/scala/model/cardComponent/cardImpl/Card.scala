@@ -1,15 +1,15 @@
-package core
-package model.cardComponent.cardImpl
+package model
+package cardComponent.cardImpl
 
 import com.fasterxml.jackson.databind.JsonSerializable
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import model.cardComponent.CardInterface
+import cardComponent.CardInterface
 import play.api.libs.json.*
 
 import scala.annotation.nowarn
 import scala.collection.View.Empty
 import scala.xml.Node
-import core.model.fieldComponent.fieldImpl.Field
+import fieldComponent.fieldImpl.Field
 import scala.util.Try
 import scala.util.Failure
 import scala.util.Success

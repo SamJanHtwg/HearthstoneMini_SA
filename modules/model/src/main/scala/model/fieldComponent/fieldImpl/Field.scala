@@ -1,8 +1,8 @@
-package core
-package model.fieldComponent.fieldImpl
+package model
+package fieldComponent.fieldImpl
 
-import model.fieldComponent.FieldInterface
-import model.playerComponent.playerImpl.Player
+import fieldComponent.FieldInterface
+import playerComponent.playerImpl.Player
 import play.api.libs.json.*
 
 import javax.inject.Inject

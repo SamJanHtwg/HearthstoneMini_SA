@@ -1,13 +1,12 @@
-package core
-package model.fieldComponent
+package model
+package fieldComponent
 
-import model.cardComponent.cardImpl.Card
-import model.playerComponent.playerImpl.Player
-import model.fieldComponent
+import cardComponent.cardImpl.Card
+import playerComponent.playerImpl.Player
 import play.api.libs.json.JsValue
 
 import scala.xml.Node
-import core.model.playerComponent.PlayerInterface
+import playerComponent.PlayerInterface
 
 trait FieldInterface {
   val players: Map[Int, PlayerInterface]

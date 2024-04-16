@@ -1,13 +1,13 @@
-package core
-package model.fileIOComponent.xmlIOImpl
+package model
+package fileIOComponent.xmlIOImpl
 
 import com.google.inject.Guice
 import com.google.inject.name.Names
-import model.fieldComponent.FieldInterface
+import fieldComponent.FieldInterface
 import net.codingwell.scalaguice.InjectorExtensions.*
 
-import model.fileIOComponent.FileIOInterface
-import model.fieldComponent.fieldImpl.{Field}
+import fileIOComponent.FileIOInterface
+import fieldComponent.fieldImpl.{Field}
 
 import java.io.{File, PrintWriter}
 import scala.xml.XML.loadFile

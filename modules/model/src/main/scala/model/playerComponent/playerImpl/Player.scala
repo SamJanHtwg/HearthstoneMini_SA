@@ -1,11 +1,10 @@
-package core
-package model.playerComponent.playerImpl
+package model
+package playerComponent.playerImpl
 
-import core.model.cardComponent.CardInterface
-import core.model.cardComponent.cardImpl.Card
-import core.model.fieldComponent.fieldImpl.Field
-import core.model.playerComponent.PlayerInterface
-import core.util.CardProvider
+import cardComponent.CardInterface
+import cardComponent.cardImpl.Card
+import fieldComponent.fieldImpl.Field
+import playerComponent.PlayerInterface
 import play.api.libs.json.*
 
 import scala.collection.immutable.Vector
@@ -69,18 +68,16 @@ object Player {
 }
 
 case class Player(
-                   name: String = "Player",
-                   id: Int,
-                   hpValue: Int = 1,
-                   maxHpValue: Int = 5,
-                   maxManaValue: Int = 2,
-                   manaValue: Int = 1,
-                   hand: List[CardInterface] =
-      new CardProvider("/json/cards.json").getCards(5),
-                   deck: List[CardInterface] =
-      new CardProvider("/json/cards.json").getCards(30),
-                   friedhof: Array[CardInterface] = Array[CardInterface](),
-                   field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None }
+    name: String = "Player",
+    id: Int,
+    hpValue: Int = 1,
+    maxHpValue: Int = 5,
+    maxManaValue: Int = 2,
+    manaValue: Int = 1,
+    hand: List[CardInterface] = List[CardInterface](),
+    deck: List[CardInterface] = List[CardInterface](),
+    friedhof: Array[CardInterface] = Array[CardInterface](),
+    field: Vector[Option[CardInterface]] = Vector.tabulate(5) { field => None }
 ) extends PlayerInterface {
 
   private enum ValueType {
