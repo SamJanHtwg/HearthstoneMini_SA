@@ -26,7 +26,7 @@ class HearthstoneMiniRunner(
     initTUI: Boolean = false
 ) {
   val cardProvider =
-    new CardProvider(inputFile = "src/main/resources/cards.json")
+    new CardProvider(inputFile = "/json/cards.json")
   val controller: ControllerInterface = Controller(
     new Field(players =
       Map(
