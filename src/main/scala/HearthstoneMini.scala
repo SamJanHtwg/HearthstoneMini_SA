@@ -9,7 +9,8 @@ import tui.Tui
 import gui.GuiApp
 import core.util.Event
 import core.controller.GameState
-
+import model.playerComponent.playerImpl.Player
+import core.util.CardProvider
 
 object HearthstoneMini {
   private val hearthstoneMiniRunner =
@@ -24,7 +25,24 @@ class HearthstoneMiniRunner(
     initGUI: Boolean = false,
     initTUI: Boolean = false
 ) {
-  val controller: ControllerInterface = Controller(new Field())
+  val cardProvider =
+    new CardProvider(inputFile = "/json/cards.json")
+  val controller: ControllerInterface = Controller(
+    new Field(players =
+      Map(
+        1 -> Player(
+          id = 1,
+          hand = cardProvider.getCards(5),
+          deck = cardProvider.getCards(30)
+        ),
+        2 -> Player(
+          id = 2,
+          hand = cardProvider.getCards(5),
+          deck = cardProvider.getCards(30)
+        )
+      )
+    )
+  )
   private val optionalTui: Option[Tui] =
     if (initTUI) Some(new Tui(controller)) else None
   val optionalGUI: Option[GuiApp] =

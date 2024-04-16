@@ -1,7 +1,7 @@
 package hearthstoneMini
 package model
 
-import core.model.Move
+import _root_.model.Move
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

@@ -1,11 +1,11 @@
 package hearthstoneMini
 package model
 
-import core.model.playerComponent.playerImpl.Player
+import _root_.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import core.model.cardComponent.cardImpl.Card
-import core.model.cardComponent.CardInterface
+import _root_.model.cardComponent.cardImpl.Card
+import _root_.model.cardComponent.CardInterface
 
 class PlayerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List(
@@ -21,7 +21,8 @@ class PlayerSpec extends AnyWordSpec with Matchers {
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "")
   )
 
-  val testCardsPlayer: Player = Player("Player0", 0, deck = testCards)
+  val testCardsPlayer: Player =
+    Player("Player0", 0, deck = testCards, hand = testCards)
 
   val player1: Player = Player("Player1", 1)
   val player2: Player = Player("Player2", 2)
@@ -34,8 +35,8 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player1.maxHpValue should be(5)
       player1.manaValue should be(1)
       player1.maxManaValue should be(2)
-      player1.hand.length should be(5)
-      player1.deck.length should be(30)
+      player1.hand.length should be(0)
+      player1.deck.length should be(0)
       player1.field shouldBe a[Vector[Option[CardInterface]]]
     }
     "set a name" in {
@@ -46,15 +47,15 @@ class PlayerSpec extends AnyWordSpec with Matchers {
 
   "Player actions" when {
     "placing a card" in {
-      val initialHandSize = player1.hand.size
-      val newPlayer = player1.placeCard(2, 2)
+      val initialHandSize = testCardsPlayer.hand.size
+      val newPlayer = testCardsPlayer.placeCard(2, 2)
       newPlayer.field(2).isDefined should be(true)
       newPlayer.hand.size should be(initialHandSize - 1)
     }
     "drawing a card" in {
-      val initialHandSize = player1.hand.size
-      val initialDeckSize = player1.deck.size
-      val newPlayer = player1.drawCard()
+      val initialHandSize = testCardsPlayer.hand.size
+      val initialDeckSize = testCardsPlayer.deck.size
+      val newPlayer = testCardsPlayer.drawCard()
       newPlayer.hand.size should be(initialHandSize + 1)
       newPlayer.deck.size should be(initialDeckSize - 1)
     }

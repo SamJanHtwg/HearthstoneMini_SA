@@ -79,7 +79,7 @@ lazy val core = project
   .settings(
     name := "core",
     commonDependencies
-  ).dependsOn(model)
+  ).dependsOn(model % "compile->compile")
 
 lazy val root = project
   .in(file("."))
@@ -94,5 +94,5 @@ lazy val root = project
     jacocoSettings
   )
   .enablePlugins(JacocoCoverallsPlugin)
-  .dependsOn(core, tui, gui, model)
+  .dependsOn(core % "compile->compile;test->test", tui % "compile->compile;test->test", gui % "compile->compile;test->test", model % "compile->compile;test->test")
   .aggregate(core, tui, gui, model)
