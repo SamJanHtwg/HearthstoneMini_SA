@@ -1,8 +1,21 @@
 import org.scoverage.coveralls.GitHubActions
+import org.scoverage.coveralls.Imports.CoverallsKeys.*
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
 
 val scala3Version = "3.3.3"
+
+coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
+coverallsService := Some(GitHubActions)
+
+coverageHighlighting := true
+coverageFailOnMinimum := false
+coverageMinimumStmtTotal := 0
+coverageMinimumBranchTotal := 0
+coverageMinimumStmtPerPackage := 0
+coverageMinimumBranchPerPackage := 0
+coverageMinimumStmtPerFile := 0
+coverageMinimumBranchPerFile := 0
 
 val jacocoSettings = Seq(
   jacocoReportSettings := JacocoReportSettings(
@@ -109,17 +122,3 @@ lazy val root = project
     model % "compile->compile;test->test"
   )
   .aggregate(core, tui, gui, model)
-
-import org.scoverage.coveralls.Imports.CoverallsKeys.*
-
-coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
-coverallsService := Some(GitHubActions)
-
-coverageHighlighting := true
-coverageFailOnMinimum := false
-coverageMinimumStmtTotal := 0
-coverageMinimumBranchTotal := 0
-coverageMinimumStmtPerPackage := 0
-coverageMinimumBranchPerPackage := 0
-coverageMinimumStmtPerFile := 0
-coverageMinimumBranchPerFile := 0
