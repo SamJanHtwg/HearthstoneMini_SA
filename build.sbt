@@ -1,3 +1,4 @@
+import org.scoverage.coveralls.GitHubActions
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
 
@@ -47,7 +48,13 @@ lazy val commonDependencies = Seq(
     "javax.inject" % "javax.inject" % "1",
     "org.scalafx" % "scalafx_3" % "20.0.0-R31"
   ) ++ Seq(
-    "base", "controls", "fxml", "graphics", "media", "swing", "web"
+    "base",
+    "controls",
+    "fxml",
+    "graphics",
+    "media",
+    "swing",
+    "web"
   ).map(m => "org.openjfx" % s"javafx-$m" % "20")
 )
 
@@ -79,7 +86,8 @@ lazy val core = project
   .settings(
     name := "core",
     commonDependencies
-  ).dependsOn(model % "compile->compile")
+  )
+  .dependsOn(model % "compile->compile")
 
 lazy val root = project
   .in(file("."))
@@ -94,5 +102,24 @@ lazy val root = project
     jacocoSettings
   )
   .enablePlugins(JacocoCoverallsPlugin)
-  .dependsOn(core % "compile->compile;test->test", tui % "compile->compile;test->test", gui % "compile->compile;test->test", model % "compile->compile;test->test")
+  .dependsOn(
+    core % "compile->compile;test->test",
+    tui % "compile->compile;test->test",
+    gui % "compile->compile;test->test",
+    model % "compile->compile;test->test"
+  )
   .aggregate(core, tui, gui, model)
+
+import org.scoverage.coveralls.Imports.CoverallsKeys.*
+
+coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
+coverallsService := Some(GitHubActions)
+
+coverageHighlighting := true
+coverageFailOnMinimum := false
+coverageMinimumStmtTotal := 0
+coverageMinimumBranchTotal := 0
+coverageMinimumStmtPerPackage := 0
+coverageMinimumBranchPerPackage := 0
+coverageMinimumStmtPerFile := 0
+coverageMinimumBranchPerFile := 0
