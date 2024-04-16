@@ -3,7 +3,7 @@ package controller.component.controllerImpl
 
 import com.google.inject.name.{Named, Names}
 import com.google.inject.{Guice, Inject, Injector}
-import controller.GameState
+import controller.GameState.*
 import controller.component.ControllerInterface
 import controller.{GameState, Strategy}
 import model.fieldComponent.FieldInterface
