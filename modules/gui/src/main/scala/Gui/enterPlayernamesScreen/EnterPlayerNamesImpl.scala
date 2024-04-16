@@ -6,7 +6,7 @@ import core.controller.Strategy
 import core.controller.component.controllerImpl.Controller
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
-import core.model.Move
+import model.Move
 import scalafx.geometry.Insets
 import scalafx.scene.Node
 import scalafx.scene.control.{
@@ -17,7 +17,7 @@ import scalafx.scene.control.{
   ToggleGroup
 }
 import scalafx.scene.layout.GridPane
-import core.model.fileIOComponent.jsonIOImpl.FileIO
+import model.fileIOComponent.jsonIOImpl.FileIO
 
 //noinspection DuplicatedCode
 class EnterPlayerNamesImpl(controller: ControllerInterface)

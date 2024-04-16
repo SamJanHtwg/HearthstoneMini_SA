@@ -6,8 +6,8 @@ import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
-import core.model.fieldComponent.FieldInterface
-import core.model.fileIOComponent.xmlIOImpl.FileIO
+import model.fieldComponent.FieldInterface
+import model.fileIOComponent.xmlIOImpl.FileIO
 import scalafx.geometry.Insets
 import scalafx.scene.Node
 import scalafx.scene.control.{Button, RadioButton, ToggleGroup}

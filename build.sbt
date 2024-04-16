@@ -57,7 +57,7 @@ lazy val gui = project
     name := "gui",
     commonDependencies
   )
-  .dependsOn(core)
+  .dependsOn(core, model)
 
 lazy val tui = project
   .in(file("./modules/tui"))
@@ -65,7 +65,7 @@ lazy val tui = project
     name := "tui",
     commonDependencies
   )
-  .dependsOn(core)
+  .dependsOn(core, model)
 
 lazy val model = project
   .in(file("./modules/model"))

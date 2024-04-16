@@ -1,6 +1,6 @@
 package tui
 
-import core.model.Move
+import model.Move
 import core.util.Observer
 import core.util.Event
 import core.controller.GameState
@@ -9,7 +9,7 @@ import core.controller.component.controllerImpl.Controller
 import scala.util.{Failure, Success, Try}
 import core.controller.component.ControllerInterface
 import core.util.matrix.Matrix
-import core.model.playerComponent.PlayerInterface
+import model.playerComponent.PlayerInterface
 import Tui.{
   zeilenUmbruch,
   endGameMsg,

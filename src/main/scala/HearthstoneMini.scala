@@ -3,7 +3,7 @@ package hearthstoneMini
 import scala.io.StdIn
 import scala.io.StdIn.readLine
 import core.controller.component.ControllerInterface
-import core.model.fieldComponent.fieldImpl.Field
+import model.fieldComponent.fieldImpl.Field
 import core.controller.component.controllerImpl.Controller
 import tui.Tui
 import gui.GuiApp
