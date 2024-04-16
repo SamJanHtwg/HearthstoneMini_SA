@@ -1,5 +1,5 @@
 # HearthstoneMini
-[![codecov](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini_SA/graph/badge.svg?token=V5BEOV9XX5)](https://codecov.io/gh/SamuelBehrmann/HearthstoneMini_SA)
+[![codecov](https://codecov.io/gh/SamJanHtwg/HearthstoneMini_SA/graph/badge.svg?token=V5BEOV9XX5)](https://codecov.io/gh/SamJanHtwg/HearthstoneMini_SA)
 
 [![Coverage Status](https://coveralls.io/repos/github/SamJanHtwg/HearthstoneMini_SA/badge.svg?branch=main)](https://coveralls.io/github/SamJanHtwg/HearthstoneMini_SA?branch=main)
 
