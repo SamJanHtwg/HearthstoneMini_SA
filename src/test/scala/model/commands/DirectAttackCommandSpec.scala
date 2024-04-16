@@ -1,11 +1,11 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import core.model.playerComponent.playerImpl
+import model.playerComponent.playerImpl
 import core.controller.component.controllerImpl.Controller
-import core.model.fieldComponent.fieldImpl.Field
-import core.model.playerComponent.playerImpl.Player
-import core.model.Move
+import model.fieldComponent.fieldImpl.Field
+import model.playerComponent.playerImpl.Player
+import model.Move
 import core.util.commands.commandImpl.DirectAttackCommand
 
 class DirectAttackCommandSpec extends AnyWordSpec with Matchers {

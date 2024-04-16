@@ -6,10 +6,10 @@ import core.controller.{GameState, Strategy}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import core.controller.component.controllerImpl.Controller
-import core.model.cardComponent.cardImpl.Card
-import core.model.fieldComponent.fieldImpl.Field
-import core.model.playerComponent.playerImpl.Player
-import core.model.Move
+import model.cardComponent.cardImpl.Card
+import model.fieldComponent.fieldImpl.Field
+import model.playerComponent.playerImpl.Player
+import model.Move
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](

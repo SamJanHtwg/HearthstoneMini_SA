@@ -1,6 +1,6 @@
 package hearthstoneMini
 package model
-import core.model.cardComponent.cardImpl.Card
+import model.cardComponent.cardImpl.Card
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

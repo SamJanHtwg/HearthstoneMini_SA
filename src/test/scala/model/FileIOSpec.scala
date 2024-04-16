@@ -1,11 +1,11 @@
 package model
 
-import core.model.cardComponent.CardInterface
-import core.model.cardComponent.cardImpl.Card
-import core.model.fieldComponent.fieldImpl.Field
-import core.model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
-import core.model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
-import core.model.playerComponent.playerImpl.Player
+import model.cardComponent.CardInterface
+import model.cardComponent.cardImpl.Card
+import model.fieldComponent.fieldImpl.Field
+import model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
+import model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
+import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
