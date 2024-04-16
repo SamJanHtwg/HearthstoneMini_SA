@@ -18,7 +18,11 @@ val jacocoSettings = Seq(
     "*view.*.*",
     "*view.*.*.*",
     "hearthstoneMini.HearthstoneMini.scala"
-  )
+  ),
+  jacocoCoverallsServiceName := "github-actions",
+  jacocoCoverallsBranch := sys.env.get("CI_BRANCH"),
+  jacocoCoverallsPullRequest := sys.env.get("GITHUB_EVENT_NAME"),
+  jacocoCoverallsRepoToken := sys.env.get("COVERALLS_REPO_TOKEN")
 )
 
 assembly / assemblyMergeStrategy := {
@@ -82,4 +86,6 @@ lazy val root = project
     commonDependencies,
     jacocoSettings
   )
+  .enablePlugins(JacocoCoverallsPlugin)
   .dependsOn(core, tui, gui)
+  .aggregate(core, tui, gui)
