@@ -16,10 +16,16 @@ import core.util.commands.commandImpl.PlaceCardCommand
 class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "do step" in {
+      val testCards: List[Card] = List[Card](
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, "")
+      )
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
             (2, Player(id = 2))
           )
         )

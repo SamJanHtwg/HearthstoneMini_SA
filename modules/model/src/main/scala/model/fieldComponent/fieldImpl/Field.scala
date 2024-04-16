@@ -18,7 +18,7 @@ object Field {
         .map(player => Player.fromJson(player))
         .map(player => (player.id, player))
         .toMap,
-      turns = fieldJs("turns").toString.toInt,
+      turns = fieldJs("turns").toString.toInt
     )
   }
 
@@ -41,15 +41,6 @@ case class Field @Inject() (
     activePlayerId: Int = 1,
     turns: Int = 0
 ) extends FieldInterface() {
-
-  def this(player1: String, player2: String) = this(
-    players = Map[Int, Player](
-      (1, Player(name = player1, id = 1, manaValue = 0, maxManaValue = 1)),
-      (2, Player(name = player2, id = 2, manaValue = 0, maxManaValue = 1))
-    ),
-    activePlayerId = 1
-  )
-
   def this() = this(
     activePlayerId = 1,
     players = Map[Int, Player](

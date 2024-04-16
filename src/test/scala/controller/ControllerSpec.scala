@@ -38,7 +38,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1, manaValue = 100)),
+            (1, Player(id = 1, manaValue = 100, hand = testCards)),
             (2, Player(id = 2))
           ),
           turns = 3
@@ -55,7 +55,11 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (
+              1,
+              Player(id = 1, hand = testCards.take(4), deck = testCards)
+                .resetAndIncreaseMana()
+            ),
             (2, Player(id = 2))
           )
         )
@@ -85,8 +89,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
+            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
+            (2, Player(id = 2, hand = testCards))
           )
         )
       )
@@ -135,19 +139,19 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val controller = Controller(
         Field(
           players = Map[Int, Player](
-            (1, Player(id = 1, hand = List.empty)),
+            (1, Player(id = 1, hand = List.empty, deck = testCards)),
             (2, Player(id = 2))
           )
         )
       )
       controller.drawCard()
-      controller.canUndo should be (true)
+      controller.canUndo should be(true)
       controller.undo
       controller.field
         .players(controller.field.activePlayerId)
         .hand
         .length should be(0)
-      controller.canRedo should be (true)
+      controller.canRedo should be(true)
       controller.redo
       controller.field
         .players(controller.field.activePlayerId)
@@ -206,7 +210,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         )
       )
 
-      controller.getWinner() should be (None)
+      controller.getWinner() should be(None)
     }
     "should be able to save & load" in {
       val field = Field(

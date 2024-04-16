@@ -7,12 +7,23 @@ import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.playerImpl.Player
 import model.Move
 import core.util.commands.commandImpl.DirectAttackCommand
+import model.cardComponent.cardImpl.Card
 
 class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
+  val testCards: List[Card] = List[Card](
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+    Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, "")
+  )
+
   "A controller" should {
     val controller = Controller(
       Field(
-        players = Map[Int, Player]((1, Player(id = 1)), (2, Player(id = 2)))
+        players = Map[Int, Player](
+          (1, Player(id = 1, hand = testCards)),
+          (2, Player(id = 2, hand = testCards))
+        )
       )
     )
 

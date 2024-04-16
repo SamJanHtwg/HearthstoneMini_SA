@@ -14,7 +14,6 @@ import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
 import core.util.commands.CommandInterface
 
-
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}

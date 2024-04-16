@@ -14,18 +14,27 @@ class FieldSpec extends AnyWordSpec with Matchers {
   "A Field" when {
     "created" should {
       val testCards = List[Card](
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "")
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "1"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "2"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "3"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "4"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "5")
       )
 
-      val field0 = new Field("Player1", "Player2")
-      var field = new Field(
+      val field0 = new Field(
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
-          (2, Player(id = 2))
+          (2, Player(id = 2, hand = testCards))
+        )
+      )
+      var field = new Field(
+        players = Map[Int, Player](
+          (
+            1,
+            Player(id = 1, hand = testCards, deck = testCards)
+              .resetAndIncreaseMana()
+          ),
+          (2, Player(id = 2, hand = testCards, deck = testCards))
         )
       )
 
@@ -110,17 +119,17 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
     }
     "when hp value is set" in {
-      new Field("1", "2").setHpValues(34).players.head._2.hpValue should be(
+      new Field().setHpValues(34).players.head._2.hpValue should be(
         34
       )
     }
     "when mana value is set" in {
-      new Field("1", "2").setManaValues(45).players(1).manaValue should be(
+      new Field().setManaValues(45).players(1).manaValue should be(
         45
       )
     }
     "restored from xml" in {
-      val field = new Field("1", "2")
+      val field = new Field()
       val xml = field.toXML
       val fromXml = Field.fromXml(xml).toXML
       assert(xml == fromXml)
