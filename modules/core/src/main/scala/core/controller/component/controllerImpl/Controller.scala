@@ -3,16 +3,16 @@ package controller.component.controllerImpl
 
 import com.google.inject.name.{Named, Names}
 import com.google.inject.{Guice, Inject, Injector}
-import controller.GameState.*
-import controller.component.ControllerInterface
-import controller.{GameState, Strategy}
+import core.controller.GameState.*
+import core.controller.component.ControllerInterface
+import core.controller.{GameState, Strategy}
 import model.fieldComponent.FieldInterface
 import model.Move
 import model.fileIOComponent.FileIOInterface
 import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
-import util.{Event, Observable, UndoManager}
-import util.commands.CommandInterface
+import core.util.{Event, Observable, UndoManager}
+import core.util.commands.CommandInterface
 
 
 import java.lang.System.exit

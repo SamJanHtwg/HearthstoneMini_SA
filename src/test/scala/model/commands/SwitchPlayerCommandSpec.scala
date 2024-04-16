@@ -5,12 +5,12 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import core.controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.Card
+import _root_.model.cardComponent.cardImpl.Card
 
-import model.playerComponent.playerImpl.Player
+import _root_.model.playerComponent.playerImpl.Player
 import core.util.Observer
-import model.fieldComponent.FieldInterface
-import model.fieldComponent.fieldImpl.Field
+import _root_.model.fieldComponent.FieldInterface
+import _root_.model.fieldComponent.fieldImpl.Field
 import core.util.commands.commandImpl.SwitchPlayerCommand
 
 class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {

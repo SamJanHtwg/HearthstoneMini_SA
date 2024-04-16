@@ -1,15 +1,14 @@
 package hearthstoneMini
 package controller
-package model
 
 import core.controller.{GameState, Strategy}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import core.controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.Card
-import model.fieldComponent.fieldImpl.Field
-import model.playerComponent.playerImpl.Player
-import model.Move
+import _root_.model.cardComponent.cardImpl.Card
+import _root_.model.fieldComponent.fieldImpl.Field
+import _root_.model.playerComponent.playerImpl.Player
+import _root_.model.Move
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](

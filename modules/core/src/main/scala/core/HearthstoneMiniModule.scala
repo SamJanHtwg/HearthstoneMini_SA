@@ -3,14 +3,13 @@ package core
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 
+import net.codingwell.scalaguice.ScalaModule
 import controller.component.ControllerInterface
 import controller.component.controllerImpl.Controller
-import net.codingwell.scalaguice.ScalaModule
-import model.fileIOComponent.jsonIOImpl.FileIO as json
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import model.fileIOComponent.FileIOInterface
-
+import model.fileIOComponent.jsonIOImpl.FileIO as json
 class HearthstoneMiniModule extends AbstractModule {
   private val defaultSize = 5
 

@@ -1,14 +1,14 @@
 package hearthstoneMini
 package model
 
-import model.cardComponent.cardImpl.Card
-import model.fieldComponent.fieldImpl
-import model.playerComponent.playerImpl
-import model.playerComponent.playerImpl.Player
+import _root_.model.cardComponent.cardImpl.Card
+import _root_.model.fieldComponent.fieldImpl
+import _root_.model.playerComponent.playerImpl
+import _root_.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import model.fieldComponent.fieldImpl.Field
-import model.fieldComponent.fieldImpl.Field
+import _root_.model.fieldComponent.fieldImpl.Field
+import _root_.model.fieldComponent.fieldImpl.Field
 
 class FieldSpec extends AnyWordSpec with Matchers {
   "A Field" when {
