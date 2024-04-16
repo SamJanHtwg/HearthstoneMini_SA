@@ -1,10 +1,10 @@
 package core
 package util.commands
 
-import core.model.fieldComponent.FieldInterface
+import model.fieldComponent.FieldInterface
 
 import scala.util.Try
-import core.model.cardComponent.CardInterface
+import model.cardComponent.CardInterface
 
 //noinspection UnitMethodIsParameterless,MutatorLikeMethodIsParameterless
 trait CommandInterface {

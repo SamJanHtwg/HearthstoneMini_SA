@@ -1,4 +1,3 @@
-package core
 package model
 
 import scala.annotation.meta.field

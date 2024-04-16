@@ -9,7 +9,7 @@ import core.util.commands.CommandInterface
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
-import core.model.cardComponent.CardInterface
+import model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
 class DirectAttackCommand(controller: Controller, move: Move)

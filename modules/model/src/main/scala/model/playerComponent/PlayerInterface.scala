@@ -1,11 +1,11 @@
-package core
-package model.playerComponent
+package model
+package playerComponent
 
 import play.api.libs.json.JsValue
 
 import scala.xml.Node
 import scala.compiletime.ops.int
-import core.model.cardComponent.CardInterface
+import cardComponent.CardInterface
 
 trait PlayerInterface {
   val id: Int

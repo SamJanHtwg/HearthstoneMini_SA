@@ -1,8 +1,8 @@
-package core
-package model.fileIOComponent.jsonIOImpl
-import model.fieldComponent.FieldInterface
-import model.fieldComponent.fieldImpl.{Field}
-import model.fileIOComponent.FileIOInterface
+package model
+package fileIOComponent.jsonIOImpl
+import fieldComponent.FieldInterface
+import fieldComponent.fieldImpl.{Field}
+import fileIOComponent.FileIOInterface
 import play.api.libs.json.*
 
 import java.io.{File, PrintWriter}

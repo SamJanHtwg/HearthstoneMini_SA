@@ -8,7 +8,7 @@ import model.fieldComponent.FieldInterface
 import scala.util.{Failure, Success, Try}
 import core.util.commands.CommandInterface
 import org.checkerframework.checker.units.qual.s
-import core.model.cardComponent.CardInterface
+import model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
 class AttackCommand(controller: Controller, move: Move)
