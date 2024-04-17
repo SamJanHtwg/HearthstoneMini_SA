@@ -1,4 +1,4 @@
-name: Coveralls Test (new)
+name: Test Pipeline
 
 on:
   push:
@@ -22,6 +22,7 @@ jobs:
           distribution: 'adopt'
       - name: compile
         run: sbt compile
+
   tests:
     runs-on: ubuntu-latest
     steps:
@@ -31,8 +32,9 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
         run: sbt +clean +coverage +test +coverageReport
+
       - name: Export Coverage
-        run: sbt coverageAggregate coveralls
+        run: sbt coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
