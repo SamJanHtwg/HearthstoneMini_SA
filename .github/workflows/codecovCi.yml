@@ -1,4 +1,4 @@
-name: Test Pipeline
+name: Codecov CI
 
 on:
   push:
@@ -32,11 +32,6 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
         run: sbt +clean +coverage +test +coverageReport
-
-      - name: Export Coverage
-        run: sbt coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3

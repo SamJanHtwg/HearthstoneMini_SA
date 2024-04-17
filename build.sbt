@@ -5,40 +5,6 @@ import sbtassembly.AssemblyPlugin.autoImport.*
 
 val scala3Version = "3.3.3"
 
-coverallsTokenFile := sys.env.get("COVERALLS_REPO_TOKEN")
-coverallsService := Some(GitHubActions)
-
-coverageHighlighting := true
-coverageFailOnMinimum := false
-coverageMinimumStmtTotal := 0
-coverageMinimumBranchTotal := 0
-coverageMinimumStmtPerPackage := 0
-coverageMinimumBranchPerPackage := 0
-coverageMinimumStmtPerFile := 0
-coverageMinimumBranchPerFile := 0
-
-val jacocoSettings = Seq(
-  jacocoReportSettings := JacocoReportSettings(
-    "Jacoco Coverage Report",
-    None,
-    JacocoThresholds(),
-    Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML),
-    "utf-8"
-  ),
-  jacocoExcludes := Seq(
-    "*Tui",
-    "*Interface",
-    "*view.*",
-    "*view.*.*",
-    "*view.*.*.*",
-    "hearthstoneMini.HearthstoneMini.scala"
-  ),
-  jacocoCoverallsServiceName := "github-actions",
-  jacocoCoverallsBranch := sys.env.get("CI_BRANCH"),
-  jacocoCoverallsPullRequest := sys.env.get("GITHUB_EVENT_NAME"),
-  jacocoCoverallsRepoToken := sys.env.get("COVERALLS_REPO_TOKEN")
-)
-
 assembly / assemblyMergeStrategy := {
   case PathList("META-INF", _*) => MergeStrategy.discard
   case _                        => MergeStrategy.first
@@ -112,7 +78,6 @@ lazy val root = project
     assembly / assemblyJarName := "HearthstoneMini.jar",
     scalaVersion := scala3Version,
     commonDependencies,
-    jacocoSettings
   )
   .enablePlugins(JacocoCoverallsPlugin)
   .dependsOn(
