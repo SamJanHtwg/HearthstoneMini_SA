@@ -1,7 +1,6 @@
 package hearthstoneMini
 package model
-import model.cardComponent.cardImpl.Card
-import model.matrixComponent.matrixImpl.Matrix
+import _root_.model.cardComponent.cardImpl.Card
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -9,18 +8,13 @@ class CardSpec extends AnyWordSpec with Matchers {
   "A Card" when {
     "filled" should {
       val card = new Card("test", 2, 2, 2, "Schmettern", "rare", 0, "")
-      "have a String repesentation" in {
+      "have a String representation" in {
         card.toString() should be("test (2)#atk: 2#def: 2#Schmettern#rare")
-      }
-      "have a Matrix repesentation" in {
-        card.toMatrix.toString should be(
-          "test (2)       \natk: 2         \ndef: 2         \nSchmettern     \nrare           \n"
-        )
       }
       "have a name" in {
         card.name should be("test")
       }
-      "have Manacost" in {
+      "have Mana cost" in {
         card.manaCost should be(2)
       }
       "have atk Value" in {
@@ -30,7 +24,7 @@ class CardSpec extends AnyWordSpec with Matchers {
       "have def Value" in {
         card.defenseValue should be(2)
       }
-      "have an effekt" in {
+      "have an effect" in {
         card.effect should be("Schmettern")
       }
       "have a Rarity" in {

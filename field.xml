@@ -1,332 +1,44 @@
 <field>
     <players>
         <player>
-            <name> Player </name>
+            <name> Player1 </name>
             <id> 1 </id>
             <hpValue> 1 </hpValue>
             <maxHpValue> 5 </maxHpValue>
             <manaValue> 1 </manaValue>
             <maxManaValue> 2 </maxManaValue>
-            <hand>
-                <card>
-                    <id>ULD_270</id>
-                    <name>Sandhufwas</name>
-                    <manaCost>5</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GIL_650</id>
-                    <name>Hundemeist</name>
-                    <manaCost>4</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LOEA16_22</id>
-                    <name>Archaedas</name>
-                    <manaCost>5</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ULD_430t</id>
-                    <name>Schrecke</name>
-                    <manaCost>1</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>1</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>EX1_045</id>
-                    <name>Uralter Wä</name>
-                    <manaCost>2</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-            </hand>
+            <hand> </hand>
             <deck>
                 <card>
-                    <id>BT_187</id>
-                    <name>Kayn Sonne</name>
-                    <manaCost>4</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LOOT_538</id>
-                    <name>Temporus</name>
-                    <manaCost>7</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>PVPDR_SCH_Passive24t</id>
-                    <name>Aufgebläht</name>
-                    <manaCost>1</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>AT_092</id>
-                    <name>Eiswüter</name>
-                    <manaCost>3</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LOOT_122</id>
-                    <name>Ätzender S</name>
-                    <manaCost>5</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>DRG_056</id>
-                    <name>Fallschirm</name>
-                    <manaCost>2</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>Story_07_SpiritofWater</id>
-                    <name>Geist des </name>
-                    <manaCost>1</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>8</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GIL_685</id>
-                    <name>Bewahrerin</name>
-                    <manaCost>3</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>EX1_185</id>
-                    <name>Belagerung</name>
-                    <manaCost>7</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>8</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TRL_513</id>
-                    <name>Mosh’Ogg-R</name>
-                    <manaCost>8</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>14</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LETLT_011_01</id>
-                    <name>Alphahyäne</name>
-                    <manaCost>4</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>15</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BGS_083</id>
-                    <name>Menageriek</name>
-                    <manaCost>5</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ULD_167</id>
-                    <name>Kranker Ge</name>
-                    <manaCost>4</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>CS2_boar</id>
-                    <name>Eber</name>
+                    <id></id>
+                    <name>test1</name>
                     <manaCost>1</manaCost>
                     <attValue>1</attValue>
                     <defenseValue>1</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
+                    <effect>testEffect1</effect>
+                    <rarity>testRarety1</rarity>
                 </card>
                 <card>
-                    <id>AT_081</id>
-                    <name>Eadric der</name>
-                    <manaCost>7</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>7</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ICC_068</id>
-                    <name>Eiswandler</name>
+                    <id></id>
+                    <name>test2</name>
                     <manaCost>2</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>AT_020</id>
-                    <name>Fiese Verd</name>
-                    <manaCost>7</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>8</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LOE_009t</id>
-                    <name>Skarabäus</name>
-                    <manaCost>1</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>1</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>Story_09_RagingInfernal</id>
-                    <name>Tobende Hö</name>
-                    <manaCost>10</manaCost>
-                    <attValue>8</attValue>
-                    <defenseValue>8</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>VAN_EX1_604</id>
-                    <name>Wütender B</name>
-                    <manaCost>3</manaCost>
                     <attValue>2</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>Story_04_WallsLordaeron</id>
-                    <name>Mauern von</name>
-                    <manaCost>0</manaCost>
-                    <attValue>0</attValue>
-                    <defenseValue>10</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LETL_026P4_03m</id>
-                    <name>Riesenflos</name>
-                    <manaCost>5</manaCost>
-                    <attValue>14</attValue>
-                    <defenseValue>14</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GILA_BOSS_49t</id>
-                    <name>Willenlose</name>
-                    <manaCost>3</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ICCA01_004t</id>
-                    <name>Ghul</name>
-                    <manaCost>3</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>DMF_707</id>
-                    <name>Zauberflos</name>
-                    <manaCost>3</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>EX1_414</id>
-                    <name>Grommash H</name>
-                    <manaCost>8</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>9</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>PVPDR_YOP_PriestT2</id>
-                    <name>Herold der</name>
-                    <manaCost>5</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BT_703</id>
-                    <name>Verfluchte</name>
-                    <manaCost>7</manaCost>
-                    <attValue>7</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>OG_322</id>
-                    <name>Schwarzmee</name>
-                    <manaCost>4</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>CRED_81</id>
-                    <name>Sojin Hwan</name>
-                    <manaCost>3</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
+                    <defenseValue>2</defenseValue>
+                    <effect>testEffect2</effect>
+                    <rarity>testRarety2</rarity>
                 </card>
             </deck>
-            <friedhof> </friedhof>
+            <friedhof>
+                <card>
+                    <id></id>
+                    <name>test1</name>
+                    <manaCost>1</manaCost>
+                    <attValue>1</attValue>
+                    <defenseValue>1</defenseValue>
+                    <effect>testEffect1</effect>
+                    <rarity>testRarety1</rarity>
+                </card>
+            </friedhof>
             <field>
                 <card> </card>
                 <card> </card>
@@ -336,332 +48,44 @@
             </field>
         </player>
         <player>
-            <name> Player </name>
+            <name> Player2 </name>
             <id> 2 </id>
             <hpValue> 1 </hpValue>
             <maxHpValue> 5 </maxHpValue>
             <manaValue> 1 </manaValue>
             <maxManaValue> 2 </maxManaValue>
-            <hand>
-                <card>
-                    <id>TB_BaconUps_152</id>
-                    <name>Giftflosse</name>
-                    <manaCost>1</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TRL_551</id>
-                    <name>Riesiger T</name>
-                    <manaCost>3</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GIL_664</id>
-                    <name>Unglücksra</name>
-                    <manaCost>4</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BOT_031</id>
-                    <name>Goblinbomb</name>
-                    <manaCost>1</manaCost>
-                    <attValue>0</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ULDA_405</id>
-                    <name>Branns epi</name>
-                    <manaCost>6</manaCost>
-                    <attValue>0</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-            </hand>
+            <hand> </hand>
             <deck>
                 <card>
-                    <id>EX1_591</id>
-                    <name>Auchenaise</name>
-                    <manaCost>4</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BG20_207_G</id>
-                    <name>Dynamische</name>
-                    <manaCost>4</manaCost>
-                    <attValue>8</attValue>
-                    <defenseValue>10</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LETLT_016_01</id>
-                    <name>Giftiger S</name>
-                    <manaCost>4</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>15</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>VAN_NEW1_041</id>
-                    <name>Panischer </name>
-                    <manaCost>5</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>VAN_CS2_064</id>
-                    <name>Schreckens</name>
-                    <manaCost>6</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>SCH_199t26</id>
-                    <name>Austauschs</name>
-                    <manaCost>2</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TB_BaconUps_003t</id>
-                    <name>Murlocspäh</name>
+                    <id></id>
+                    <name>test1</name>
                     <manaCost>1</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GVG_091</id>
-                    <name>Arkannulli</name>
-                    <manaCost>4</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TRL_312</id>
-                    <name>Zauberfuri</name>
-                    <manaCost>2</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>CFM_344</id>
-                    <name>Finja die </name>
-                    <manaCost>5</manaCost>
-                    <attValue>2</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>GIL_120</id>
-                    <name>Wütender E</name>
-                    <manaCost>7</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>9</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BARL_016H_01</id>
-                    <name>Tyrande</name>
-                    <manaCost>4</manaCost>
-                    <attValue>8</attValue>
-                    <defenseValue>81</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TB_IgnoblegardenEgg</id>
-                    <name>Nobelgarte</name>
-                    <manaCost>2</manaCost>
-                    <attValue>0</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ULD_727</id>
-                    <name>Leichenwic</name>
-                    <manaCost>4</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>CFM_609</id>
-                    <name>Peiniger d</name>
-                    <manaCost>3</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>7</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>LOOT_132</id>
-                    <name>Drachentöt</name>
-                    <manaCost>3</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>ULD_217</id>
-                    <name>Mikromumie</name>
-                    <manaCost>2</manaCost>
                     <attValue>1</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>UNG_830</id>
-                    <name>Grausame D</name>
-                    <manaCost>6</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>KAR_061</id>
-                    <name>Der Kurato</name>
-                    <manaCost>7</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>PVPDR_DMF_Priestt2</id>
-                    <name>Wahnsinnst</name>
-                    <manaCost>5</manaCost>
-                    <attValue>3</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BAR_312</id>
-                    <name>Wahrsagerk</name>
-                    <manaCost>2</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>3</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BOT_021</id>
-                    <name>Bronzetorw</name>
-                    <manaCost>3</manaCost>
-                    <attValue>1</attValue>
-                    <defenseValue>5</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>EX1_089</id>
-                    <name>Arkangolem</name>
-                    <manaCost>3</manaCost>
-                    <attValue>4</attValue>
-                    <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>CRED_86</id>
-                    <name>Neal Kochh</name>
-                    <manaCost>5</manaCost>
-                    <attValue>5</attValue>
-                    <defenseValue>6</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>BARL_020H_02</id>
-                    <name>Draka</name>
-                    <manaCost>4</manaCost>
-                    <attValue>6</attValue>
-                    <defenseValue>45</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>TU4a_002</id>
-                    <name>Gnoll der </name>
-                    <manaCost>1</manaCost>
-                    <attValue>2</attValue>
                     <defenseValue>1</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
+                    <effect>testEffect1</effect>
+                    <rarity>testRarety1</rarity>
                 </card>
                 <card>
-                    <id>KAR_711</id>
-                    <name>Arkanriese</name>
-                    <manaCost>12</manaCost>
-                    <attValue>8</attValue>
-                    <defenseValue>8</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>AT_105</id>
-                    <name>Verletzter</name>
-                    <manaCost>1</manaCost>
+                    <id></id>
+                    <name>test2</name>
+                    <manaCost>2</manaCost>
                     <attValue>2</attValue>
-                    <defenseValue>4</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>DMF_073t</id>
-                    <name>Dunkelmond</name>
-                    <manaCost>3</manaCost>
-                    <attValue>3</attValue>
                     <defenseValue>2</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
-                </card>
-                <card>
-                    <id>EX1_345t</id>
-                    <name>Schatten d</name>
-                    <manaCost>0</manaCost>
-                    <attValue>0</attValue>
-                    <defenseValue>1</defenseValue>
-                    <effect>Effect</effect>
-                    <rarity>Rarity</rarity>
+                    <effect>testEffect2</effect>
+                    <rarity>testRarety2</rarity>
                 </card>
             </deck>
-            <friedhof> </friedhof>
+            <friedhof>
+                <card>
+                    <id></id>
+                    <name>test1</name>
+                    <manaCost>1</manaCost>
+                    <attValue>1</attValue>
+                    <defenseValue>1</defenseValue>
+                    <effect>testEffect1</effect>
+                    <rarity>testRarety1</rarity>
+                </card>
+            </friedhof>
             <field>
                 <card> </card>
                 <card> </card>
@@ -671,7 +95,6 @@
             </field>
         </player>
     </players>
-    <slotnum> 5 </slotnum>
     <turns> 0 </turns>
     <activePlayerId> 1 </activePlayerId>
 </field>

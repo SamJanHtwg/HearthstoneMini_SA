@@ -1,42 +1,47 @@
 package hearthstoneMini
 package model
 
-import model.cardComponent.cardImpl.Card
-import model.fieldComponent.fieldImpl
-import model.playerComponent.playerImpl
-import model.playerComponent.playerImpl.Player
+import _root_.model.cardComponent.cardImpl.Card
+import _root_.model.fieldComponent.fieldImpl
+import _root_.model.playerComponent.playerImpl
+import _root_.model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import model.fieldComponent.fieldImpl.Field
-import model.fieldComponent.fieldImpl.FieldObject
+import _root_.model.fieldComponent.fieldImpl.Field
+import _root_.model.fieldComponent.fieldImpl.Field
 
 class FieldSpec extends AnyWordSpec with Matchers {
   "A Field" when {
     "created" should {
       val testCards = List[Card](
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
-        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "")
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "1"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "2"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "3"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "4"),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, "5")
       )
 
-      val field0 = new Field(5, "Player1", "Player2")
-      var field = new Field(
-        slotNum = 5,
+      val field0 = new Field(
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
-          (2, Player(id = 2))
+          (2, Player(id = 2, hand = testCards))
+        )
+      )
+      var field = new Field(
+        players = Map[Int, Player](
+          (
+            1,
+            Player(id = 1, hand = testCards, deck = testCards)
+              .resetAndIncreaseMana()
+          ),
+          (2, Player(id = 2, hand = testCards, deck = testCards))
         )
       )
 
-      val field1 = new Field(5)
+      val field1 = new Field()
       "be created with empty constructor" in {
         val field0 = Field()
-        field0.slotNum should be(5)
-      }
-      "be created using default fieldsize 5 and 2 player names" in {
-        field.matrix.colSize should be(FieldObject.standartFieldWidth)
+
       }
       "have a Card in slot 1 after placed 1 card in slot 1 from hand" in {
         field0
@@ -103,11 +108,6 @@ class FieldSpec extends AnyWordSpec with Matchers {
       "return player with id 1" in {
         field.getPlayerById(1) should be(field.players(field.activePlayerId))
       }
-      "have a Matrix representation" in {
-        field1.toMatrix.colSize should be(85)
-        field1.toMatrix.rowSize should be(31)
-
-      }
       "have reset and increased mana" in {
         val fieldAfterMove = field1.resetAndIncreaseMana()
         fieldAfterMove.players(field.activePlayerId).manaValue should be(2)
@@ -119,20 +119,20 @@ class FieldSpec extends AnyWordSpec with Matchers {
       }
     }
     "when hp value is set" in {
-      new Field(5, "1", "2").setHpValues(34).players.head._2.hpValue should be(
+      new Field().setHpValues(34).players.head._2.hpValue should be(
         34
       )
     }
     "when mana value is set" in {
-      new Field(5, "1", "2").setManaValues(45).players(1).manaValue should be(
+      new Field().setManaValues(45).players(1).manaValue should be(
         45
       )
     }
     "restored from xml" in {
-      val field = new Field(5, "1", "2")
+      val field = new Field()
       val xml = field.toXML
-      val fromXml = FieldObject.fromXml(xml)
-      assert(field.toString === fromXml.toString)
+      val fromXml = Field.fromXml(xml).toXML
+      assert(xml == fromXml)
     }
   }
 }

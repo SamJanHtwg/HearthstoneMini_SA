@@ -3,24 +3,29 @@ package model.commands
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.{Card}
+import core.controller.component.controllerImpl.Controller
+import _root_.model.cardComponent.cardImpl.Card
 
-import model.playerComponent.playerImpl.Player
-import util.Observer
-import model.fieldComponent.FieldInterface
-import model.Move
-import model.fieldComponent.fieldImpl.Field
-import hearthstoneMini.util.commands.commandImpl.PlaceCardCommand
+import _root_.model.playerComponent.playerImpl.Player
+import core.util.Observer
+import _root_.model.fieldComponent.FieldInterface
+import _root_.model.Move
+import _root_.model.fieldComponent.fieldImpl.Field
+import core.util.commands.commandImpl.PlaceCardCommand
 
 class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     "do step" in {
+      val testCards: List[Card] = List[Card](
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
+        Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, "")
+      )
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
             (2, Player(id = 2))
           )
         )
@@ -36,7 +41,6 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
     "undo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -54,7 +58,6 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
     "redo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))

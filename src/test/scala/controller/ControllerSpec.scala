@@ -1,17 +1,14 @@
 package hearthstoneMini
 package controller
 
-package hearthstoneMini
-package model
-
+import core.controller.{GameState, Strategy}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import controller.component.controllerImpl.Controller
-import util.Observer
-import _root_.hearthstoneMini.model.cardComponent.cardImpl.Card
-import _root_.hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import _root_.hearthstoneMini.model.playerComponent.playerImpl.Player
-import _root_.hearthstoneMini.model.Move
+import core.controller.component.controllerImpl.Controller
+import _root_.model.cardComponent.cardImpl.Card
+import _root_.model.fieldComponent.fieldImpl.Field
+import _root_.model.playerComponent.playerImpl.Player
+import _root_.model.Move
 
 class ControllerSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
@@ -22,10 +19,13 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   )
 
   "The Controller" should {
-    "have a default gametstate of GameState.PREGAME" in {
+    "should have access to all game states" in {
+      val allStates = GameState.values.toList
+      assert(allStates.length == 5)
+    }
+    "have a default game state of GameState.PREGAME" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -37,9 +37,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "place a card on field" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1, manaValue = 100)),
+            (1, Player(id = 1, manaValue = 100, hand = testCards)),
             (2, Player(id = 2))
           ),
           turns = 3
@@ -55,9 +54,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "draw a card" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
+            (
+              1,
+              Player(id = 1, hand = testCards.take(4), deck = testCards)
+                .resetAndIncreaseMana()
+            ),
             (2, Player(id = 2))
           )
         )
@@ -71,7 +73,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "setting player names" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -87,10 +88,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "attacking" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
+            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
+            (2, Player(id = 2, hand = testCards))
           )
         )
       )
@@ -109,10 +109,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "switching player" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1, name = 1.toString()).resetAndIncreaseMana()),
-            (2, Player(id = 2, name = 2.toString()))
+            (1, Player(id = 1, name = 1.toString).resetAndIncreaseMana()),
+            (2, Player(id = 2, name = 2.toString))
           )
         )
       )
@@ -124,10 +123,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "do a direct attack" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1, manaValue = 100, hand = testCards)),
-            (2, Player(id = 2, hpValue = 5, maxHpValue = 5))
+            (2, Player(id = 2, hpValue = 5))
           ),
           turns = 3
         )
@@ -140,19 +138,20 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "undo step / redo step" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
-            (1, Player(id = 1, hand = List.empty)),
+            (1, Player(id = 1, hand = List.empty, deck = testCards)),
             (2, Player(id = 2))
           )
         )
       )
       controller.drawCard()
+      controller.canUndo should be(true)
       controller.undo
       controller.field
         .players(controller.field.activePlayerId)
         .hand
         .length should be(0)
+      controller.canRedo should be(true)
       controller.redo
       controller.field
         .players(controller.field.activePlayerId)
@@ -162,7 +161,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "setStrategy should set a strategy based on input" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -173,10 +171,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.getPlayerById(1).hpValue should be(100)
       controller.field.getPlayerById(1).manaValue should be(100)
     }
-    "should set gamestate to Exit" in {
+    "should set game state to Exit" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1).resetAndIncreaseMana()),
             (2, Player(id = 2))
@@ -189,7 +186,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     "should return the Winner when one player has 0 hp" in {
       val controller = Controller(
         Field(
-          slotNum = 5,
           players = Map[Int, Player](
             (1, Player(id = 1, hpValue = 0)),
             (2, Player(id = 2))
@@ -201,11 +197,23 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getWinner() should be(
         Some(controller.field.players(controller.field.activePlayerId).name)
       )
-      controller.gameState should be (GameState.WIN)
+      controller.gameState should be(GameState.WIN)
+    }
+    "should return none when game dont have a winner" in {
+      val controller = Controller(
+        Field(
+          players = Map[Int, Player](
+            (1, Player(id = 1)),
+            (2, Player(id = 2))
+          ),
+          turns = 2
+        )
+      )
+
+      controller.getWinner() should be(None)
     }
     "should be able to save & load" in {
       val field = Field(
-        slotNum = 5,
         players = Map[Int, Player](
           (1, Player(id = 1)),
           (2, Player(id = 2))
@@ -216,6 +224,9 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val saved: Unit = controller.saveField
       val loaded: Unit = controller.loadField
       assert(saved === loaded)
+    }
+    "when unable to load, error should be triggered" in {
+      // TODO: add testcase
     }
   }
 }

@@ -3,57 +3,7 @@
     "players" : [ {
       "name" : "Player1",
       "id" : 1,
-      "hand" : [ {
-        "card" : {
-          "id" : "LETL_015H_03",
-          "name" : "Rexxar",
-          "manaCost" : 4,
-          "attValue" : 11,
-          "defenseValue" : 72,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TRLA_113t",
-          "name" : "Blutpakt",
-          "manaCost" : 0,
-          "attValue" : 0,
-          "defenseValue" : 0,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "GIL_202t",
-          "name" : "Königswach",
-          "manaCost" : 8,
-          "attValue" : 8,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "AT_106",
-          "name" : "Champion d",
-          "manaCost" : 3,
-          "attValue" : 4,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TB_GP_03",
-          "name" : "Neuer Scha",
-          "manaCost" : 0,
-          "attValue" : 0,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      } ],
+      "hand" : [ ],
       "deck" : [ {
         "card" : {
           "id" : "",
@@ -94,57 +44,7 @@
     }, {
       "name" : "Player2",
       "id" : 2,
-      "hand" : [ {
-        "card" : {
-          "id" : "Story_03_OddTotem",
-          "name" : "Ungerades ",
-          "manaCost" : 2,
-          "attValue" : 0,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "ULD_309",
-          "name" : "Zwergenarc",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TU5_CS2_179",
-          "name" : "Schildmeis",
-          "manaCost" : 4,
-          "attValue" : 3,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "CS2_147",
-          "name" : "Gnomische ",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DMF_703t",
-          "name" : "Grubenmeis",
-          "manaCost" : 3,
-          "attValue" : 1,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      } ],
+      "hand" : [ ],
       "deck" : [ {
         "card" : {
           "id" : "",
@@ -183,7 +83,6 @@
       "maxManaValue" : 2,
       "field" : [ null, null, null, null, null ]
     } ],
-    "slotnum" : 5,
     "turns" : 0,
     "activePlayerId" : 1
   }

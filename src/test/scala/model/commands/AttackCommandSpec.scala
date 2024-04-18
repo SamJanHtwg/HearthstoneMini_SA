@@ -1,11 +1,11 @@
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import _root_.hearthstoneMini.model.cardComponent.cardImpl.Card
-import _root_.hearthstoneMini.model.fieldComponent.fieldImpl.Field
-import _root_.hearthstoneMini.model.playerComponent.playerImpl.Player
-import _root_.hearthstoneMini.model.Move
-import hearthstoneMini.controller.component.controllerImpl.Controller
-import hearthstoneMini.util.commands.commandImpl.AttackCommand
+import model.cardComponent.cardImpl.Card
+import model.fieldComponent.fieldImpl.Field
+import model.playerComponent.playerImpl.Player
+import model.Move
+import core.controller.component.controllerImpl.Controller
+import core.util.commands.commandImpl.AttackCommand
 
 class AttackCommandSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
@@ -18,7 +18,6 @@ class AttackCommandSpec extends AnyWordSpec with Matchers {
   "A controller" should {
     val controller = Controller(
       Field(
-        slotNum = 5,
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards)),
           (2, Player(id = 2, hand = testCards))
