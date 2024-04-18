@@ -79,7 +79,6 @@ lazy val root = project
     scalaVersion := scala3Version,
     commonDependencies,
   )
-  .enablePlugins(JacocoCoverallsPlugin)
   .dependsOn(
     core % "compile->compile;test->test",
     tui % "compile->compile;test->test",
