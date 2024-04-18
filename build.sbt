@@ -1,29 +1,9 @@
+import org.scoverage.coveralls.GitHubActions
+import org.scoverage.coveralls.Imports.CoverallsKeys.*
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
 
 val scala3Version = "3.3.3"
-
-val jacocoSettings = Seq(
-  jacocoReportSettings := JacocoReportSettings(
-    "Jacoco Coverage Report",
-    None,
-    JacocoThresholds(),
-    Seq(JacocoReportFormats.ScalaHTML, JacocoReportFormats.XML),
-    "utf-8"
-  ),
-  jacocoExcludes := Seq(
-    "*Tui",
-    "*Interface",
-    "*view.*",
-    "*view.*.*",
-    "*view.*.*.*",
-    "hearthstoneMini.HearthstoneMini.scala"
-  ),
-  jacocoCoverallsServiceName := "github-actions",
-  jacocoCoverallsBranch := sys.env.get("CI_BRANCH"),
-  jacocoCoverallsPullRequest := sys.env.get("GITHUB_EVENT_NAME"),
-  jacocoCoverallsRepoToken := sys.env.get("COVERALLS_REPO_TOKEN")
-)
 
 assembly / assemblyMergeStrategy := {
   case PathList("META-INF", _*) => MergeStrategy.discard
@@ -47,7 +27,13 @@ lazy val commonDependencies = Seq(
     "javax.inject" % "javax.inject" % "1",
     "org.scalafx" % "scalafx_3" % "20.0.0-R31"
   ) ++ Seq(
-    "base", "controls", "fxml", "graphics", "media", "swing", "web"
+    "base",
+    "controls",
+    "fxml",
+    "graphics",
+    "media",
+    "swing",
+    "web"
   ).map(m => "org.openjfx" % s"javafx-$m" % "20")
 )
 
@@ -79,7 +65,8 @@ lazy val core = project
   .settings(
     name := "core",
     commonDependencies
-  ).dependsOn(model % "compile->compile")
+  )
+  .dependsOn(model % "compile->compile")
 
 lazy val root = project
   .in(file("."))
@@ -91,8 +78,11 @@ lazy val root = project
     assembly / assemblyJarName := "HearthstoneMini.jar",
     scalaVersion := scala3Version,
     commonDependencies,
-    jacocoSettings
   )
-  .enablePlugins(JacocoCoverallsPlugin)
-  .dependsOn(core % "compile->compile;test->test", tui % "compile->compile;test->test", gui % "compile->compile;test->test", model % "compile->compile;test->test")
+  .dependsOn(
+    core % "compile->compile;test->test",
+    tui % "compile->compile;test->test",
+    gui % "compile->compile;test->test",
+    model % "compile->compile;test->test"
+  )
   .aggregate(core, tui, gui, model)
