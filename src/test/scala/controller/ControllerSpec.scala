@@ -10,7 +10,7 @@ import _root_.model.fieldComponent.fieldImpl.Field
 import _root_.model.playerComponent.playerImpl.Player
 import _root_.model.Move
 import org.scalamock.scalatest.MockFactory
-import _root_.model.fileIOComponent.FileIOInterface
+import persistence.fileIO.FileIOInterface
 
 class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
   val testCards: List[Card] = List[Card](
