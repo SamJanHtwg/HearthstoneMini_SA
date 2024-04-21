@@ -8,8 +8,10 @@ import model.playerComponent.playerImpl.Player
 import model.Move
 import core.util.commands.commandImpl.DirectAttackCommand
 import model.cardComponent.cardImpl.Card
+import org.scalamock.scalatest.MockFactory
 
-class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
+
+class DirectAttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -18,15 +20,7 @@ class DirectAttackCommandSpec extends AnyWordSpec with Matchers {
   )
 
   "A controller" should {
-    val controller = Controller(
-      Field(
-        players = Map[Int, Player](
-          (1, Player(id = 1, hand = testCards)),
-          (2, Player(id = 2, hand = testCards))
-        )
-      )
-    )
-
+    val controller = mock[Controller]
     controller.placeCard(Move())
     controller.switchPlayer()
     controller.switchPlayer()

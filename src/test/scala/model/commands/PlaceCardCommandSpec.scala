@@ -12,8 +12,9 @@ import _root_.model.fieldComponent.FieldInterface
 import _root_.model.Move
 import _root_.model.fieldComponent.fieldImpl.Field
 import core.util.commands.commandImpl.PlaceCardCommand
+import org.scalamock.scalatest.MockFactory
 
-class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
+class PlaceCardCommandSpec extends AnyWordSpec with Matchers with MockFactory {
   "A controller" should {
     "do step" in {
       val testCards: List[Card] = List[Card](
@@ -22,14 +23,7 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
         Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, "")
       )
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
-        )
-      )
+      val controller = mock[Controller]
       val testField = controller.field
       val placeCardCommand = new PlaceCardCommand(
         controller,
@@ -39,14 +33,7 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
       placeCardCommand.memento should be(testField)
     }
     "undo step" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
-        )
-      )
+      val controller = mock[Controller]
       val testField = controller.field
       val placeCardCommand = new PlaceCardCommand(
         controller,
@@ -56,14 +43,7 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
       placeCardCommand.memento should be(testField)
     }
     "redo step" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
-        )
-      )
+      val controller = mock[Controller]
       val testField = controller.field
       val placeCardCommand = new PlaceCardCommand(
         controller,

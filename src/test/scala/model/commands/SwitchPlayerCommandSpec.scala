@@ -12,32 +12,19 @@ import core.util.Observer
 import _root_.model.fieldComponent.FieldInterface
 import _root_.model.fieldComponent.fieldImpl.Field
 import core.util.commands.commandImpl.SwitchPlayerCommand
+import org.scalamock.scalatest.MockFactory
 
-class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers {
+class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers with MockFactory{
   "A controller" should {
     "when switching players" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
-        )
-      )
+      val controller = mock[Controller]
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.doStep
       switchPlayer.memento should be(testField)
     }
     "undo / redo step" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
-        )
-      )
+      val controller = mock[Controller]
       val switchPlayer = new SwitchPlayerCommand(controller)
       val testField = controller.field
       switchPlayer.undoStep

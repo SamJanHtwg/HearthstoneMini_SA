@@ -9,8 +9,10 @@ import _root_.model.cardComponent.cardImpl.Card
 import _root_.model.fieldComponent.fieldImpl.Field
 import _root_.model.playerComponent.playerImpl.Player
 import _root_.model.Move
+import org.scalamock.scalatest.MockFactory
+import _root_.model.fileIOComponent.FileIOInterface
 
-class ControllerSpec extends AnyWordSpec with Matchers {
+class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -24,25 +26,26 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       assert(allStates.length == 5)
     }
     "have a default game state of GameState.PREGAME" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2))
         )
       )
       controller.gameState should be(GameState.CHOOSEMODE)
     }
     "place a card on field" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, manaValue = 100, hand = testCards)),
-            (2, Player(id = 2))
-          ),
-          turns = 3
-        )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, manaValue = 100, hand = testCards)),
+          (2, Player(id = 2))
+        ),
+        turns = 3
       )
       controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
@@ -52,16 +55,16 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .isDefined should be(true)
     }
     "draw a card" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (
-              1,
-              Player(id = 1, hand = testCards.take(4), deck = testCards)
-                .resetAndIncreaseMana()
-            ),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (
+            1,
+            Player(id = 1, hand = testCards.take(4), deck = testCards)
+              .resetAndIncreaseMana()
+          ),
+          (2, Player(id = 2))
         )
       )
       controller.drawCard()
@@ -71,12 +74,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .length should be(5)
     }
     "setting player names" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2))
         )
       )
       controller.setPlayerNames(playername1 = "Jan", playername2 = "Sam")
@@ -86,14 +89,15 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.players(2).name should be("Sam")
     }
     "attacking" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
-            (2, Player(id = 2, hand = testCards))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, hand = testCards).resetAndIncreaseMana()),
+          (2, Player(id = 2, hand = testCards))
         )
       )
+
       controller.nextState()
       controller.nextState()
       controller.placeCard(Move(2, 2))
@@ -107,12 +111,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .isEmpty should be(true)
     }
     "switching player" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, name = 1.toString).resetAndIncreaseMana()),
-            (2, Player(id = 2, name = 2.toString))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, name = 1.toString).resetAndIncreaseMana()),
+          (2, Player(id = 2, name = 2.toString))
         )
       )
       controller.switchPlayer()
@@ -121,14 +125,14 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       )
     }
     "do a direct attack" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, manaValue = 100, hand = testCards)),
-            (2, Player(id = 2, hpValue = 5))
-          ),
-          turns = 3
-        )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, manaValue = 100, hand = testCards)),
+          (2, Player(id = 2, hpValue = 5))
+        ),
+        turns = 3
       )
       controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
@@ -136,12 +140,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.players(2).hpValue should be(4)
     }
     "undo step / redo step" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, hand = List.empty, deck = testCards)),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, hand = List.empty, deck = testCards)),
+          (2, Player(id = 2))
         )
       )
       controller.drawCard()
@@ -159,12 +163,12 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         .length should be(1)
     }
     "setStrategy should set a strategy based on input" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2))
         )
       )
       controller.setStrategy(Strategy.debug)
@@ -172,26 +176,27 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.field.getPlayerById(1).manaValue should be(100)
     }
     "should set game state to Exit" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1).resetAndIncreaseMana()),
-            (2, Player(id = 2))
-          )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1).resetAndIncreaseMana()),
+          (2, Player(id = 2))
         )
       )
       controller.exitGame()
       controller.gameState should be(GameState.EXIT)
     }
     "should return the Winner when one player has 0 hp" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1, hpValue = 0)),
-            (2, Player(id = 2))
-          ),
-          turns = 2
-        )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, hpValue = 0)),
+          (2, Player(id = 2))
+        ),
+        turns = 2
       )
 
       controller.getWinner() should be(
@@ -200,14 +205,14 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.gameState should be(GameState.WIN)
     }
     "should return none when game dont have a winner" in {
-      val controller = Controller(
-        Field(
-          players = Map[Int, Player](
-            (1, Player(id = 1)),
-            (2, Player(id = 2))
-          ),
-          turns = 2
-        )
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1)),
+          (2, Player(id = 2))
+        ),
+        turns = 2
       )
 
       controller.getWinner() should be(None)
@@ -220,7 +225,8 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         )
       )
 
-      val controller = Controller(field)
+      val fileIoMock = mock[FileIOInterface]
+      val controller = Controller(fileIoMock)
       val saved: Unit = controller.saveField
       val loaded: Unit = controller.loadField
       assert(saved === loaded)

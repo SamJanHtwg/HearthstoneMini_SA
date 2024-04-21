@@ -6,8 +6,9 @@ import model.playerComponent.playerImpl.Player
 import model.Move
 import core.controller.component.controllerImpl.Controller
 import core.util.commands.commandImpl.AttackCommand
+import org.scalamock.scalatest.MockFactory
 
-class AttackCommandSpec extends AnyWordSpec with Matchers {
+class AttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 10, 1, "testEffect1", "testRarety1", 1, ""),
@@ -16,14 +17,8 @@ class AttackCommandSpec extends AnyWordSpec with Matchers {
   )
 
   "A controller" should {
-    val controller = Controller(
-      Field(
-        players = Map[Int, Player](
-          (1, Player(id = 1, hand = testCards)),
-          (2, Player(id = 2, hand = testCards))
-        )
-      )
-    )
+    val controller =  mock[Controller]
+    
     controller.placeCard(Move(1, 1))
     controller.switchPlayer()
     controller.placeCard(Move(0, 1))
