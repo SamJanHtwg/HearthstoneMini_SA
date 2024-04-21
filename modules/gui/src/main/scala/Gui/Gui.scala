@@ -1,10 +1,9 @@
-package gui
+package Gui
 
-import gui.enterPlayernamesScreen.EnterPlayerNamesImpl
-import gui.mainGameScreen.MainGameScreen
-import gui.modeSelectionScreen.ModeSelectionScreenImpl
-import gui.GuiApp
-import core.controller.GameState
+import Gui.enterPlayernamesScreen.EnterPlayerNamesImpl
+import Gui.mainGameScreen.MainGameScreen
+import Gui.modeSelectionScreen.ModeSelectionScreenImpl
+import model.GameState
 import core.controller.component.controllerImpl.Controller
 import javafx.scene.control.DialogPane
 import scalafx.application.{JFXApp3, Platform}
@@ -15,8 +14,22 @@ import scalafx.scene.control.Alert
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.{Image, ImageView}
 import core.controller.component.ControllerInterface
+import core.util.Observer
+import core.util.Event
 
-class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3 {
+class Gui(using controller: ControllerInterface) extends JFXApp3, Observer {
+  controller.add(this)
+
+  override def update(e: Event, msg: Option[String]): Unit = {
+    Platform.runLater {
+      e match {
+        case Event.ERROR => showErrorDialog(msg)
+        case Event.EXIT  => stopApp()
+        case Event.PLAY  => start()
+      }
+    }
+  }
+
   override def start(): Unit = {
     stage = new JFXApp3.PrimaryStage {
       title = "HearthstoneMini"
@@ -27,7 +40,7 @@ class Gui(guiApp: GuiApp, controller: ControllerInterface) extends JFXApp3 {
         fill = White
         Platform.runLater {
           () -> {
-            controller.gameState match {
+            controller.field.gameState match {
               case GameState.CHOOSEMODE =>
                 content = new ModeSelectionScreenImpl(controller = controller)
               case GameState.ENTERPLAYERNAMES =>

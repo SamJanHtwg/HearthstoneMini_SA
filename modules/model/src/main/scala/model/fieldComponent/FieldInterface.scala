@@ -5,12 +5,15 @@ import cardComponent.cardImpl.Card
 import playerComponent.playerImpl.Player
 import play.api.libs.json.JsValue
 import playerComponent.PlayerInterface
+import model.GameState.GameState
 
 trait FieldInterface {
   val players: Map[Int, PlayerInterface]
   val activePlayerId: Int
   val turns: Int
+  val gameState: GameState
 
+  def setGameState(gameState: GameState): FieldInterface
   // player
   def placeCard(handSlot: Int, fieldSlot: Int): FieldInterface
 

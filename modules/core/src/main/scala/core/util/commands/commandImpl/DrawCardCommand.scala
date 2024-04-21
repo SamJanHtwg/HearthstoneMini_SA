@@ -8,7 +8,8 @@ import core.util.commands.CommandInterface
 import scala.util.{Failure, Try, Success}
 import core.controller.component.ControllerInterface
 
-class DrawCardCommand(controller: ControllerInterface) extends CommandInterface {
+class DrawCardCommand(controller: ControllerInterface)
+    extends CommandInterface {
   var memento: FieldInterface = controller.field
   override def doStep: Try[FieldInterface] =
     Option

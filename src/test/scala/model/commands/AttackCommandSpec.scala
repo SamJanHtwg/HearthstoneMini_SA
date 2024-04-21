@@ -17,8 +17,8 @@ class AttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
   )
 
   "A controller" should {
-    val controller =  mock[Controller]
-    
+    val controller = mock[Controller]
+
     controller.placeCard(Move(1, 1))
     controller.switchPlayer()
     controller.placeCard(Move(0, 1))

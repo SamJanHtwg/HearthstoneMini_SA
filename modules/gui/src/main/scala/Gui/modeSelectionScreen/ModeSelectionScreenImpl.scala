@@ -1,6 +1,6 @@
-package gui
-package modeSelectionScreen
+package Gui.modeSelectionScreen
 
+import core.controller.Strategy.Strategy
 import core.controller.Strategy
 import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller

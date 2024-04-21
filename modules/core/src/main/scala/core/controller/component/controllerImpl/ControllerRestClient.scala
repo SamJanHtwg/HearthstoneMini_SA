@@ -1,14 +1,12 @@
 package core.controller.component.controllerImpl
-
-import com.google.inject.name.{Named, Names}
-import com.google.inject.{Guice, Inject, Injector}
-import core.controller.GameState.*
+import core.controller.Strategy
+import core.controller.Strategy.Strategy
+import model.GameState.*
+import model.GameState
 import core.controller.component.ControllerInterface
-import core.controller.{GameState, Strategy}
 import model.fieldComponent.FieldInterface
 import model.Move
 import model.playerComponent.playerImpl.Player
-import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
 import core.util.commands.CommandInterface
 import model.fieldComponent.fieldImpl.Field
@@ -35,7 +33,6 @@ import akka.http.javadsl.model.RequestEntity
 import akka.http.scaladsl.model.HttpMethod
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
-import scalafx.scene.input.KeyCode.J
 import persistence.fileIO.FileIOInterface
 
 class ControllerRestClient(val fileIO: FileIOInterface)
@@ -44,7 +41,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     new CardProvider(inputFile = "/json/cards.json")
 
   private val controllerServiceUrl = "http://localhost:4001/controller"
-  private val persistenceServiceEndpoint = "http://localhost:4001/persistence"
+  private val persistenceServiceEndpoint = "http://localhost:4002/persistence"
 
   var field: FieldInterface = Field(
     players = Map(
@@ -60,7 +57,6 @@ class ControllerRestClient(val fileIO: FileIOInterface)
       )
     )
   )
-  var gameState: GameState = GameState.CHOOSEMODE
   var errorMsg: Option[String] = None
   private val undoManager: UndoManager = new UndoManager
 
@@ -93,15 +89,15 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     }
     Try {
       val responseJson =
-        Await.result(responseJsonFuture, 3.seconds)
+        Await.result(responseJsonFuture, 30.seconds)
       Field.fromJson(responseJson)
     } match {
       case Success(newField) => {
         field = newField
         errorMsg = None
         notifyObservers(Event.PLAY, msg = errorMsg)
-    }
-    case Failure(x) =>
+      }
+      case Failure(x) =>
         errorMsg = Some(x.getMessage)
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
@@ -111,11 +107,16 @@ class ControllerRestClient(val fileIO: FileIOInterface)
   def canRedo: Boolean = undoManager.canRedo
 
   def placeCard(move: Move): Unit =
-    request(controllerServiceUrl, "placeCard", HttpMethods.POST, Some(move.toJson))
+    request(
+      controllerServiceUrl,
+      "placeCard",
+      HttpMethods.POST,
+      Some(move.toJson)
+    )
 
   def drawCard(): Unit =
     request(controllerServiceUrl, "drawCard", HttpMethods.GET)
-    
+
   def setPlayerNames(playername1: String, playername2: String): Unit = {
     request(
       controllerServiceUrl,
@@ -148,16 +149,14 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     HttpMethods.GET
   )
 
-  def undo: Unit = 
+  def undo: Unit =
     request(controllerServiceUrl, "undo", HttpMethods.GET)
-  
-  def redo: Unit = 
+
+  def redo: Unit =
     request(controllerServiceUrl, "redo", HttpMethods.GET)
-  
-  def exitGame(): Unit = request(
-    controllerServiceUrl,
-    "exitGame",
-    HttpMethods.GET)
+
+  def exitGame(): Unit =
+    request(controllerServiceUrl, "exitGame", HttpMethods.GET)
 
   def setStrategy(strat: Strategy): Unit = request(
     controllerServiceUrl,
@@ -170,7 +169,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
     playersWithHp.values.size match {
       case 1 =>
-        gameState = GameState.WIN
+        field = field.setGameState(GameState.WIN)
         Some(playersWithHp.values.head.name)
       case _ => None
     }

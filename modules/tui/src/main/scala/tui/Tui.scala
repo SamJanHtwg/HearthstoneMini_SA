@@ -3,7 +3,7 @@ package tui
 import model.Move
 import core.util.Observer
 import core.util.Event
-import core.controller.GameState
+import model.GameState
 import core.controller.Strategy
 import core.controller.component.controllerImpl.Controller
 import scala.util.{Failure, Success, Try}
@@ -70,7 +70,7 @@ class Tui(controller: ControllerInterface) extends Observer {
       case Event.ERROR => msg.fold({})(msg => println(msg))
       case Event.EXIT  => println(endGameMsg)
       case Event.PLAY =>
-        controller.gameState match {
+        controller.field.gameState match {
           case GameState.CHOOSEMODE       => println(chooseGameMode)
           case GameState.ENTERPLAYERNAMES => println(enterPlayerNames)
           case GameState.MAINGAME         => printField()
@@ -85,7 +85,7 @@ class Tui(controller: ControllerInterface) extends Observer {
 
   def onInput(input: String): Unit = {
     if checkInput(input) then {
-      controller.gameState match {
+      controller.field.gameState match {
         case GameState.CHOOSEMODE       => setGameStrategy(input)
         case GameState.ENTERPLAYERNAMES => setPlayerNames(input)
         case GameState.MAINGAME         => EvalInput(input)
@@ -142,7 +142,7 @@ class Tui(controller: ControllerInterface) extends Observer {
   }
 
   def checkInput(input: String): Boolean = {
-    controller.gameState match {
+    controller.field.gameState match {
       case GameState.CHOOSEMODE       => input.matches("([123])")
       case GameState.ENTERPLAYERNAMES => input.matches("(.{3,10}\\s.{3,10})")
       case GameState.MAINGAME =>
@@ -284,80 +284,3 @@ class Tui(controller: ControllerInterface) extends Observer {
       )
   }
 }
-/*
-  // CARD
-  override def toMatrix: Matrix[String] = new Matrix[String](
-    FieldObject.standartCardHeight,
-    FieldObject.standartCardWidth,
-    " "
-  ).updateMatrix(0, 0, toString().split("#").toList)
-
-  // FIELD
-  override def toMatrix: Matrix[String] = matrix
-    .updateMatrix(0, 0, List[String]("-" * FieldObject.standartFieldWidth))
-    .updateMatrixWithMatrix(FieldObject.offset, 0, getPlayerById(1).toMatrix)
-    .updateMatrixWithMatrix(
-      FieldObject.offset + FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight
-        + FieldObject.standartFieldBarHeight,
-      0,
-      getPlayerById(2).toMatrix
-    )
-
-  val offset: Int = 1
-
-  val standartCardWidth: Int = 15
-  val standartCardHeight: Int = 5
-  val standartSlotWidth: Int = standartCardWidth + 2 // 2 for Margin
-  val standartFieldBarHeight: Int = standartCardHeight + 1 // + 2 for border
-  val standartGameBarHeight: Int = 7
-  val standartMenueBarHeight: Int = 2
-  val standartFieldWidth: Int = standartSlotNum * standartSlotWidth
-  val standartFieldHeight: Int =
-    (standartFieldBarHeight + standartGameBarHeight + standartMenueBarHeight) * 2
-      + FieldObject.offset
-
-
-  // PLAYER
-  override def toMatrix: Matrix[String] =
-    if (id % 2) == 1 then renderUnevenId() else renderEvenId()
-
-  override def renderUnevenId(): Matrix[String] = new Matrix[String](
-    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
-    FieldObject.standartFieldWidth,
-    " "
-  )
-    .updateMatrixWithMatrix(0, 0, menueBar())
-
-  // .updateMatrixWithMatrix(
-  //   FieldObject.standartGameBarHeight + FieldObject.standartMenueBarHeight,
-  //   0,
-  //   field.toMatrix
-  // )
-
-  override def renderEvenId(): Matrix[String] = new Matrix[String](
-    FieldObject.standartMenueBarHeight + FieldObject.standartGameBarHeight + FieldObject.standartFieldBarHeight,
-    FieldObject.standartFieldWidth,
-    " "
-  )
-    // .updateMatrixWithMatrix(0, 0, fieldbar.toMatrix)
-    .updateMatrixWithMatrix(
-      FieldObject.standartFieldBarHeight + FieldObject.standartGameBarHeight,
-      0,
-      menueBar()
-    )
-    override def menueBar(): Matrix[String] = new Matrix[String](
-      FieldObject.standartMenueBarHeight,
-      FieldObject.standartFieldWidth,
-      " "
-    )
-      .updateMatrix(
-        0,
-        0,
-        List[String](
-          name + " " +
-            "#" * ((FieldObject.standartFieldWidth - name.length - 1) *
-              hpValue / maxHpValue).asInstanceOf[Float].floor.asInstanceOf[Int],
-          "-" *
-            FieldObject.standartFieldWidth        )
-      )
- */

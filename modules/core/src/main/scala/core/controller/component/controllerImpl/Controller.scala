@@ -1,11 +1,12 @@
-package core
-package controller.component.controllerImpl
+package core.controller.component.controllerImpl
 
 import com.google.inject.name.{Named, Names}
 import com.google.inject.{Guice, Inject, Injector}
-import core.controller.GameState.*
+import model.GameState.*
 import core.controller.component.ControllerInterface
-import core.controller.{GameState, Strategy}
+import core.controller.Strategy.Strategy
+import core.controller.Strategy
+import model.GameState
 import model.fieldComponent.FieldInterface
 import model.Move
 import persistence.fileIO.FileIOInterface
@@ -18,7 +19,7 @@ import model.fieldComponent.fieldImpl.Field
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}
-import util.commands.commandImpl.{
+import core.util.commands.commandImpl.{
   PlaceCardCommand,
   DirectAttackCommand,
   DrawCardCommand,
@@ -27,27 +28,26 @@ import util.commands.commandImpl.{
 }
 import core.util.CardProvider
 
-class Controller (val fileIO: FileIOInterface)
-    extends ControllerInterface {
+class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
+
   val cardProvider =
-      new CardProvider(inputFile = "/json/cards.json")
+    new CardProvider(inputFile = "/json/cards.json")
 
   var field: FieldInterface = Field(
     players = Map(
-        1 -> Player(
-          id = 1,
-          hand = cardProvider.getCards(5),
-          deck = cardProvider.getCards(30)
-        ),
-        2 -> Player(
-          id = 2,
-          hand = cardProvider.getCards(5),
-          deck = cardProvider.getCards(30)
-        )
+      1 -> Player(
+        id = 1,
+        hand = cardProvider.getCards(5),
+        deck = cardProvider.getCards(30)
+      ),
+      2 -> Player(
+        id = 2,
+        hand = cardProvider.getCards(5),
+        deck = cardProvider.getCards(30)
       )
+    )
   )
 
-  var gameState: GameState = GameState.CHOOSEMODE
   var errorMsg: Option[String] = None
   private val undoManager: UndoManager = new UndoManager
 
@@ -92,16 +92,16 @@ class Controller (val fileIO: FileIOInterface)
     notifyObservers(Event.PLAY, msg = None)
   }
   def exitGame(): Unit = {
-    gameState = GameState.EXIT
+    field = field.setGameState(GameState.EXIT)
     errorMsg = None
     notifyObservers(Event.EXIT, msg = None)
   }
   def nextState(): Unit = {
-    gameState match {
-      case GameState.CHOOSEMODE       => gameState = GameState.ENTERPLAYERNAMES
-      case GameState.ENTERPLAYERNAMES => gameState = GameState.MAINGAME
-      case GameState.MAINGAME         => gameState = GameState.WIN
-    }
+    field = field.setGameState(field.gameState match {
+      case GameState.CHOOSEMODE       => GameState.ENTERPLAYERNAMES
+      case GameState.ENTERPLAYERNAMES => GameState.MAINGAME
+      case GameState.MAINGAME         => GameState.WIN
+    })
   }
   def setStrategy(strat: Strategy): Unit = {
     field = strat match {
@@ -117,7 +117,7 @@ class Controller (val fileIO: FileIOInterface)
     val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
     playersWithHp.values.size match {
       case 1 =>
-        gameState = GameState.WIN
+        field.setGameState(GameState.WIN)
         Some(playersWithHp.values.head.name)
       case _ => None
     }
@@ -129,7 +129,7 @@ class Controller (val fileIO: FileIOInterface)
     fileIO.load match {
       case Success(value) =>
         this.field = value
-        gameState = GameState.MAINGAME
+        field = field.setGameState(GameState.MAINGAME)
         errorMsg = None
         notifyObservers(Event.PLAY, msg = None)
       case Failure(exception) =>

@@ -1,5 +1,4 @@
-package gui
-package enterPlayernamesScreen
+package Gui.enterPlayernamesScreen
 
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent

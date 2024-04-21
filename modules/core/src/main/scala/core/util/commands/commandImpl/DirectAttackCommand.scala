@@ -2,7 +2,7 @@ package core
 package util.commands.commandImpl
 
 import model.Move
-import controller.GameState
+import model.GameState
 import model.cardComponent.cardImpl.Card
 import core.util.commands.CommandInterface
 import model.fieldComponent.FieldInterface
@@ -21,7 +21,7 @@ class DirectAttackCommand(controller: ControllerInterface, move: Move)
       memento = controller.field
       val currentField = controller.field
 
-      val newField = currentField
+      var newField = currentField
         .reduceHp(
           currentField.getInactivePlayerId,
           attackingCard.attValue
@@ -29,7 +29,7 @@ class DirectAttackCommand(controller: ControllerInterface, move: Move)
         .reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.gameState = GameState.WIN
+        newField = newField.setGameState(GameState.WIN)
       }
       newField
     })
