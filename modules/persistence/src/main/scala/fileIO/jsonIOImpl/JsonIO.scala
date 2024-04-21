@@ -27,4 +27,10 @@ class JsonIO extends FileIOInterface {
     pw.write(Json.prettyPrint(save))
     pw.close()
   }
+
+  override def save(json: JsValue): Unit = {
+    val pw = new PrintWriter(new File("field.json"))
+    pw.write(Json.prettyPrint(json))
+    pw.close()
+  }
 }

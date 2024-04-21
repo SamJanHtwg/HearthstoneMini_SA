@@ -41,7 +41,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     new CardProvider(inputFile = "/json/cards.json")
 
   private val controllerServiceUrl = "http://localhost:4001/controller"
-  private val persistenceServiceEndpoint = "http://localhost:4002/persistence"
+  private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
   var field: FieldInterface = Field(
     players = Map(
