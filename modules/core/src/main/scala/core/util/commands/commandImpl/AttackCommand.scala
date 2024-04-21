@@ -3,15 +3,15 @@ package util.commands.commandImpl
 
 import model.Move
 import controller.GameState
-import controller.component.controllerImpl.Controller
 import model.fieldComponent.FieldInterface
 import scala.util.{Failure, Success, Try}
 import core.util.commands.CommandInterface
 import org.checkerframework.checker.units.qual.s
 import model.cardComponent.CardInterface
+import core.controller.component.ControllerInterface
 
 //noinspection DuplicatedCode
-class AttackCommand(controller: Controller, move: Move)
+class AttackCommand(controller: ControllerInterface, move: Move)
     extends CommandInterface {
   var memento: FieldInterface = controller.field
   var newField: FieldInterface = _
@@ -44,7 +44,7 @@ class AttackCommand(controller: Controller, move: Move)
       }.reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.nextState()
+        controller.gameState = GameState.WIN
       }
       newField
     }

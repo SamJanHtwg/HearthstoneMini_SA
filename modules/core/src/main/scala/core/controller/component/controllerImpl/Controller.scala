@@ -13,6 +13,7 @@ import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
 import core.util.commands.CommandInterface
+import model.fieldComponent.fieldImpl.Field
 
 import java.lang.System.exit
 import java.text.Annotation
@@ -24,13 +25,28 @@ import util.commands.commandImpl.{
   SwitchPlayerCommand,
   AttackCommand
 }
+import core.util.CardProvider
 
-case class Controller @Inject() (var field: FieldInterface)
+class Controller (val fileIO: FileIOInterface)
     extends ControllerInterface {
-  private val injector: Injector =
-    Guice.createInjector(new HearthstoneMiniModule)
-  private val fileIO: FileIOInterface =
-    injector.getInstance(classOf[FileIOInterface])
+  val cardProvider =
+      new CardProvider(inputFile = "/json/cards.json")
+
+  var field: FieldInterface = Field(
+    players = Map(
+        1 -> Player(
+          id = 1,
+          hand = cardProvider.getCards(5),
+          deck = cardProvider.getCards(30)
+        ),
+        2 -> Player(
+          id = 2,
+          hand = cardProvider.getCards(5),
+          deck = cardProvider.getCards(30)
+        )
+      )
+  )
+
   var gameState: GameState = GameState.CHOOSEMODE
   var errorMsg: Option[String] = None
   private val undoManager: UndoManager = new UndoManager

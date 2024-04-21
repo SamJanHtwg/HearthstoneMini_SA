@@ -1,14 +1,13 @@
 package core
 package util.commands.commandImpl
 
-import controller.component.controllerImpl.Controller
 import model.Move
 import model.fieldComponent.FieldInterface
 import core.util.commands.CommandInterface
-
 import scala.util.{Success, Try}
+import core.controller.component.ControllerInterface
 
-class SwitchPlayerCommand(controller: Controller) extends CommandInterface {
+class SwitchPlayerCommand(controller: ControllerInterface) extends CommandInterface {
   var memento: FieldInterface = controller.field
   override def doStep: Try[FieldInterface] = {
     memento = controller.field

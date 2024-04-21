@@ -22,7 +22,6 @@ trait ControllerInterface extends Observable {
   def exitGame(): Unit
   def undo: Unit
   def redo: Unit
-  def nextState(): Unit
   def setStrategy(strat: Strategy): Unit
   override def toString(): String
   def getWinner(): Option[String]

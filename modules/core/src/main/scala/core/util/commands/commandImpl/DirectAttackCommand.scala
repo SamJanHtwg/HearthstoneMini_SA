@@ -3,16 +3,16 @@ package util.commands.commandImpl
 
 import model.Move
 import controller.GameState
-import controller.component.controllerImpl.Controller
 import model.cardComponent.cardImpl.Card
 import core.util.commands.CommandInterface
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
 import model.cardComponent.CardInterface
+import core.controller.component.ControllerInterface
 
 //noinspection DuplicatedCode
-class DirectAttackCommand(controller: Controller, move: Move)
+class DirectAttackCommand(controller: ControllerInterface, move: Move)
     extends CommandInterface {
   var memento: FieldInterface = controller.field
   var errorMsg: String = ""
@@ -29,7 +29,7 @@ class DirectAttackCommand(controller: Controller, move: Move)
         .reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.nextState()
+        controller.gameState = GameState.WIN
       }
       newField
     })

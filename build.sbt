@@ -4,6 +4,8 @@ import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
 
 val scala3Version = "3.3.3"
+val AkkaVersion = "2.9.2"
+val AkkaHttpVersion = "10.6.2"
 
 assembly / assemblyMergeStrategy := {
   case PathList("META-INF", _*) => MergeStrategy.discard
@@ -16,16 +18,23 @@ ThisBuild / version := "1.0"
 Compile / mainClass := Some("hearthstoneMini.HearthstoneMini")
 Compile / packageBin / mainClass := Some("hearthstoneMini.HearthstoneMini")
 
-lazy val commonDependencies = Seq(
+lazy val commonSettings = Seq(
+  scalaVersion := scala3Version,
+  resolvers += "Akka library repository".at("https://repo.akka.io/maven"),
   libraryDependencies ++= Seq(
     "org.scalactic" %% "scalactic" % "3.2.18",
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
+    "org.scalamock" %% "scalamock" % "6.0.0" % "test",
     "com.typesafe.play" %% "play-json" % "2.10.4",
     "org.scala-lang.modules" %% "scala-xml" % "2.2.0",
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
     "net.codingwell" %% "scala-guice" % "7.0.0",
     "javax.inject" % "javax.inject" % "1",
-    "org.scalafx" % "scalafx_3" % "20.0.0-R31"
+    "org.scalafx" % "scalafx_3" % "20.0.0-R31",
+    "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
+    "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
+    "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
   ) ++ Seq(
     "base",
     "controls",
@@ -41,7 +50,7 @@ lazy val gui = project
   .in(file("./modules/gui"))
   .settings(
     name := "gui",
-    commonDependencies
+    commonSettings,
   )
   .dependsOn(core, model)
 
@@ -49,7 +58,7 @@ lazy val tui = project
   .in(file("./modules/tui"))
   .settings(
     name := "tui",
-    commonDependencies
+    commonSettings,
   )
   .dependsOn(core, model)
 
@@ -57,14 +66,14 @@ lazy val model = project
   .in(file("./modules/model"))
   .settings(
     name := "model",
-    commonDependencies
+    commonSettings,
   )
 
 lazy val core = project
   .in(file("./modules/core"))
   .settings(
     name := "core",
-    commonDependencies
+    commonSettings,
   )
   .dependsOn(model % "compile->compile")
 
@@ -76,8 +85,7 @@ lazy val root = project
     Compile / resourceDirectory := file(".") / "./src/main/resources",
     assembly / mainClass := Some("scala.HearthstoneMini"),
     assembly / assemblyJarName := "HearthstoneMini.jar",
-    scalaVersion := scala3Version,
-    commonDependencies,
+    commonSettings
   )
   .dependsOn(
     core % "compile->compile;test->test",
