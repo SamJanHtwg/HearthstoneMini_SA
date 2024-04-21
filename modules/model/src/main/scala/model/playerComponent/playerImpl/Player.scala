@@ -8,7 +8,6 @@ import playerComponent.PlayerInterface
 import play.api.libs.json.*
 
 import scala.collection.immutable.Vector
-import scala.xml.Node
 import scala.util.Try
 
 /** TODO:
@@ -35,36 +34,6 @@ object Player {
         .map(card => Try(Card.fromJson(card)).toOption)
         .toVector
     )
-
-  def fromXml(node: Node): Player = Player(
-    name = (node \ "name").text.trim,
-    hpValue = (node \ "hpValue").text.trim.toInt,
-    maxHpValue = (node \ "maxHpValue").text.trim.toInt,
-    id = (node \ "id").text.trim.toInt,
-    manaValue = (node \ "manaValue").text.trim.toInt,
-    maxManaValue = (node \ "maxManaValue").text.trim.toInt,
-    hand = (node \ "hand")
-      .map(card => card \ "card")
-      .flatten
-      .map(card => Card.fromXml(card))
-      .toList,
-    deck = (node \ "deck")
-      .map(card => card \ "card")
-      .flatten
-      .map(card => Card.fromXml(card))
-      .toList,
-    friedhof = (node \ "friedhof")
-      .map(card => card \ "card")
-      .flatten
-      .map(card => Card.fromXml(card))
-      .toArray,
-    field = (node \ "field")
-      .map(card => card \ "card")
-      .flatten
-      .map(card => Try(Card.fromXml(card)).toOption)
-      .toList
-      .toVector
-  )
 }
 
 case class Player(
@@ -170,38 +139,4 @@ case class Player(
     "maxManaValue" -> Json.toJson(maxManaValue),
     "field" -> field.map(_.map(_.toJson))
   )
-
-  override def toXml: Node =
-    <player>
-      <name>
-        {name}
-      </name>
-      <id>
-        {id}
-      </id>
-      <hpValue>
-        {hpValue}
-      </hpValue>
-      <maxHpValue>
-        {maxHpValue}
-      </maxHpValue>
-      <manaValue>
-        {manaValue}
-      </manaValue>
-      <maxManaValue>
-        {maxManaValue}
-      </maxManaValue>
-      <hand>
-        {hand.map(_.toXML)}
-      </hand>
-      <deck>
-        {deck.map(_.toXML)}
-      </deck>
-      <friedhof>
-        {friedhof.map(_.toXML)}
-      </friedhof>
-      <field>
-        {field.map(_.map(_.toXML).getOrElse(<card> </card>))}
-      </field>
-    </player>
 }

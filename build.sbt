@@ -21,7 +21,6 @@ lazy val commonDependencies = Seq(
     "org.scalactic" %% "scalactic" % "3.2.18",
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
     "com.typesafe.play" %% "play-json" % "2.10.4",
-    "org.scala-lang.modules" %% "scala-xml" % "2.2.0",
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
     "net.codingwell" %% "scala-guice" % "7.0.0",
     "javax.inject" % "javax.inject" % "1",

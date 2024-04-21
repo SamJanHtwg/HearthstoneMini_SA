@@ -4,8 +4,6 @@ package fieldComponent
 import cardComponent.cardImpl.Card
 import playerComponent.playerImpl.Player
 import play.api.libs.json.JsValue
-
-import scala.xml.Node
 import playerComponent.PlayerInterface
 
 trait FieldInterface {
@@ -52,7 +50,4 @@ trait FieldInterface {
   def setManaValues(amount: Int): FieldInterface
 
   def toJson: JsValue
-
-  def toXML: Node
-
 }

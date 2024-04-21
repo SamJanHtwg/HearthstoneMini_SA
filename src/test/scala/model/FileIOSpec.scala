@@ -8,8 +8,6 @@ import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-import scala.xml.Node
-
 class FileIOSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List(
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 0, ""),
@@ -31,8 +29,6 @@ class FileIOSpec extends AnyWordSpec with Matchers {
       (2, testCardsPlayer2)
     )
   )
-
-  val field2: Node = field.toXML
 
   val fileIOJson = new JsonIO
 

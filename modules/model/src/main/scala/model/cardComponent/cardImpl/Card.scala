@@ -1,14 +1,11 @@
 package model
 package cardComponent.cardImpl
 
-import com.fasterxml.jackson.databind.JsonSerializable
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import cardComponent.CardInterface
 import play.api.libs.json.*
 
 import scala.annotation.nowarn
 import scala.collection.View.Empty
-import scala.xml.Node
 import fieldComponent.fieldImpl.Field
 import scala.util.Try
 import scala.util.Failure
@@ -47,18 +44,6 @@ object Card {
       id = jsonCard("id").toString.replace("\"", "")
     )
   }
-
-  def fromXml(node: Node): Card = {
-    Card(
-      name = (node \ "name").text,
-      manaCost = (node \ "manaCost").text.trim.toInt,
-      attValue = (node \ "attValue").text.trim.toInt,
-      defenseValue = (node \ "defenseValue").text.trim.toInt,
-      effect = (node \ "effect").text,
-      rarity = (node \ "rarity").text,
-      id = (node \ "id").text
-    )
-  }
 }
 
 case class Card(
@@ -91,15 +76,4 @@ case class Card(
       "rarity" -> Json.toJson(rarity)
     )
   )
-
-  def toXML: Node =
-    <card>
-            <id>{id}</id>
-            <name>{name}</name>
-            <manaCost>{manaCost.toString}</manaCost>
-            <attValue>{attValue.toString}</attValue>
-            <defenseValue>{defenseValue.toString}</defenseValue>
-            <effect>{effect}</effect>
-            <rarity>{rarity}</rarity>
-        </card>
 }
