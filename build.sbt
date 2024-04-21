@@ -60,13 +60,24 @@ lazy val model = project
     commonDependencies
   )
 
+lazy val persistence = project
+  .in(file("./modules/persistence"))
+  .settings(
+    name := "persistence",
+    commonDependencies
+  )
+  .dependsOn(model % "compile->compile")
+
 lazy val core = project
   .in(file("./modules/core"))
   .settings(
     name := "core",
     commonDependencies
   )
-  .dependsOn(model % "compile->compile")
+  .dependsOn(
+    model % "compile->compile",
+    persistence % "compile->compile"
+  )
 
 lazy val root = project
   .in(file("."))
@@ -77,12 +88,13 @@ lazy val root = project
     assembly / mainClass := Some("scala.HearthstoneMini"),
     assembly / assemblyJarName := "HearthstoneMini.jar",
     scalaVersion := scala3Version,
-    commonDependencies,
+    commonDependencies
   )
   .dependsOn(
     core % "compile->compile;test->test",
     tui % "compile->compile;test->test",
     gui % "compile->compile;test->test",
-    model % "compile->compile;test->test"
+    model % "compile->compile;test->test",
+    persistence % "compile->compile;test->test"
   )
-  .aggregate(core, tui, gui, model)
+  .aggregate(core, tui, gui, model, persistence)

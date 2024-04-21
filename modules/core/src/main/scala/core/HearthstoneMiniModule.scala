@@ -8,8 +8,8 @@ import controller.component.ControllerInterface
 import controller.component.controllerImpl.Controller
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
-import model.fileIOComponent.FileIOInterface
-import model.fileIOComponent.jsonIOImpl.FileIO as json
+import persistence.fileIO.FileIOInterface
+import persistence.fileIO.jsonIOImpl.JsonIO as json
 class HearthstoneMiniModule extends AbstractModule {
   private val defaultSize = 5
 

@@ -8,7 +8,7 @@ import core.controller.component.ControllerInterface
 import core.controller.{GameState, Strategy}
 import model.fieldComponent.FieldInterface
 import model.Move
-import model.fileIOComponent.FileIOInterface
+import persistence.fileIO.FileIOInterface
 import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
