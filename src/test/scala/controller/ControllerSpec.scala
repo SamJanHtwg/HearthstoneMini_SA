@@ -1,7 +1,8 @@
 package hearthstoneMini
 package controller
 
-import core.controller.{GameState, Strategy}
+import core.controller.{Strategy}
+import model.GameState
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import core.controller.component.controllerImpl.Controller

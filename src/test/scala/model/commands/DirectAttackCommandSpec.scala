@@ -10,8 +10,10 @@ import core.util.commands.commandImpl.DirectAttackCommand
 import model.cardComponent.cardImpl.Card
 import org.scalamock.scalatest.MockFactory
 
-
-class DirectAttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
+class DirectAttackCommandSpec
+    extends AnyWordSpec
+    with Matchers
+    with MockFactory {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),

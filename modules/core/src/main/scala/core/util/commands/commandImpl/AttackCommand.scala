@@ -2,7 +2,7 @@ package core
 package util.commands.commandImpl
 
 import model.Move
-import controller.GameState
+import model.GameState
 import model.fieldComponent.FieldInterface
 import scala.util.{Failure, Success, Try}
 import core.util.commands.CommandInterface
@@ -44,7 +44,7 @@ class AttackCommand(controller: ControllerInterface, move: Move)
       }.reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.gameState = GameState.WIN
+        newField = newField.setGameState(GameState.WIN)
       }
       newField
     }

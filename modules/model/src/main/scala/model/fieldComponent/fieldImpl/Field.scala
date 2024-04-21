@@ -1,6 +1,8 @@
 package model
 package fieldComponent.fieldImpl
 
+import model.GameState.*
+import model.GameState
 import fieldComponent.FieldInterface
 import playerComponent.playerImpl.Player
 import play.api.libs.json.*
@@ -17,17 +19,23 @@ object Field {
         .map(player => Player.fromJson(player))
         .map(player => (player.id, player))
         .toMap,
-      turns = fieldJs("turns").toString.toInt
+      turns = fieldJs("turns").toString.toInt,
+      gameState = GameState.withName(fieldJs("gameState").toString.replace("\"", ""))
     )
   }
 }
 
 //noinspection DuplicatedCode
-case class Field @Inject() (
+case class Field(
     players: Map[Int, Player] = Map[Int, Player](),
     activePlayerId: Int = 1,
-    turns: Int = 0
+    turns: Int = 0,
+    gameState: GameState = GameState.CHOOSEMODE
 ) extends FieldInterface() {
+
+  override def setGameState(gameState: GameState.GameState): FieldInterface =
+    copy(gameState = gameState)
+
   def this() = this(
     activePlayerId = 1,
     players = Map[Int, Player](
@@ -163,8 +171,11 @@ case class Field @Inject() (
   )
 
   override def toJson: JsValue = Json.obj(
-    "players" -> players.map((id, player) => player.toJson),
-    "turns" -> Json.toJson(turns),
-    "activePlayerId" -> Json.toJson(activePlayerId)
+    "field" -> Json.obj(
+      "activePlayerId" -> Json.toJson(activePlayerId),
+      "players" -> Json.toJson(players.values.map(player => player.toJson)),
+      "turns" -> Json.toJson(turns),
+      "gameState" -> Json.toJson(gameState.toString)
+    )
   )
 }

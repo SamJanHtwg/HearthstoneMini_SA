@@ -14,7 +14,10 @@ import _root_.model.fieldComponent.fieldImpl.Field
 import core.util.commands.commandImpl.SwitchPlayerCommand
 import org.scalamock.scalatest.MockFactory
 
-class SwitchPlayerCommandSpec extends AnyWordSpec with Matchers with MockFactory{
+class SwitchPlayerCommandSpec
+    extends AnyWordSpec
+    with Matchers
+    with MockFactory {
   "A controller" should {
     "when switching players" in {
       val controller = mock[Controller]

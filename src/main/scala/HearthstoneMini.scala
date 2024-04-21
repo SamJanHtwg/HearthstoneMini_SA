@@ -1,17 +1,22 @@
 package hearthstoneMini
 
 import core.controller.module.ControllerModule
-import gui.GuiApp
+import Gui.GuiModule
 import tui.TuiService
+import core.controller.module.ControllerServiceModule
+import tui.TuiRestService
+import Gui.GuiRestModule
+
 
 object HearthstoneMini {
   def main(args: Array[String]): Unit = {
-
-    TuiService
-    // TuiRestService
-    // GuiService
     
+    ControllerServiceModule
+    GuiRestModule
+    // TuiService
+    TuiRestService
+    // GuiService
     // ControllerService
-    new GuiApp(ControllerModule.given_ControllerInterface)
+
   }
 }
