@@ -4,7 +4,6 @@ package cardComponent
 import cardComponent.cardImpl.Card
 import fieldComponent.fieldImpl.Field
 import play.api.libs.json.JsValue
-import scala.xml.Node
 
 trait CardInterface {
   val name: String
@@ -21,5 +20,4 @@ trait CardInterface {
   def resetAttackCount(): CardInterface
 
   def toJson: JsValue
-  def toXML: Node
 }

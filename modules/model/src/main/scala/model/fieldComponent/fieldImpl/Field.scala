@@ -6,7 +6,6 @@ import playerComponent.playerImpl.Player
 import play.api.libs.json.*
 
 import javax.inject.Inject
-import scala.xml.Node
 
 object Field {
   def fromJson(json: JsValue): Field = {
@@ -21,18 +20,6 @@ object Field {
       turns = fieldJs("turns").toString.toInt
     )
   }
-
-  def fromXml(node: Node): Field =
-    Field(
-      activePlayerId = (node \ "activePlayerId").text.trim.toInt,
-      players = (node \ "players")
-        .map(player => node \\ "player")
-        .flatten
-        .map(player => Player.fromXml(player))
-        .map(player => (player.id, player))
-        .toMap[Int, Player],
-      turns = (node \ "turns").text.trim.toInt
-    )
 }
 
 //noinspection DuplicatedCode
@@ -180,17 +167,4 @@ case class Field @Inject() (
     "turns" -> Json.toJson(turns),
     "activePlayerId" -> Json.toJson(activePlayerId)
   )
-
-  override def toXML: Node =
-    <field>
-      <players>
-        {players.map((id, player) => player.toXml)}
-      </players>
-      <turns>
-        {turns.toString}
-      </turns>
-      <activePlayerId>
-        {activePlayerId.toString}
-      </activePlayerId>
-    </field>
 }

@@ -1,7 +1,7 @@
-package model
-package fileIOComponent
+package persistence
+package fileIO
 
-import fieldComponent.FieldInterface
+import model.fieldComponent.FieldInterface
 import scala.util.Try
 
 trait FileIOInterface {

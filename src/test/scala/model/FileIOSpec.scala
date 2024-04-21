@@ -3,13 +3,10 @@ package model
 import model.cardComponent.CardInterface
 import model.cardComponent.cardImpl.Card
 import model.fieldComponent.fieldImpl.Field
-import model.fileIOComponent.xmlIOImpl.FileIO as xmlImport
-import model.fileIOComponent.jsonIOImpl.FileIO as jsonImport
+import persistence.fileIO.jsonIOImpl.JsonIO
 import model.playerComponent.playerImpl.Player
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import scala.xml.Node
 
 class FileIOSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List(
@@ -33,20 +30,13 @@ class FileIOSpec extends AnyWordSpec with Matchers {
     )
   )
 
-  val field2: Node = field.toXML
-
-  val fileIOJson = new jsonImport
-  val fileIOXml = new xmlImport
+  val fileIOJson = new JsonIO
 
   "Should be possible to save and load a field" when {
     "with json variant" in {
       val saved: Unit = fileIOJson.save(field)
       val loaded: Unit = fileIOJson.load
       assert(saved === loaded)
-    }
-    "with xml variant" in {
-      val saved: Unit = fileIOXml.save(field)
-      val loaded: Unit = fileIOXml.load
     }
   }
 }
