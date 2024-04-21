@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
     "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
     "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-    "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion
   ) ++ Seq(
     "base",
     "controls",
@@ -49,7 +49,7 @@ lazy val gui = project
   .in(file("./modules/gui"))
   .settings(
     name := "gui",
-    commonSettings,
+    commonSettings
   )
   .dependsOn(core, model)
 
@@ -57,7 +57,7 @@ lazy val tui = project
   .in(file("./modules/tui"))
   .settings(
     name := "tui",
-    commonSettings,
+    commonSettings
   )
   .dependsOn(core, model)
 
@@ -65,14 +65,14 @@ lazy val model = project
   .in(file("./modules/model"))
   .settings(
     name := "model",
-    commonSettings,
+    commonSettings
   )
 
 lazy val persistence = project
   .in(file("./modules/persistence"))
   .settings(
     name := "persistence",
-    commonSettings,
+    commonSettings
   )
   .dependsOn(model % "compile->compile")
 
@@ -80,7 +80,7 @@ lazy val core = project
   .in(file("./modules/core"))
   .settings(
     name := "core",
-    commonSettings,
+    commonSettings
   )
   .dependsOn(
     model % "compile->compile",

@@ -7,7 +7,6 @@ import core.controller.component.ControllerInterface
 import core.controller.{GameState, Strategy}
 import model.fieldComponent.FieldInterface
 import model.Move
-import model.fileIOComponent.FileIOInterface
 import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
@@ -37,6 +36,7 @@ import akka.http.scaladsl.model.HttpMethod
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
 import scalafx.scene.input.KeyCode.J
+import persistence.fileIO.FileIOInterface
 
 class ControllerRestClient(val fileIO: FileIOInterface)
     extends ControllerInterface {
