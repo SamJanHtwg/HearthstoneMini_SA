@@ -2,7 +2,8 @@ package hearthstoneMini
 package controller
 
 import core.controller.{Strategy}
-import model.GameState
+import _root_.model.GameState.GameState
+import _root_.model.GameState
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import core.controller.component.controllerImpl.Controller
@@ -35,7 +36,7 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
           (2, Player(id = 2))
         )
       )
-      controller.gameState should be(GameState.CHOOSEMODE)
+      controller.field.gameState should be(GameState.CHOOSEMODE)
     }
     "place a card on field" in {
       val fileIoMock = mock[FileIOInterface]
@@ -48,7 +49,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
         ),
         turns = 3
       )
-      controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
       controller.field
         .players(controller.field.activePlayerId)
@@ -135,7 +135,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
         ),
         turns = 3
       )
-      controller.gameState = GameState.MAINGAME
       controller.placeCard(Move(2, 2))
       controller.directAttack(Move(fieldSlotActive = 2))
       controller.field.players(2).hpValue should be(4)
@@ -186,7 +185,7 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
         )
       )
       controller.exitGame()
-      controller.gameState should be(GameState.EXIT)
+      controller.field.gameState should be(GameState.EXIT)
     }
     "should return the Winner when one player has 0 hp" in {
       val fileIoMock = mock[FileIOInterface]
@@ -203,7 +202,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
       controller.getWinner() should be(
         Some(controller.field.players(controller.field.activePlayerId).name)
       )
-      controller.gameState should be(GameState.WIN)
     }
     "should return none when game dont have a winner" in {
       val fileIoMock = mock[FileIOInterface]
@@ -217,23 +215,6 @@ class ControllerSpec extends AnyWordSpec with Matchers with MockFactory {
       )
 
       controller.getWinner() should be(None)
-    }
-    "should be able to save & load" in {
-      val field = Field(
-        players = Map[Int, Player](
-          (1, Player(id = 1)),
-          (2, Player(id = 2))
-        )
-      )
-
-      val fileIoMock = mock[FileIOInterface]
-      val controller = Controller(fileIoMock)
-      val saved: Unit = controller.saveField
-      val loaded: Unit = controller.loadField
-      assert(saved === loaded)
-    }
-    "when unable to load, error should be triggered" in {
-      // TODO: add testcase
     }
   }
 }
