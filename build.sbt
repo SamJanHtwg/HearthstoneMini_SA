@@ -26,7 +26,6 @@ lazy val commonSettings = Seq(
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
     "org.scalamock" %% "scalamock" % "6.0.0" % "test",
     "com.typesafe.play" %% "play-json" % "2.10.4",
-    "org.scala-lang.modules" %% "scala-xml" % "2.2.0",
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
     "net.codingwell" %% "scala-guice" % "7.0.0",
     "javax.inject" % "javax.inject" % "1",
@@ -69,13 +68,24 @@ lazy val model = project
     commonSettings,
   )
 
+lazy val persistence = project
+  .in(file("./modules/persistence"))
+  .settings(
+    name := "persistence",
+    commonSettings,
+  )
+  .dependsOn(model % "compile->compile")
+
 lazy val core = project
   .in(file("./modules/core"))
   .settings(
     name := "core",
     commonSettings,
   )
-  .dependsOn(model % "compile->compile")
+  .dependsOn(
+    model % "compile->compile",
+    persistence % "compile->compile"
+  )
 
 lazy val root = project
   .in(file("."))
@@ -91,6 +101,7 @@ lazy val root = project
     core % "compile->compile;test->test",
     tui % "compile->compile;test->test",
     gui % "compile->compile;test->test",
-    model % "compile->compile;test->test"
+    model % "compile->compile;test->test",
+    persistence % "compile->compile;test->test"
   )
-  .aggregate(core, tui, gui, model)
+  .aggregate(core, tui, gui, model, persistence)

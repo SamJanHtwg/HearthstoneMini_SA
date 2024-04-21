@@ -1,15 +1,17 @@
-package model
-package fileIOComponent.jsonIOImpl
-import fieldComponent.FieldInterface
-import fieldComponent.fieldImpl.{Field}
-import fileIOComponent.FileIOInterface
+package persistence
+package fileIO.jsonIOImpl
+
+import model.fieldComponent.FieldInterface
+import model.fieldComponent.fieldImpl.{Field}
+import fileIO.FileIOInterface
 import play.api.libs.json.*
 
 import java.io.{File, PrintWriter}
 import scala.io.Source
 import scala.util.Try
+import fileIO.FileIOInterface
 
-class FileIO extends FileIOInterface {
+class JsonIO extends FileIOInterface {
   override def load: Try[Field] = Try {
     val source = Source.fromFile("field.json")
     val json = Json.parse(source.getLines().mkString)

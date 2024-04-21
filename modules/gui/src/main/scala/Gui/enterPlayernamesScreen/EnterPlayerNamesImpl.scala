@@ -17,7 +17,7 @@ import scalafx.scene.control.{
   ToggleGroup
 }
 import scalafx.scene.layout.GridPane
-import model.fileIOComponent.jsonIOImpl.FileIO
+import persistence.fileIO.jsonIOImpl.JsonIO
 
 //noinspection DuplicatedCode
 class EnterPlayerNamesImpl(controller: ControllerInterface)

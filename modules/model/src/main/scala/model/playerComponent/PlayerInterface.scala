@@ -3,7 +3,6 @@ package playerComponent
 
 import play.api.libs.json.JsValue
 
-import scala.xml.Node
 import scala.compiletime.ops.int
 import cardComponent.CardInterface
 
@@ -55,6 +54,4 @@ trait PlayerInterface {
   def isManaEmpty: Boolean
 
   def toJson: JsValue
-
-  def toXml: Node
 }
