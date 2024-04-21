@@ -44,7 +44,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     new CardProvider(inputFile = "/json/cards.json")
 
   private val controllerServiceUrl = "http://localhost:4001/controller"
-  private val persistenceServiceEndpoint = "http://localhost:4001/persistence"
+  private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
   var field: FieldInterface = Field(
     players = Map(
@@ -115,7 +115,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
 
   def drawCard(): Unit =
     request(controllerServiceUrl, "drawCard", HttpMethods.GET)
-    
+
   def setPlayerNames(playername1: String, playername2: String): Unit = {
     request(
       controllerServiceUrl,
@@ -148,12 +148,12 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     HttpMethods.GET
   )
 
-  def undo: Unit = 
+  def undo: Unit =
     request(controllerServiceUrl, "undo", HttpMethods.GET)
-  
-  def redo: Unit = 
+
+  def redo: Unit =
     request(controllerServiceUrl, "redo", HttpMethods.GET)
-  
+
   def exitGame(): Unit = request(
     controllerServiceUrl,
     "exitGame",

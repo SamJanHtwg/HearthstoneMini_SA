@@ -53,12 +53,12 @@ class PersistenceService() {
     )
 
   def start(): Unit = {
-    val binding = Http().newServerAt("localhost", 4001).bind(route)
+    val binding = Http().newServerAt("localhost", 5001).bind(route)
 
     binding.onComplete({
       case Success(serverBinding) =>
         println(
-          s"Server online at http://localhost:4001/" +
+          s"Server online at http://localhost:5001/" +
             s"\nPress RETURN to stop..."
         )
         StdIn.readLine()
