@@ -33,30 +33,15 @@ import akka.http.javadsl.model.RequestEntity
 import akka.http.scaladsl.model.HttpMethod
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
-import persistence.fileIO.FileIOInterface
 
-class ControllerRestClient(val fileIO: FileIOInterface)
-    extends ControllerInterface {
+class ControllerRestClient() extends ControllerInterface {
   private val cardProvider =
     new CardProvider(inputFile = "/json/cards.json")
 
   private val controllerServiceUrl = "http://localhost:4001/controller"
-  private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
-  var field: FieldInterface = Field(
-    players = Map(
-      1 -> Player(
-        id = 1,
-        hand = cardProvider.getCards(5),
-        deck = cardProvider.getCards(30)
-      ),
-      2 -> Player(
-        id = 2,
-        hand = cardProvider.getCards(5),
-        deck = cardProvider.getCards(30)
-      )
-    )
-  )
+  var field: FieldInterface = _
+  fieldRequest(controllerServiceUrl, "field", HttpMethods.GET)
   var errorMsg: Option[String] = None
   private val undoManager: UndoManager = new UndoManager
 
@@ -65,7 +50,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
       command: String,
       method: HttpMethod,
       data: Option[JsValue] = None
-  ): Unit = {
+  ): Try[JsValue] = {
     implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
     implicit val executionContext = system.executionContext
 
@@ -87,18 +72,26 @@ class ControllerRestClient(val fileIO: FileIOInterface)
         Json.parse(jsonString)
       }
     }
+
     Try {
-      val responseJson =
-        Await.result(responseJsonFuture, 30.seconds)
-      Field.fromJson(responseJson)
-    } match {
-      case Success(newField) => {
+      Await.result(responseJsonFuture, 3.seconds)
+    }
+  }
+
+  def fieldRequest(
+      endpoint: String,
+      command: String,
+      method: HttpMethod,
+      data: Option[JsValue] = None
+  ): Unit = {
+    val response = request(endpoint, command, method, data).map(Field.fromJson(_))
+    response match {
+      case Success(newField) =>
         field = newField
         errorMsg = None
         notifyObservers(Event.PLAY, msg = errorMsg)
-      }
-      case Failure(x) =>
-        errorMsg = Some(x.getMessage)
+      case Failure(exception) =>
+        errorMsg = Some(exception.getMessage)
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
   }
@@ -107,7 +100,7 @@ class ControllerRestClient(val fileIO: FileIOInterface)
   def canRedo: Boolean = undoManager.canRedo
 
   def placeCard(move: Move): Unit =
-    request(
+    fieldRequest(
       controllerServiceUrl,
       "placeCard",
       HttpMethods.POST,
@@ -115,10 +108,10 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     )
 
   def drawCard(): Unit =
-    request(controllerServiceUrl, "drawCard", HttpMethods.GET)
+    fieldRequest(controllerServiceUrl, "drawCard", HttpMethods.GET)
 
   def setPlayerNames(playername1: String, playername2: String): Unit = {
-    request(
+    fieldRequest(
       controllerServiceUrl,
       "setPlayerNames",
       HttpMethods.POST,
@@ -131,34 +124,40 @@ class ControllerRestClient(val fileIO: FileIOInterface)
     )
   }
 
-  def attack(move: Move): Unit = request(
+  def setGameState(gameState: GameState): Unit = fieldRequest(
+    controllerServiceUrl,
+    "setGameState",
+    HttpMethods.POST,
+    Some(Json.obj("gameState" -> gameState.toString))
+  )
+  def attack(move: Move): Unit = fieldRequest(
     controllerServiceUrl,
     "attack",
     HttpMethods.POST,
     Some(move.toJson)
   )
-  def directAttack(move: Move): Unit = request(
+  def directAttack(move: Move): Unit = fieldRequest(
     controllerServiceUrl,
     "directAttack",
     HttpMethods.POST,
     Some(move.toJson)
   )
-  def switchPlayer(): Unit = request(
+  def switchPlayer(): Unit = fieldRequest(
     controllerServiceUrl,
     "switchPlayer",
     HttpMethods.GET
   )
 
   def undo: Unit =
-    request(controllerServiceUrl, "undo", HttpMethods.GET)
+    fieldRequest(controllerServiceUrl, "undo", HttpMethods.GET)
 
   def redo: Unit =
-    request(controllerServiceUrl, "redo", HttpMethods.GET)
+    fieldRequest(controllerServiceUrl, "redo", HttpMethods.GET)
 
   def exitGame(): Unit =
-    request(controllerServiceUrl, "exitGame", HttpMethods.GET)
+    fieldRequest(controllerServiceUrl, "exitGame", HttpMethods.GET)
 
-  def setStrategy(strat: Strategy): Unit = request(
+  def setStrategy(strat: Strategy): Unit = fieldRequest(
     controllerServiceUrl,
     "setStrategy",
     HttpMethods.POST,
@@ -176,13 +175,12 @@ class ControllerRestClient(val fileIO: FileIOInterface)
   }
 
   def saveField: Unit = request(
-    persistenceServiceEndpoint,
+    controllerServiceUrl,
     "save",
-    HttpMethods.POST,
-    Some(field.toJson)
+    HttpMethods.GET,
   )
 
   def loadField: Unit = {
-    request(persistenceServiceEndpoint, "load", HttpMethods.GET)
+    fieldRequest(controllerServiceUrl, "load", HttpMethods.GET)
   }
 }

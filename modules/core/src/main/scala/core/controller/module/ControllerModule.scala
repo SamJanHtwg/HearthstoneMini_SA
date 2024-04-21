@@ -10,7 +10,7 @@ object ControllerModule:
   given ControllerInterface = Controller(new JsonIO())
 
 object ControllerRestClientModule:
-  given ControllerInterface = ControllerRestClient(new JsonIO())
+  given ControllerInterface = ControllerRestClient()
 
 object ControllerServiceModule extends App:
   ControllerRestService(using ControllerModule.given_ControllerInterface)

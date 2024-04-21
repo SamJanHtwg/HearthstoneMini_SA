@@ -92,9 +92,8 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
     notifyObservers(Event.PLAY, msg = None)
   }
   def exitGame(): Unit = {
-    field = field.setGameState(GameState.EXIT)
     errorMsg = None
-    notifyObservers(Event.EXIT, msg = None)
+    setGameState(GameState.EXIT)
   }
   def nextState(): Unit = {
     field = field.setGameState(field.gameState match {
@@ -122,6 +121,10 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
       case _ => None
     }
   }
+  def setGameState(gameState: GameState): Unit = {
+    field = field.setGameState(gameState)
+    notifyObservers(Event.PLAY, msg = None)
+  }
   def saveField: Unit = {
     fileIO.save(this.field)
   }
@@ -129,9 +132,8 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
     fileIO.load match {
       case Success(value) =>
         this.field = value
-        field = field.setGameState(GameState.MAINGAME)
         errorMsg = None
-        notifyObservers(Event.PLAY, msg = None)
+        setGameState(GameState.MAINGAME)
       case Failure(exception) =>
         errorMsg = Some("Sieht so aus als wäre die Datei beschädigt.")
         notifyObservers(Event.ERROR, msg = errorMsg)

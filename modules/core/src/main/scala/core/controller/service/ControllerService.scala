@@ -20,8 +20,16 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import model.Move
 import core.controller.Strategy.*
 import core.controller.Strategy
+import model.GameState
+import akka.http.scaladsl.model.HttpMethods
+import akka.http.scaladsl.model.HttpRequest
+import scala.concurrent.Await
+import scala.concurrent.duration.*
+import scala.util.Try
+import model.fieldComponent.fieldImpl.Field
 
 class ControllerRestService(using controller: ControllerInterface) {
+  private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SprayExample")
@@ -44,6 +52,17 @@ class ControllerRestService(using controller: ControllerInterface) {
                   controller.field.gameState.toString()
                 )
               )
+            case "save" => save match {
+              case Success(_) =>
+              case Failure(exception) =>
+                failWith(exception)
+            }
+            case "load" => load match {
+              case Success(json) =>
+                controller.field = Field.fromJson(json)
+              case Failure(exception) =>
+                failWith(exception)
+              }
             case "drawCard" =>
               controller.drawCard()
             case "switchPlayer" =>
@@ -82,6 +101,10 @@ class ControllerRestService(using controller: ControllerInterface) {
                   (jsValue \ "playername1").as[String],
                   (jsValue \ "playername2").as[String]
                 )
+              case "setGameState" =>
+                controller.setGameState(
+                  GameState.withName(jsValue("gameState").toString.replace("\"", ""))
+                )
               case "attack" =>
                 controller.attack(Move.fromJson(jsValue))
               case "directAttack" =>
@@ -104,6 +127,48 @@ class ControllerRestService(using controller: ControllerInterface) {
         }
       }
     )
+  
+  def save: Try[Unit] = {
+    val saveRequest = Http().singleRequest(
+      HttpRequest(
+        uri = s"$persistenceServiceEndpoint/save",
+        method = HttpMethods.POST,
+        entity = HttpEntity(
+          ContentTypes.`application/json`,
+          controller.field.toJson.toString
+        )
+      )
+    )
+
+    val responseJsonFuture = saveRequest.flatMap { response =>
+      Unmarshal(response.entity).to[String].map { jsonString =>
+        Json.parse(jsonString)
+      }
+    }
+
+    Try {
+      Await.result(responseJsonFuture, 3.seconds)
+    }.map(_ => ())
+  }
+
+  def load: Try[JsValue] = {
+    val loadRequest = Http().singleRequest(
+      HttpRequest(
+        uri = s"$persistenceServiceEndpoint/load",
+        method = HttpMethods.GET
+      )
+    )
+
+     val responseJsonFuture = loadRequest.flatMap { response =>
+      Unmarshal(response.entity).to[String].map { jsonString =>
+        Json.parse(jsonString)
+      }
+    }
+
+    Try {
+      Await.result(responseJsonFuture, 3.seconds)
+    } 
+  }
 
   def start(): Unit = {
     val binding = Http().newServerAt("localhost", 4001).bind(route)

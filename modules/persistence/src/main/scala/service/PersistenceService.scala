@@ -32,7 +32,7 @@ class PersistenceService() {
         }
       },
       post {
-        path("save") {
+        path("persistence" / "save") {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
             JsonIO().save(json)
@@ -41,13 +41,13 @@ class PersistenceService() {
         }
       },
       get {
-        path("load") {
-          complete(
-            HttpEntity(
-              ContentTypes.`application/json`,
-              JsonIO().load.toString
-            )
-          )
+        path("persistence" / "load") {
+          JsonIO().load match {
+            case Success(field) =>
+              complete(Json.prettyPrint(field.toJson))
+            case Failure(exception) =>
+              failWith(Throwable("Error loading field"))
+          }
         }
       }
     )

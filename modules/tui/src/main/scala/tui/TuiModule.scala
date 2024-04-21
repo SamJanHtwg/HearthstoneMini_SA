@@ -11,20 +11,26 @@ import core.controller.component.ControllerInterface
 import core.controller.module.ControllerRestClientModule
 import model.GameState
 
-object TuiService extends App:
+object TuiService:
   Starter(ControllerModule.given_ControllerInterface).start()
 
-object TuiRestService extends App:
+object TuiRestService:
   Starter(ControllerRestClientModule.given_ControllerInterface).start()
 
 case class Starter(controller: ControllerInterface) {
-  val tui = Tui(controller)
+  val thread: Thread = new Thread {
+    override def run(): Unit = {
+      val tui = Tui(controller)
+  
+      tui.update(Event.PLAY, None)
+      while controller.field.gameState != GameState.EXIT && controller.field.gameState != GameState.WIN
+      do {
+        tui.onInput(StdIn.readLine())
+      }
+    }
+  }
 
   def start() = {
-    tui.update(Event.PLAY, None)
-    while controller.field.gameState != GameState.EXIT && controller.field.gameState != GameState.WIN
-    do {
-      tui.onInput(StdIn.readLine())
-    }
+    thread.start()
   }
 }

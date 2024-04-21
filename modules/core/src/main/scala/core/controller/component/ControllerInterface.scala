@@ -10,6 +10,7 @@ import core.controller.Strategy.*
 trait ControllerInterface extends Observable {
   var errorMsg: Option[String]
   var field: FieldInterface
+  def setGameState(gameState: GameState): Unit
   def canUndo: Boolean
   def canRedo: Boolean
   def placeCard(move: Move): Unit

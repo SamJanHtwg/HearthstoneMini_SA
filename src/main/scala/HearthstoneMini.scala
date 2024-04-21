@@ -6,6 +6,7 @@ import tui.TuiService
 import core.controller.module.ControllerServiceModule
 import tui.TuiRestService
 import Gui.GuiRestModule
+import persistence.fileIO.service.PersistenceService
 
 
 object HearthstoneMini {
@@ -13,10 +14,10 @@ object HearthstoneMini {
     
     ControllerServiceModule
     GuiRestModule
-    // TuiService
     TuiRestService
+    PersistenceService().start()
+    // TuiService
     // GuiService
     // ControllerService
-
   }
 }
