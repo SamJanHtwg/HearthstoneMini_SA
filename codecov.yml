@@ -3,3 +3,4 @@ ignore:
   - "modules/gui"
   - "src/main/scala/HearthstoneMini.scala"
   - "modules/core/src/main/scala/core/controller/module"
+  - "modules/persistence/src/main/scala/PersistenceRestApi.scala"
