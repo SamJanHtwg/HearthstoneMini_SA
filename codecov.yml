@@ -2,3 +2,4 @@ ignore:
   - "modules/tui"
   - "modules/gui"
   - "src/main/scala/HearthstoneMini.scala"
+  - "modules/core/src/main/scala/core/controller/module"
