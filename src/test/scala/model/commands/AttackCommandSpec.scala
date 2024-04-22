@@ -6,9 +6,8 @@ import model.playerComponent.playerImpl.Player
 import model.Move
 import core.controller.component.controllerImpl.Controller
 import core.util.commands.commandImpl.AttackCommand
-import org.scalamock.scalatest.MockFactory
 
-class AttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
+class AttackCommandSpec extends AnyWordSpec with Matchers {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 10, 1, "testEffect1", "testRarety1", 1, ""),

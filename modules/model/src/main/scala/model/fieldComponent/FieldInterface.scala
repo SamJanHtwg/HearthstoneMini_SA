@@ -33,9 +33,9 @@ trait FieldInterface {
 
   def switchPlayer(): FieldInterface
 
-  def getPlayerById(id: Int): Player
+  def getPlayerById(id: Int): PlayerInterface
 
-  def getActivePlayer: Player
+  def getActivePlayer: PlayerInterface
 
   // hp
   def reduceHp(player: Int, amount: Int): FieldInterface

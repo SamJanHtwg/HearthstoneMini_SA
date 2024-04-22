@@ -8,14 +8,12 @@ import model.playerComponent.playerImpl.Player
 import model.Move
 import core.util.commands.commandImpl.DirectAttackCommand
 import model.cardComponent.cardImpl.Card
-import org.scalamock.scalatest.MockFactory
 
 // TODO: When undo redo command are working, add tests for them
 
 class DirectAttackCommandSpec
     extends AnyWordSpec
-    with Matchers
-    with MockFactory {
+    with Matchers {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),

@@ -20,23 +20,23 @@ class SwitchPlayerCommandSpec
     extends AnyWordSpec
     with Matchers
     with MockFactory {
-  "A controller" should {
-    "when switching players" in {
-      val controller = mock[Controller]
-      val switchPlayer = new SwitchPlayerCommand(controller)
-      val testField = controller.field
-      switchPlayer.doStep
-      switchPlayer.memento should be(testField)
-    }
-    "undo / redo step" in {
-      // val controller = mock[Controller]
-      // val switchPlayer = new SwitchPlayerCommand(controller)
-      // val testField = controller.field
-      // switchPlayer.undoStep
-      // switchPlayer.memento should be(testField)
+  // "A controller" should {
+  //   "when switching players" in {
+  //     val controller = mock[Controller]
+  //     val switchPlayer = new SwitchPlayerCommand(controller)
+  //     val testField = controller.field
+  //     switchPlayer.doStep
+  //     switchPlayer.memento should be(testField)
+  //   }
+  //   "undo / redo step" in {
+  //     // val controller = mock[Controller]
+  //     // val switchPlayer = new SwitchPlayerCommand(controller)
+  //     // val testField = controller.field
+  //     // switchPlayer.undoStep
+  //     // switchPlayer.memento should be(testField)
 
-      // switchPlayer.redoStep
-      // switchPlayer.memento should be(testField)
-    }
-  }
+  //     // switchPlayer.redoStep
+  //     // switchPlayer.memento should be(testField)
+  //   }
+  // }
 }

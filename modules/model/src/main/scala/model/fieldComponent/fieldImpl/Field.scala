@@ -8,6 +8,7 @@ import playerComponent.playerImpl.Player
 import play.api.libs.json.*
 
 import javax.inject.Inject
+import model.playerComponent.PlayerInterface
 
 object Field {
   def fromJson(json: JsValue): Field = {
@@ -28,7 +29,7 @@ object Field {
 
 //noinspection DuplicatedCode
 case class Field(
-    players: Map[Int, Player] = Map[Int, Player](),
+    players: Map[Int, PlayerInterface] = Map[Int, PlayerInterface](),
     activePlayerId: Int = 1,
     turns: Int = 0,
     gameState: GameState = GameState.CHOOSEMODE
@@ -39,7 +40,7 @@ case class Field(
 
   def this() = this(
     activePlayerId = 1,
-    players = Map[Int, Player](
+    players = Map[Int, PlayerInterface](
       (1, Player(id = 1, manaValue = 0, maxManaValue = 1)),
       (2, Player(id = 2, manaValue = 0, maxManaValue = 1))
     )
@@ -157,9 +158,9 @@ case class Field(
     )
   }
 
-  override def getPlayerById(id: Int): Player = players(id)
+  override def getPlayerById(id: Int): PlayerInterface = players(id)
 
-  override def getActivePlayer: Player = players(activePlayerId)
+  override def getActivePlayer: PlayerInterface = players(activePlayerId)
 
   override def getInactivePlayerId: Int =
     players.find((id, player) => id != activePlayerId).get._1

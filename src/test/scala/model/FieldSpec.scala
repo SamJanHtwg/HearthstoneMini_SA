@@ -69,7 +69,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
       "have 4 Hp when reduced by 1" in {
         field = field.copy(players =
           field.players
-            .updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25))
+            .updated(1, Player(id = 1, hpValue = 5, maxHpValue = 25))
         )
         field.reduceHp(1, 1).players(field.activePlayerId).hpValue should be(
           4
@@ -78,7 +78,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
       "have 25 Hp when increased by 20" in {
         field = field.copy(players =
           field.players
-            .updated(1, field.players(1).copy(hpValue = 5, maxHpValue = 25))
+            .updated(1, Player(id = 1, hpValue = 5, maxHpValue = 25))
         )
         field.increaseHp(20).players(field.activePlayerId).hpValue should be(25)
       }
@@ -90,7 +90,7 @@ class FieldSpec extends AnyWordSpec with Matchers {
       "have 1 Mana when increased" in {
         field = field.copy(players =
           field.players
-            .updated(1, field.players(1).copy(manaValue = 1, maxManaValue = 2))
+            .updated(1, Player(id = 1, manaValue = 1, maxManaValue = 2))
         )
         field.increaseMana(20).players(1).manaValue should be(2)
       }

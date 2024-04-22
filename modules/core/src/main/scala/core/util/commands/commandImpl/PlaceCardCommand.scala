@@ -31,13 +31,11 @@ class PlaceCardCommand(val field: FieldInterface, move: Move)
 
     val isInRange = move.handSlot < activePlayer.hand.length
 
-    val hasMana = activePlayer.manaValue
+    isSlotEmpty
+    && isInRange
+    && activePlayer.manaValue
       >= activePlayer
         .hand(move.handSlot)
         .manaCost
-
-    isSlotEmpty
-    && isInRange
-    && hasMana
   }
 }
