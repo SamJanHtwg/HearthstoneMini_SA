@@ -1,8 +1,8 @@
+package model.commands
+
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
 import model.playerComponent.playerImpl
-import core.controller.component.controllerImpl.Controller
 import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.playerImpl.Player
 import model.Move

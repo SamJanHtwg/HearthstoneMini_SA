@@ -1,10 +1,11 @@
+package model.commands
+
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import model.cardComponent.cardImpl.Card
 import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.playerImpl.Player
 import model.Move
-import core.controller.component.controllerImpl.Controller
 import core.util.commands.commandImpl.AttackCommand
 import model.playerComponent.PlayerInterface
 import model.GameState

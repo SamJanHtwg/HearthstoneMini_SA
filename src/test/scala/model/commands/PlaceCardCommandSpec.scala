@@ -16,7 +16,6 @@ import scala.annotation.meta.field
 import scala.util.Try
 import scala.util.Failure
 
-
 class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
   "A PlaceCardCommand" should {
     val testCards = List(
@@ -80,7 +79,8 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
               deck = testCards
             )
           )
-        ))
+        )
+      )
 
       val placeCardCommand = new PlaceCardCommand(
         testField,
@@ -111,9 +111,9 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
               deck = testCards
             )
           )
-        ))
+        )
+      )
 
-    
       val placeCardCommand = new PlaceCardCommand(
         testField,
         Move(handSlot = 2, fieldSlotActive = 2)
@@ -140,9 +140,9 @@ class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
               deck = testCards
             )
           )
-        ))
+        )
+      )
 
-    
       val placeCardCommand = new PlaceCardCommand(
         testField,
         Move(handSlot = 2, fieldSlotActive = 2)
