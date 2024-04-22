@@ -8,10 +8,9 @@ import tui.TuiRestService
 import Gui.GuiRestModule
 import persistence.fileIO.service.PersistenceService
 
-
 object HearthstoneMini {
   def main(args: Array[String]): Unit = {
-    
+
     ControllerServiceModule
     GuiRestModule
     TuiRestService

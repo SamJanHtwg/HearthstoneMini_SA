@@ -16,11 +16,11 @@ object GuiRestModule {
   Starter(ControllerRestClientModule.given_ControllerInterface).start()
 }
 
- class Starter(controller: ControllerInterface) {
+class Starter(controller: ControllerInterface) {
   val thread: Thread = new Thread {
     override def run(): Unit = {
       val gui = Gui(using controller)
-  
+
       gui.main(Array.empty)
     }
   }

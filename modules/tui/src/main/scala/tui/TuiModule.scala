@@ -21,7 +21,7 @@ case class Starter(controller: ControllerInterface) {
   val thread: Thread = new Thread {
     override def run(): Unit = {
       val tui = Tui(controller)
-  
+
       tui.update(Event.PLAY, None)
       while controller.field.gameState != GameState.EXIT && controller.field.gameState != GameState.WIN
       do {

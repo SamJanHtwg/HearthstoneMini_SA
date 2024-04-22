@@ -20,7 +20,8 @@ object Field {
         .map(player => (player.id, player))
         .toMap,
       turns = fieldJs("turns").toString.toInt,
-      gameState = GameState.withName(fieldJs("gameState").toString.replace("\"", ""))
+      gameState =
+        GameState.withName(fieldJs("gameState").toString.replace("\"", ""))
     )
   }
 }
