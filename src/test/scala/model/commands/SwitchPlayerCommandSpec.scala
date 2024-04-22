@@ -13,30 +13,37 @@ import _root_.model.fieldComponent.FieldInterface
 import _root_.model.fieldComponent.fieldImpl.Field
 import core.util.commands.commandImpl.SwitchPlayerCommand
 import org.scalamock.scalatest.MockFactory
+import _root_.model.playerComponent.PlayerInterface
 
-// TODO: When undo redo command are working, add tests for them
 
 class SwitchPlayerCommandSpec
     extends AnyWordSpec
-    with Matchers
-    with MockFactory {
-  // "A controller" should {
-  //   "when switching players" in {
-  //     val controller = mock[Controller]
-  //     val switchPlayer = new SwitchPlayerCommand(controller)
-  //     val testField = controller.field
-  //     switchPlayer.doStep
-  //     switchPlayer.memento should be(testField)
-  //   }
-  //   "undo / redo step" in {
-  //     // val controller = mock[Controller]
-  //     // val switchPlayer = new SwitchPlayerCommand(controller)
-  //     // val testField = controller.field
-  //     // switchPlayer.undoStep
-  //     // switchPlayer.memento should be(testField)
+    with Matchers {
+  "A controller" should {
+    "when switching players" in {
+      val testField = Field(
+        players = Map[Int, PlayerInterface](
+          (
+            1,
+            Player(
+              name = "test",
+              id = 1,
+            )
+          ),
+          (
+            2,
+            Player(
+              name = "test",
+              id = 2,
+            )
+          )
+        )
+      )
+      val switchPlayer = new SwitchPlayerCommand(testField)
+      val result = switchPlayer.doStep
+      result.get.activePlayerId should be(2)
+      switchPlayer.memento should be(testField)
 
-  //     // switchPlayer.redoStep
-  //     // switchPlayer.memento should be(testField)
-  //   }
-  // }
+    }
+  }
 }

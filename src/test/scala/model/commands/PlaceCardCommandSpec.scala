@@ -16,7 +16,6 @@ import scala.annotation.meta.field
 import scala.util.Try
 import scala.util.Failure
 
-//TODO: When undo redo command are working, add tests for them
 
 class PlaceCardCommandSpec extends AnyWordSpec with Matchers {
   "A PlaceCardCommand" should {
