@@ -54,18 +54,18 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
   def canUndo: Boolean = undoManager.canUndo
   def canRedo: Boolean = undoManager.canRedo
 
-  def placeCard(move: Move): Unit = doStep(new PlaceCardCommand(this, move))
-  def drawCard(): Unit = doStep(new DrawCardCommand(this))
+  def placeCard(move: Move): Unit = doStep(new PlaceCardCommand(field, move))
+  def drawCard(): Unit = doStep(new DrawCardCommand(field))
   def setPlayerNames(playername1: String, playername2: String): Unit = {
     field = field.setPlayerNames(playername1, playername2)
     nextState()
     notifyObservers(Event.PLAY, msg = None)
   }
-  def attack(move: Move): Unit = doStep(new AttackCommand(this, move))
+  def attack(move: Move): Unit = doStep(new AttackCommand(field, move))
   def directAttack(move: Move): Unit = doStep(
-    new DirectAttackCommand(this, move)
+    new DirectAttackCommand(field, move)
   )
-  def switchPlayer(): Unit = doStep(new SwitchPlayerCommand(this))
+  def switchPlayer(): Unit = doStep(new SwitchPlayerCommand(field))
 
   private def doStep(command: CommandInterface): Unit = {
     command.doStep match {
@@ -81,20 +81,34 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
   }
+
   def undo: Unit = {
-    undoManager.undoStep
-    errorMsg = None
-    notifyObservers(Event.PLAY, msg = None)
+    undoManager.undoStep(field) match
+      case Failure(exception) =>
+        errorMsg = Some(exception.getMessage)
+        notifyObservers(Event.ERROR, msg = errorMsg)
+      case Success(value) =>
+        field = value
+        errorMsg = None
+        notifyObservers(Event.PLAY, msg = None)
   }
+
   def redo: Unit = {
-    undoManager.redoStep
-    errorMsg = None
-    notifyObservers(Event.PLAY, msg = None)
+    undoManager.redoStep(field) match
+      case Failure(exception) =>
+        errorMsg = Some(exception.getMessage)
+        notifyObservers(Event.ERROR, msg = errorMsg)
+      case Success(value) =>
+        field = value
+        errorMsg = None
+        notifyObservers(Event.PLAY, msg = None)
   }
+
   def exitGame(): Unit = {
     errorMsg = None
     setGameState(GameState.EXIT)
   }
+
   def nextState(): Unit = {
     field = field.setGameState(field.gameState match {
       case GameState.CHOOSEMODE       => GameState.ENTERPLAYERNAMES
@@ -102,6 +116,7 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
       case GameState.MAINGAME         => GameState.WIN
     })
   }
+
   def setStrategy(strat: Strategy): Unit = {
     field = strat match {
       case Strategy.normal   => field.setHpValues(30).setManaValues(1)
@@ -112,6 +127,7 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
     errorMsg = None
     notifyObservers(Event.PLAY, msg = None)
   }
+
   def getWinner(): Option[String] = {
     val playersWithHp = field.players.filterNot(_._2.isHpEmpty)
     playersWithHp.values.size match {
