@@ -27,6 +27,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration.*
 import scala.util.Try
 import model.fieldComponent.fieldImpl.Field
+import scala.annotation.meta.field
+import akka.http.scaladsl.server.StandardRoute
 
 class ControllerRestService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
@@ -46,42 +48,44 @@ class ControllerRestService(using controller: ControllerInterface) {
         path("controller" / Segment) { command =>
           command match {
             case "gameState" =>
-              complete(
-                HttpEntity(
-                  ContentTypes.`application/json`,
-                  controller.field.gameState.toString()
-                )
-              )
-            case "save" => save match {
-              case Success(_) =>
-              case Failure(exception) =>
-                failWith(exception)
-            }
-            case "load" => load match {
-              case Success(json) =>
-                controller.field = Field.fromJson(json)
-              case Failure(exception) =>
-                failWith(exception)
+              completeWithData(controller.field.gameState.toString())
+            case "field" =>
+              completeWithData(controller.field.toJson.toString())
+            case "save" =>
+              save match {
+                case Success(_) => completeWithData("success")
+                case Failure(exception) =>
+                  failWith(exception)
+              }
+            case "load" =>
+              load match {
+                case Success(json) =>
+                  controller.field = Field.fromJson(json)
+                  completeWithData(controller.field.toJson.toString)
+                case Failure(exception) =>
+                  failWith(exception)
               }
             case "drawCard" =>
               controller.drawCard()
+              completeWithData(controller.field.toJson.toString)
             case "switchPlayer" =>
               controller.switchPlayer()
+              completeWithData(controller.field.toJson.toString)
+            case "canUndo" =>
+              complete(controller.canUndo.toString())
+            case "canRedo" =>
+              complete(controller.canRedo.toString())
             case "undo" =>
               controller.undo
+              completeWithData(controller.field.toJson.toString)
             case "redo" =>
               controller.redo
+              completeWithData(controller.field.toJson.toString)
             case "exitGame" =>
               controller.exitGame()
+              completeWithData(controller.field.toJson.toString)
             case _ => failWith(new Exception("Invalid command"))
           }
-
-          complete(
-            HttpEntity(
-              ContentTypes.`application/json`,
-              Json.stringify(controller.field.toJson)
-            )
-          )
         }
       },
       post {
@@ -103,7 +107,9 @@ class ControllerRestService(using controller: ControllerInterface) {
                 )
               case "setGameState" =>
                 controller.setGameState(
-                  GameState.withName(jsValue("gameState").toString.replace("\"", ""))
+                  GameState.withName(
+                    jsValue("gameState").toString.replace("\"", "")
+                  )
                 )
               case "attack" =>
                 controller.attack(Move.fromJson(jsValue))
@@ -111,23 +117,29 @@ class ControllerRestService(using controller: ControllerInterface) {
                 controller.directAttack(Move.fromJson(jsValue))
               case "setStrategy" => {
                 controller.setStrategy(
-                  Strategy.withName(jsValue("strategy").toString.replace("\"", ""))
+                  Strategy.withName(
+                    jsValue("strategy").toString.replace("\"", "")
+                  )
                 )
               }
               case _ => failWith(new Exception("Invalid command"))
             }
 
-            complete(
-              HttpEntity(
-                ContentTypes.`application/json`,
-                Json.stringify(controller.field.toJson)
-              )
-            )
+            completeWithData(controller.field.toJson.toString)
           }
         }
       }
     )
-  
+
+  private def completeWithData(data: String): StandardRoute = {
+    complete(
+      HttpEntity(
+        ContentTypes.`application/json`,
+        data
+      )
+    )
+  }
+
   def save: Try[Unit] = {
     val saveRequest = Http().singleRequest(
       HttpRequest(
@@ -159,7 +171,7 @@ class ControllerRestService(using controller: ControllerInterface) {
       )
     )
 
-     val responseJsonFuture = loadRequest.flatMap { response =>
+    val responseJsonFuture = loadRequest.flatMap { response =>
       Unmarshal(response.entity).to[String].map { jsonString =>
         Json.parse(jsonString)
       }
@@ -167,7 +179,7 @@ class ControllerRestService(using controller: ControllerInterface) {
 
     Try {
       Await.result(responseJsonFuture, 3.seconds)
-    } 
+    }
   }
 
   def start(): Unit = {
