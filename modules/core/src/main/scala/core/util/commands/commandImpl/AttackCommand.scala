@@ -8,23 +8,22 @@ import scala.util.{Failure, Success, Try}
 import core.util.commands.CommandInterface
 import org.checkerframework.checker.units.qual.s
 import model.cardComponent.CardInterface
-import core.controller.component.ControllerInterface
 
 //noinspection DuplicatedCode
-class AttackCommand(controller: ControllerInterface, move: Move)
+class AttackCommand(val field: FieldInterface, move: Move)
     extends CommandInterface {
-  var memento: FieldInterface = controller.field
+  var memento: FieldInterface = field
   var newField: FieldInterface = _
 
   override def doStep: Try[FieldInterface] = checkConditions(
     (attackingCard: CardInterface, defendingCard: CardInterface) => {
-      val currentField = controller.field
+      val currentField = field
       val difference =
         attackingCard.attValue
           - defendingCard.defenseValue
 
       newField = {
-        if (difference > 0) {
+        if (difference >= 0) {
           currentField
             .destroyCard(
               currentField.getInactivePlayerId,
@@ -56,7 +55,7 @@ class AttackCommand(controller: ControllerInterface, move: Move)
           defendingCard: CardInterface
       ) => FieldInterface
   ): Try[FieldInterface] = {
-    val currentField = controller.field
+    val currentField = field
 
     val activeFieldSlot = currentField
       .players(currentField.activePlayerId)
@@ -91,17 +90,5 @@ class AttackCommand(controller: ControllerInterface, move: Move)
           )
       )
       .toTry
-  }
-
-  override def undoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
-  }
-
-  override def redoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
   }
 }

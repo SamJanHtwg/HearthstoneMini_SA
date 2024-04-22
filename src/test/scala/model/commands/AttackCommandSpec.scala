@@ -8,8 +8,6 @@ import core.controller.component.controllerImpl.Controller
 import core.util.commands.commandImpl.AttackCommand
 import org.scalamock.scalatest.MockFactory
 
-// TODO: When undo redo command are working, add tests for them
-
 class AttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
   val testCards: List[Card] = List[Card](
     Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -18,32 +16,22 @@ class AttackCommandSpec extends AnyWordSpec with Matchers with MockFactory {
     Card("test1", 1, 1, 20, "testEffect1", "testRarety1", 1, "")
   )
 
-  "A controller" should {
-    // val controller = mock[Controller]
-
-    // controller.placeCard(Move(1, 1))
-    // controller.switchPlayer()
-    // controller.placeCard(Move(0, 1))
-    // controller.switchPlayer()
-    // val attackCommand = new AttackCommand(
-    //   controller,
-    //   Move(fieldSlotActive = 1, fieldSlotInactive = 1)
-    // )
-
-    "do step" in {
-      // val field = controller.field
-      // attackCommand.doStep
-      // attackCommand.memento should be(field)
-    }
-    "undo step" in {
-      // val field = controller.field
-      // attackCommand.undoStep
-      // attackCommand.memento should be(field)
-    }
-    "redo step" in {
-      // val field = controller.field
-      // attackCommand.redoStep
-      // attackCommand.memento should be(field)
-    }
-  }
+  // "A AttackCommand" should {
+  //   "do step" in {
+  //     val field = controller.field
+  //     val attackCommand = new AttackCommand(controller, Move(0, 1))
+  //     attackCommand.doStep
+  //     attackCommand.memento should be(field)
+  //   }
+  //   "undo step" in {
+  //     val field = controller.field
+  //     attackCommand.undoStep
+  //     attackCommand.memento should be(field)
+  //   }
+  //   "redo step" in {
+  //     val field = controller.field
+  //     attackCommand.redoStep
+  //     attackCommand.memento should be(field)
+  //   }
+  // }
 }

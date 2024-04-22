@@ -3,23 +3,21 @@ package util.commands.commandImpl
 
 import model.Move
 import model.GameState
-import model.cardComponent.cardImpl.Card
 import core.util.commands.CommandInterface
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
 import scala.util.{Success, Try, Failure}
 import model.cardComponent.CardInterface
-import core.controller.component.ControllerInterface
 
 //noinspection DuplicatedCode
-class DirectAttackCommand(controller: ControllerInterface, move: Move)
+class DirectAttackCommand(val field: FieldInterface, move: Move)
     extends CommandInterface {
-  var memento: FieldInterface = controller.field
+  var memento: FieldInterface = field
   var errorMsg: String = ""
   override def doStep: Try[FieldInterface] = {
     checkConditions((attackingCard: CardInterface) => {
-      memento = controller.field
-      val currentField = controller.field
+      memento = field
+      val currentField = field
 
       var newField = currentField
         .reduceHp(
@@ -35,24 +33,12 @@ class DirectAttackCommand(controller: ControllerInterface, move: Move)
     })
   }
 
-  override def undoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
-  }
-
-  override def redoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
-  }
-
   def checkConditions(
       onSuccess: (
           attackingCard: CardInterface
       ) => FieldInterface
   ): Try[FieldInterface] = {
-    val currentField = controller.field
+    val currentField = field
 
     val activeFieldSlot = currentField
       .players(currentField.activePlayerId)
@@ -68,7 +54,7 @@ class DirectAttackCommand(controller: ControllerInterface, move: Move)
       .flatMap(attackingCard =>
         if isEnemyFieldEmpty then
           if attackingCard.attackCount >= 1 then
-            if controller.field.turns > 1 then Right(onSuccess(attackingCard))
+            if field.turns > 1 then Right(onSuccess(attackingCard))
             else
               Left(
                 Exception("Kein Spieler kann in seiner ersten Runde angreifen!")
