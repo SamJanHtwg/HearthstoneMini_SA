@@ -83,7 +83,8 @@ class ControllerRestClient() extends ControllerInterface {
       method: HttpMethod,
       data: Option[JsValue] = None
   ): Unit = {
-    val response = request(endpoint, command, method, data).map(Field.fromJson(_))
+    val response =
+      request(endpoint, command, method, data).map(Field.fromJson(_))
     response match {
       case Success(newField) =>
         field = newField
@@ -95,15 +96,17 @@ class ControllerRestClient() extends ControllerInterface {
     }
   }
 
-  def canUndo: Boolean = request(controllerServiceUrl, "canUndo", HttpMethods.GET) match {
-    case Success(json) => json.as[Boolean]
-    case Failure(_) => false
-  }
-  
-  def canRedo: Boolean = request(controllerServiceUrl, "canRedo", HttpMethods.GET) match {
-    case Success(json) => json.as[Boolean]
-    case Failure(_) => false
-  }
+  def canUndo: Boolean =
+    request(controllerServiceUrl, "canUndo", HttpMethods.GET) match {
+      case Success(json) => json.as[Boolean]
+      case Failure(_)    => false
+    }
+
+  def canRedo: Boolean =
+    request(controllerServiceUrl, "canRedo", HttpMethods.GET) match {
+      case Success(json) => json.as[Boolean]
+      case Failure(_)    => false
+    }
 
   def placeCard(move: Move): Unit =
     fieldRequest(
@@ -183,7 +186,7 @@ class ControllerRestClient() extends ControllerInterface {
   def saveField: Unit = request(
     controllerServiceUrl,
     "save",
-    HttpMethods.GET,
+    HttpMethods.GET
   )
 
   def loadField: Unit = {
