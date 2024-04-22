@@ -28,7 +28,6 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import play.api.libs.json.*
 import scala.concurrent.Await
 import scala.concurrent.duration.*
-import com.fasterxml.jackson.databind.util.JSONPObject
 import akka.http.javadsl.model.RequestEntity
 import akka.http.scaladsl.model.HttpMethod
 import akka.http.scaladsl.model.HttpEntity
