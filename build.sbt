@@ -24,6 +24,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scalactic" %% "scalactic" % "3.2.18",
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
+    "org.mockito" % "mockito-core" % "3.12.4" % "test",
     "org.scalamock" %% "scalamock" % "6.0.0" % "test",
     "com.typesafe.play" %% "play-json" % "2.10.4",
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
@@ -33,7 +34,9 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-actor-typed" % AkkaVersion,
     "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
     "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
-    "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion
+    "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
+    "com.typesafe.akka" %% "akka-testkit" % "2.9.2" % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test,
   ) ++ Seq(
     "base",
     "controls",
