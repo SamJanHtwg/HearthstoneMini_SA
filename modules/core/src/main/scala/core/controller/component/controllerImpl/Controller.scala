@@ -51,8 +51,8 @@ class Controller(
 
   var errorMsg: Option[String] = None
 
-  def canUndo: Boolean = undoManager.canUndo
-  def canRedo: Boolean = undoManager.canRedo
+  def canUndo: Boolean = undoManager.canUndo()
+  def canRedo: Boolean = undoManager.canRedo()
 
   def placeCard(move: Move): Unit = doStep(new PlaceCardCommand(field, move))
   def drawCard(): Unit = doStep(new DrawCardCommand(field))
@@ -67,7 +67,7 @@ class Controller(
   )
   def switchPlayer(): Unit = doStep(new SwitchPlayerCommand(field))
 
-  private def doStep(command: CommandInterface): Unit = {
+  def doStep(command: CommandInterface): Unit = {
     command.doStep match {
       case Success(newField) => // noinspection RedundantBlock
         {

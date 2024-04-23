@@ -21,6 +21,9 @@ import core.util.Event
 import scala.util.Success
 import scala.annotation.meta.field
 import model.fieldComponent.FieldInterface
+import core.controller.Strategy.hardcore
+import core.util.commands.CommandInterface
+import core.util.commands.commandImpl.DrawCardCommand
 
 class ControllerSpec
     extends AnyWordSpec
@@ -39,6 +42,7 @@ class ControllerSpec
     mockFileIO = mock[FileIOInterface]
 
     testCards = List[Card](
+      Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -283,8 +287,84 @@ class ControllerSpec
         turns = 2
       )
 
-      (mockFileIO.load _).expects().onCall(_ => Success(controller.field)).once()
+      (mockFileIO.load _)
+        .expects()
+        .onCall(_ => Success(controller.field))
+        .once()
       controller.loadField
+    }
+    "loadField updates error on failure" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val mockObserver = mock[Observer]
+      controller.add(mockObserver)
+
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1)),
+          (2, Player(id = 2))
+        ),
+        turns = 2
+      )
+      (mockObserver.update _).expects(Event.ERROR, *).once()
+      (mockFileIO.load _)
+        .expects()
+        .onCall(_ => Failure(Exception("any")))
+        .once()
+      controller.loadField
+      controller.errorMsg should be(
+        Some("Sieht so aus als wäre die Datei beschädigt.")
+      )
+    }
+    "setStrategy works for all strategies" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+
+      controller.setStrategy(Strategy.normal)
+      controller.field.players(1).hpValue should be(30)
+      controller.field.players(1).manaValue should be(1)
+      controller.setStrategy(Strategy.hardcore)
+      controller.field.players(1).hpValue should be(10)
+      controller.field.players(1).manaValue should be(10)
+      controller.setStrategy(Strategy.debug)
+      controller.field.players(1).hpValue should be(100)
+      controller.field.players(1).manaValue should be(100)
+    }
+    "doStep sets error on failure" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1, hand = testCards, deck = testCards)),
+          (2, Player(id = 2, hand = testCards, deck = testCards))
+        ),
+        turns = 2
+      )
+
+      val mockCommand: CommandInterface = DrawCardCommand(controller.field)
+      controller.doStep(mockCommand)
+      controller.errorMsg should be(Some("Your hand is full!"))
+    }
+    "redo sets error on failure" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val mockObserver = mock[Observer]
+      controller.add(mockObserver)
+
+      (mockUndoManager.redoStep _)
+        .expects(*)
+        .returns(Failure(new Exception("error")))
+        .once()
+      (mockObserver.update _).expects(Event.ERROR, *).once()
+      controller.redo
+    }
+    "canUndo calls undoManager" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+
+      (mockUndoManager.canUndo _).expects().returns(true).once()
+      controller.canUndo
+    }
+    "canRedo calls undoManager" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+
+      (mockUndoManager.canRedo _).expects().returns(true).once()
+      controller.canRedo
     }
   }
 }

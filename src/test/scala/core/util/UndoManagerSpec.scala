@@ -48,8 +48,8 @@ class UndoManagerSpec extends AnyWordSpec with Matchers {
   "Undo Manager" should {
       "not be able to do undo/redo at beginning" in {
         val undoManager = new UndoManager()
-        undoManager.canUndo should be(false)
-        undoManager.canRedo should be(false)
+        undoManager.canUndo() should be(false)
+        undoManager.canRedo() should be(false)
       }
 
       "and throw exceptions" in {

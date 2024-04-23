@@ -11,8 +11,8 @@ class UndoManager {
   var undoStack: List[CommandInterface] = Nil
   var redoStack: List[CommandInterface] = Nil
 
-  def canUndo: Boolean = undoStack.nonEmpty
-  def canRedo: Boolean = redoStack.nonEmpty
+  def canUndo(): Boolean = undoStack.nonEmpty
+  def canRedo(): Boolean = redoStack.nonEmpty
 
   def doStep(command: CommandInterface): Unit = {
     undoStack = command :: undoStack
