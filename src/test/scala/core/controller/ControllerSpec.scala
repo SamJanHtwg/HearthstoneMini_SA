@@ -51,7 +51,7 @@ class ControllerSpec
   }
 
   "The Controller" should {
-    "should have access to all game states" in {
+    "have access to all game states" in {
       val allStates = GameState.values.toList
       assert(allStates.length == 5)
     }
