@@ -4,3 +4,4 @@ ignore:
   - "src/main/scala/HearthstoneMini.scala"
   - "modules/core/src/main/scala/core/controller/module"
   - "modules/persistence/src/main/scala/PersistenceRestApi.scala"
+  - "modules/core/src/main/scala/core/controller/service/HttpService.scala"

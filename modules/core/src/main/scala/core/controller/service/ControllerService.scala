@@ -162,7 +162,7 @@ class ControllerService(using controller: ControllerInterface) {
     }
 
     Try {
-      Await.result(responseJsonFuture, 300.seconds)
+      Await.result(responseJsonFuture, 3.seconds)
     }.map(_ => ())
   }
 
