@@ -18,7 +18,10 @@ import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.playerImpl.Player
 import core.controller.Strategy
 
-class ControllerRestClientTest extends AnyWordSpec with Matchers with BeforeAndAfterEach {
+class ControllerRestClientTest
+    extends AnyWordSpec
+    with Matchers
+    with BeforeAndAfterEach {
   var mockHttpService: HttpService = _
 
   override def beforeEach(): Unit = {
@@ -28,135 +31,243 @@ class ControllerRestClientTest extends AnyWordSpec with Matchers with BeforeAndA
 
   "A ControllerRestClient" should {
     "call HttpService for canUndo" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Json.parse("true")))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Json.parse("true")))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.canUndo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for canUndo and return falls on failure" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Failure(new Exception("error")))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Failure(new Exception("error")))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       val result = controllerRestClient.canUndo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
       assert(result == false)
-    } 
+    }
     "call HttpService for canRedo" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Json.parse("true")))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Json.parse("true")))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.canRedo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for canRedo and return false on failure" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Failure(new Exception("error")))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Failure(new Exception("error")))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       val result = controllerRestClient.canRedo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
       assert(result == false)
-    } 
+    }
     "call HttpService for placeCard" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.placeCard(Move())
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for drawCard" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.drawCard()
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for setPlayerNames" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.setPlayerNames("player1", "player2")
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for setGameState" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.setGameState(GameState.CHOOSEMODE)
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for attack" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.attack(Move())
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for directAttack" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.directAttack(Move())
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for switchPlayer" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.switchPlayer()
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for undo" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.undo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for redo" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.redo
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for exitGame" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.exitGame()
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for saveField" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.saveField
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for loadField" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.loadField
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for setStrategy" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
 
       controllerRestClient.setStrategy(Strategy.normal)
-      verify(mockHttpService, times(2)).request(anyString(), anyString(), any(), any())
-    } 
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "evaluate winner on getWinner" in {
-      when(mockHttpService.request(anyString(), anyString(), any(), any())).thenReturn(Success(Field().toJson))
-      val controllerRestClient = new ControllerRestClient(mockHttpService)      
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(mockHttpService)
       val result = controllerRestClient.getWinner()
       assert(result == None)
 
-      controllerRestClient.field = Field(players = ((1, Player("player1", 1, hpValue = 0)) :: (2, Player("player2", 2)) :: Nil).toMap)
+      controllerRestClient.field = Field(players =
+        ((1, Player("player1", 1, hpValue = 0)) :: (
+          2,
+          Player("player2", 2)
+        ) :: Nil).toMap
+      )
       val result2 = controllerRestClient.getWinner()
       assert(result2 == Some("player2"))
-    } 
+    }
   }
 }
