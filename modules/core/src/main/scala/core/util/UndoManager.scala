@@ -8,8 +8,8 @@ import scala.util.Failure
 
 //noinspection UnitMethodIsParameterless
 class UndoManager {
-  private var undoStack: List[CommandInterface] = Nil
-  private var redoStack: List[CommandInterface] = Nil
+  var undoStack: List[CommandInterface] = Nil
+  var redoStack: List[CommandInterface] = Nil
 
   def canUndo: Boolean = undoStack.nonEmpty
   def canRedo: Boolean = redoStack.nonEmpty
