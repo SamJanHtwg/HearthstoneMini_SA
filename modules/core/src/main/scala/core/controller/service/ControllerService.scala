@@ -1,4 +1,5 @@
-package core.controller.service
+package core
+package controller.service
 
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
@@ -30,12 +31,14 @@ import model.fieldComponent.fieldImpl.Field
 import scala.annotation.meta.field
 import akka.http.scaladsl.server.StandardRoute
 
-class ControllerRestService(using controller: ControllerInterface) {
+class ControllerService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
+
+
 
   val route: Route =
     concat(
@@ -159,7 +162,7 @@ class ControllerRestService(using controller: ControllerInterface) {
     }
 
     Try {
-      Await.result(responseJsonFuture, 3.seconds)
+      Await.result(responseJsonFuture, 300.seconds)
     }.map(_ => ())
   }
 
@@ -186,15 +189,17 @@ class ControllerRestService(using controller: ControllerInterface) {
     val binding = Http().newServerAt("localhost", 4001).bind(route)
 
     binding.onComplete {
-      case Success(binding) =>
-        println(
-          s"HearthstoneMini ControllerAPI service online at http://localhost:4001/"
-        )
-      case Failure(exception) =>
-        println(
-          s"HearthstoneMini ControllerAPI service failed to start: ${exception.getMessage}"
-        )
+      case Success(serverBinding) =>
+        complete(status = 200, serverBinding.toString())
+      case Failure(ex) =>
+        complete(status = 500, ex.getMessage)
     }
   }
+
+  def stop(): Unit = {
+    system.terminate()
+  }
+
+
 
 }

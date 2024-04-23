@@ -1,29 +1,30 @@
 package hearthstoneMini.controller
 
-import core.controller.{Strategy}
-import _root_.model.GameState.GameState
 import _root_.model.GameState
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import core.controller.component.controllerImpl.Controller
+import _root_.model.GameState.GameState
+import _root_.model.Move
 import _root_.model.cardComponent.cardImpl.Card
 import _root_.model.fieldComponent.fieldImpl.Field
 import _root_.model.playerComponent.playerImpl.Player
-import _root_.model.Move
-import org.scalamock.scalatest.MockFactory
-import persistence.fileIO.FileIOInterface
-import core.util.CardProvider
-import core.util.UndoManager
-import scala.util.Failure
-import core.util.Observer
-import org.scalatest.BeforeAndAfterEach
-import core.util.Event
-import scala.util.Success
-import scala.annotation.meta.field
-import model.fieldComponent.FieldInterface
+import core.controller.Strategy
 import core.controller.Strategy.hardcore
+import core.controller.component.controllerImpl.Controller
+import core.util.CardProvider
+import core.util.Event
+import core.util.Observer
+import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.DrawCardCommand
+import model.fieldComponent.FieldInterface
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import persistence.fileIO.FileIOInterface
+
+import scala.annotation.meta.field
+import scala.util.Failure
+import scala.util.Success
 
 class ControllerSpec
     extends AnyWordSpec
