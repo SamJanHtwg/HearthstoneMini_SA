@@ -145,7 +145,7 @@ class Controller(
     fileIO.save(this.field)
   }
   def loadField: Unit = {
-    fileIO.load match {
+    fileIO.load() match {
       case Success(value) =>
         this.field = value
         errorMsg = None

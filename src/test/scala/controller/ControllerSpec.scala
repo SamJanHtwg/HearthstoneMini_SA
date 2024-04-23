@@ -20,6 +20,7 @@ import org.scalatest.BeforeAndAfterEach
 import core.util.Event
 import scala.util.Success
 import scala.annotation.meta.field
+import model.fieldComponent.FieldInterface
 
 class ControllerSpec
     extends AnyWordSpec
@@ -256,6 +257,34 @@ class ControllerSpec
       controller.add(mockObserver)
       controller.undo
       controller.errorMsg should be(Some("error"))
+    }
+    "saveField calls fileIO service" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1)),
+          (2, Player(id = 2))
+        ),
+        turns = 2
+      )
+
+      (mockFileIO.save(_: FieldInterface)).expects(controller.field).once()
+      controller.saveField
+    }
+    "loadField calls fileIO service" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+
+      controller.field = Field(
+        players = Map[Int, Player](
+          (1, Player(id = 1)),
+          (2, Player(id = 2))
+        ),
+        turns = 2
+      )
+
+      (mockFileIO.load _).expects().onCall(_ => Success(controller.field)).once()
+      controller.loadField
     }
   }
 }
