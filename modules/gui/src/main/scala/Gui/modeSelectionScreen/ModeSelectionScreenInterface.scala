@@ -1,5 +1,4 @@
-package gui
-package modeSelectionScreen
+package Gui.modeSelectionScreen
 
 import javafx.event.EventHandler
 import scalafx.scene.Node

@@ -1,8 +1,6 @@
-package core
-package controller
+package core.controller
 
-enum Strategy {
-  case normal
-  case hardcore
-  case debug
+object Strategy extends Enumeration {
+  type Strategy = Value
+  val normal, hardcore, debug = Value
 }

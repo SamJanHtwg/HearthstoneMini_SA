@@ -2,9 +2,7 @@ package core
 package util.commands.commandImpl
 
 import model.Move
-import controller.GameState
-import controller.component.controllerImpl.Controller
-import model.cardComponent.cardImpl.Card
+import model.GameState
 import core.util.commands.CommandInterface
 import model.fieldComponent.FieldInterface
 import model.fieldComponent.fieldImpl.Field
@@ -12,16 +10,16 @@ import scala.util.{Success, Try, Failure}
 import model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
-class DirectAttackCommand(controller: Controller, move: Move)
+class DirectAttackCommand(val field: FieldInterface, move: Move)
     extends CommandInterface {
-  var memento: FieldInterface = controller.field
+  var memento: FieldInterface = field
   var errorMsg: String = ""
   override def doStep: Try[FieldInterface] = {
     checkConditions((attackingCard: CardInterface) => {
-      memento = controller.field
-      val currentField = controller.field
+      memento = field
+      val currentField = field
 
-      val newField = currentField
+      var newField = currentField
         .reduceHp(
           currentField.getInactivePlayerId,
           attackingCard.attValue
@@ -29,22 +27,10 @@ class DirectAttackCommand(controller: Controller, move: Move)
         .reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.nextState()
+        newField = newField.setGameState(GameState.WIN)
       }
       newField
     })
-  }
-
-  override def undoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
-  }
-
-  override def redoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
   }
 
   def checkConditions(
@@ -52,7 +38,7 @@ class DirectAttackCommand(controller: Controller, move: Move)
           attackingCard: CardInterface
       ) => FieldInterface
   ): Try[FieldInterface] = {
-    val currentField = controller.field
+    val currentField = field
 
     val activeFieldSlot = currentField
       .players(currentField.activePlayerId)
@@ -68,7 +54,7 @@ class DirectAttackCommand(controller: Controller, move: Move)
       .flatMap(attackingCard =>
         if isEnemyFieldEmpty then
           if attackingCard.attackCount >= 1 then
-            if controller.field.turns > 1 then Right(onSuccess(attackingCard))
+            if field.turns > 1 then Right(onSuccess(attackingCard))
             else
               Left(
                 Exception("Kein Spieler kann in seiner ersten Runde angreifen!")

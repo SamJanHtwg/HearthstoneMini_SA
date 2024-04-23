@@ -2,8 +2,7 @@ package core
 package util.commands.commandImpl
 
 import model.Move
-import controller.GameState
-import controller.component.controllerImpl.Controller
+import model.GameState
 import model.fieldComponent.FieldInterface
 import scala.util.{Failure, Success, Try}
 import core.util.commands.CommandInterface
@@ -11,20 +10,20 @@ import org.checkerframework.checker.units.qual.s
 import model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
-class AttackCommand(controller: Controller, move: Move)
+class AttackCommand(val field: FieldInterface, move: Move)
     extends CommandInterface {
-  var memento: FieldInterface = controller.field
+  var memento: FieldInterface = field
   var newField: FieldInterface = _
 
   override def doStep: Try[FieldInterface] = checkConditions(
     (attackingCard: CardInterface, defendingCard: CardInterface) => {
-      val currentField = controller.field
+      val currentField = field
       val difference =
         attackingCard.attValue
           - defendingCard.defenseValue
 
       newField = {
-        if (difference > 0) {
+        if (difference >= 0) {
           currentField
             .destroyCard(
               currentField.getInactivePlayerId,
@@ -44,7 +43,7 @@ class AttackCommand(controller: Controller, move: Move)
       }.reduceAttackCount(move.fieldSlotActive)
 
       if (newField.players.values.filter(_.isHpEmpty).size != 0) {
-        controller.nextState()
+        newField = newField.setGameState(GameState.WIN)
       }
       newField
     }
@@ -56,7 +55,7 @@ class AttackCommand(controller: Controller, move: Move)
           defendingCard: CardInterface
       ) => FieldInterface
   ): Try[FieldInterface] = {
-    val currentField = controller.field
+    val currentField = field
 
     val activeFieldSlot = currentField
       .players(currentField.activePlayerId)
@@ -91,17 +90,5 @@ class AttackCommand(controller: Controller, move: Move)
           )
       )
       .toTry
-  }
-
-  override def undoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
-  }
-
-  override def redoStep: Unit = {
-    val new_memento = controller.field
-    controller.field = memento
-    memento = new_memento
   }
 }

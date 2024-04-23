@@ -1,5 +1,4 @@
-package gui
-package mainGameScreen
+package Gui.mainGameScreen
 
 import core.controller.component.ControllerInterface
 import core.controller.Strategy

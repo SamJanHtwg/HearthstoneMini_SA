@@ -1,5 +1,4 @@
-package gui
-package enterPlayernamesScreen
+package Gui.enterPlayernamesScreen
 
 import core.controller.component.ControllerInterface
 import core.controller.Strategy

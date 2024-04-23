@@ -12,7 +12,7 @@ import scala.util.Try
 import fileIO.FileIOInterface
 
 class JsonIO extends FileIOInterface {
-  override def load: Try[Field] = Try {
+  override def load(): Try[Field] = Try {
     val source = Source.fromFile("field.json")
     val json = Json.parse(source.getLines().mkString)
     source.close()
@@ -21,10 +21,13 @@ class JsonIO extends FileIOInterface {
 
   override def save(field: FieldInterface): Unit = {
     val pw = new PrintWriter(new File("field.json"))
-    val save = Json.obj(
-      "field" -> field.toJson
-    )
-    pw.write(Json.prettyPrint(save))
+    pw.write(Json.prettyPrint(field.toJson))
+    pw.close()
+  }
+
+  override def save(json: JsValue): Unit = {
+    val pw = new PrintWriter(new File("field.json"))
+    pw.write(Json.prettyPrint(json))
     pw.close()
   }
 }

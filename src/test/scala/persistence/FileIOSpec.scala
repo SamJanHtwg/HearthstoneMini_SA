@@ -1,4 +1,4 @@
-package model
+package persistence
 
 import model.cardComponent.CardInterface
 import model.cardComponent.cardImpl.Card
@@ -33,9 +33,14 @@ class FileIOSpec extends AnyWordSpec with Matchers {
   val fileIOJson = new JsonIO
 
   "Should be possible to save and load a field" when {
-    "with json variant" in {
+    "with a saved field" in {
       val saved: Unit = fileIOJson.save(field)
-      val loaded: Unit = fileIOJson.load
+      val loaded: Unit = fileIOJson.load()
+      assert(saved === loaded)
+    }
+    "with a saved JsValue" in {
+      val saved: Unit = fileIOJson.save(field.toJson)
+      val loaded: Unit = fileIOJson.load()
       assert(saved === loaded)
     }
   }

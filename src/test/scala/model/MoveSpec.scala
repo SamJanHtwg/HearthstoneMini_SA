@@ -16,5 +16,18 @@ class MoveSpec extends AnyWordSpec with Matchers {
         move.fieldSlotInactive should be(0)
       }
     }
+    "serialized" should {
+      "have same values after serialization" in {
+        val move = Move(1, 2, 3, 4)
+        val toJson = move.toJson
+        val fromJson = Move.fromJson(toJson)
+
+        fromJson.amount should be(move.amount)
+        fromJson.handSlot should be(move.handSlot)
+        fromJson.fieldSlotActive should be(move.fieldSlotActive)
+        fromJson.fieldSlotInactive should be(move.fieldSlotInactive)
+      }
+    }
+
   }
 }

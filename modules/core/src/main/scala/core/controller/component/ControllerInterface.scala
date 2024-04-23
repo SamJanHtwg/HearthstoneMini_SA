@@ -3,14 +3,14 @@ package controller.component
 import model.Move
 import model.fieldComponent.FieldInterface
 import util.Observable
-import core.controller.GameState.GameState
-import core.controller.Strategy
+import model.GameState.GameState
+import core.controller.Strategy.*
 
 //noinspection AccessorLikeMethodIsEmptyParen,UnitMethodIsParameterless
 trait ControllerInterface extends Observable {
   var errorMsg: Option[String]
   var field: FieldInterface
-  var gameState: GameState
+  def setGameState(gameState: GameState): Unit
   def canUndo: Boolean
   def canRedo: Boolean
   def placeCard(move: Move): Unit
@@ -22,7 +22,6 @@ trait ControllerInterface extends Observable {
   def exitGame(): Unit
   def undo: Unit
   def redo: Unit
-  def nextState(): Unit
   def setStrategy(strat: Strategy): Unit
   override def toString(): String
   def getWinner(): Option[String]

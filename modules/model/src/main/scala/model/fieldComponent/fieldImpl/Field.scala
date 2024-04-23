@@ -1,11 +1,14 @@
 package model
 package fieldComponent.fieldImpl
 
+import model.GameState.*
+import model.GameState
 import fieldComponent.FieldInterface
 import playerComponent.playerImpl.Player
 import play.api.libs.json.*
 
 import javax.inject.Inject
+import model.playerComponent.PlayerInterface
 
 object Field {
   def fromJson(json: JsValue): Field = {
@@ -17,20 +20,27 @@ object Field {
         .map(player => Player.fromJson(player))
         .map(player => (player.id, player))
         .toMap,
-      turns = fieldJs("turns").toString.toInt
+      turns = fieldJs("turns").toString.toInt,
+      gameState =
+        GameState.withName(fieldJs("gameState").toString.replace("\"", ""))
     )
   }
 }
 
 //noinspection DuplicatedCode
-case class Field @Inject() (
-    players: Map[Int, Player] = Map[Int, Player](),
+case class Field(
+    players: Map[Int, PlayerInterface] = Map[Int, PlayerInterface](),
     activePlayerId: Int = 1,
-    turns: Int = 0
+    turns: Int = 0,
+    gameState: GameState = GameState.CHOOSEMODE
 ) extends FieldInterface() {
+
+  override def setGameState(gameState: GameState.GameState): FieldInterface =
+    copy(gameState = gameState)
+
   def this() = this(
     activePlayerId = 1,
-    players = Map[Int, Player](
+    players = Map[Int, PlayerInterface](
       (1, Player(id = 1, manaValue = 0, maxManaValue = 1)),
       (2, Player(id = 2, manaValue = 0, maxManaValue = 1))
     )
@@ -148,9 +158,9 @@ case class Field @Inject() (
     )
   }
 
-  override def getPlayerById(id: Int): Player = players(id)
+  override def getPlayerById(id: Int): PlayerInterface = players(id)
 
-  override def getActivePlayer: Player = players(activePlayerId)
+  override def getActivePlayer: PlayerInterface = players(activePlayerId)
 
   override def getInactivePlayerId: Int =
     players.find((id, player) => id != activePlayerId).get._1
@@ -163,8 +173,11 @@ case class Field @Inject() (
   )
 
   override def toJson: JsValue = Json.obj(
-    "players" -> players.map((id, player) => player.toJson),
-    "turns" -> Json.toJson(turns),
-    "activePlayerId" -> Json.toJson(activePlayerId)
+    "field" -> Json.obj(
+      "activePlayerId" -> Json.toJson(activePlayerId),
+      "players" -> Json.toJson(players.values.map(player => player.toJson)),
+      "turns" -> Json.toJson(turns),
+      "gameState" -> Json.toJson(gameState.toString)
+    )
   )
 }

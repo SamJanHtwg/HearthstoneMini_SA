@@ -1,11 +1,7 @@
-package core
-package util
+package core.util
 
 import play.api.libs.json.*
-import scala.io.Source
-import java.io.{File, FileInputStream}
 import scala.util.Random
-import model.*
 import model.cardComponent.cardImpl.Card
 
 class CardProvider(inputFile: String) {
