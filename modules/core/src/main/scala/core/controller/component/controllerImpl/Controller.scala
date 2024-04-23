@@ -28,10 +28,11 @@ import core.util.commands.commandImpl.{
 }
 import core.util.CardProvider
 
-class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
-
-  val cardProvider =
-    new CardProvider(inputFile = "/json/cards.json")
+class Controller(
+  val fileIO: FileIOInterface,
+  private val undoManager: UndoManager,
+  private val cardProvider: CardProvider,
+) extends ControllerInterface {
 
   var field: FieldInterface = Field(
     players = Map(
@@ -49,7 +50,6 @@ class Controller(val fileIO: FileIOInterface) extends ControllerInterface {
   )
 
   var errorMsg: Option[String] = None
-  private val undoManager: UndoManager = new UndoManager
 
   def canUndo: Boolean = undoManager.canUndo
   def canRedo: Boolean = undoManager.canRedo

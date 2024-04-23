@@ -34,9 +34,6 @@ import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
 
 class ControllerRestClient() extends ControllerInterface {
-  private val cardProvider =
-    new CardProvider(inputFile = "/json/cards.json")
-
   private val controllerServiceUrl = "http://localhost:4001/controller"
 
   var field: FieldInterface = _
