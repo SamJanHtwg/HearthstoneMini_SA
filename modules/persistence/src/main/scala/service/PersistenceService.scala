@@ -48,7 +48,7 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
       },
       get {
         path("persistence" / "load") {
-          fileIO.load match {
+          fileIO.load() match {
             case Success(field) =>
               complete(Json.prettyPrint(field.toJson))
             case Failure(exception) =>

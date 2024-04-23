@@ -35,12 +35,12 @@ class FileIOSpec extends AnyWordSpec with Matchers {
   "Should be possible to save and load a field" when {
     "with a saved field" in {
       val saved: Unit = fileIOJson.save(field)
-      val loaded: Unit = fileIOJson.load
+      val loaded: Unit = fileIOJson.load()
       assert(saved === loaded)
     }
     "with a saved JsValue" in {
       val saved: Unit = fileIOJson.save(field.toJson)
-      val loaded: Unit = fileIOJson.load
+      val loaded: Unit = fileIOJson.load()
       assert(saved === loaded)
     }
   }

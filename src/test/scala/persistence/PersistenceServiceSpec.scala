@@ -130,7 +130,7 @@ class PersistenceServiceSpec
 
     "return error when loading failed" in {
       val mockJsonIO = mock(classOf[JsonIO])
-      when(mockJsonIO.load).thenReturn(
+      when(mockJsonIO.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
 
