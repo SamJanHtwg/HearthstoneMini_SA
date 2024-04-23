@@ -20,8 +20,10 @@ import akka.protobufv3.internal.compiler.PluginProtos.CodeGeneratorResponse.File
 import org.checkerframework.checker.units.qual.s
 import akka.compat.Future
 import scala.concurrent.Future
+import akka.http.scaladsl.model.StatusCodes
+import akka.Done
 
-class PersistenceService() {
+class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
   implicit val executionContext: ExecutionContext = system.executionContext
@@ -39,29 +41,30 @@ class PersistenceService() {
         path("persistence" / "save") {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
-            JsonIO().save(json)
+            fileIO.save(json)
             complete("Saved")
           }
         }
       },
       get {
         path("persistence" / "load") {
-          JsonIO().load match {
+          fileIO.load match {
             case Success(field) =>
               complete(Json.prettyPrint(field.toJson))
             case Failure(exception) =>
-              failWith(Throwable("Error loading field"))
+              complete(status = 500, exception.getMessage)
           }
         }
       },
       post {
         path("persistence" / "stopServer") {
-          onComplete(bindingFuture.flatMap(_.unbind())) {
+          onComplete(stop()) {
             case Success(_) =>
-              system.terminate()
               complete("Server stopped")
             case Failure(ex) =>
-              complete(s"Error stopping server: $ex")
+              complete(
+                StatusCodes.InternalServerError,
+                ex.getMessage)
           }
         }
       }
@@ -72,17 +75,13 @@ class PersistenceService() {
 
     bindingFuture.onComplete({
       case Success(serverBinding) =>
-        println(
-          s"Server online at http://localhost:5001/"
-        )
+        complete(status = 200, serverBinding.toString())
       case Failure(ex) =>
-        println(s"Server could not start: $ex")
-        system.terminate()
+        complete(status = 500, ex.getMessage)
     })
   }
 
-  def stop(): Unit = {
+  def stop(): Future[Done] = {
     bindingFuture.flatMap(_.unbind())
-    system.terminate()
   }
 }

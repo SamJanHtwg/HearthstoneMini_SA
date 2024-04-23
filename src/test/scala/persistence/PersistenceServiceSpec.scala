@@ -1,9 +1,12 @@
 package persistence
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpMethods.*
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives.*
 import akka.http.scaladsl.testkit.ScalatestRouteTest
+import akka.parboiled2.RuleTrace.Run
 import akka.testkit.ImplicitSender
 import akka.testkit.TestActors
 import akka.testkit.TestKit
@@ -12,14 +15,26 @@ import model.cardComponent.CardInterface
 import model.cardComponent.cardImpl.Card
 import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.playerImpl.Player
+import org.checkerframework.checker.units.qual.s
+import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import persistence.*
+import persistence.fileIO.jsonIOImpl.JsonIO
 import persistence.fileIO.service.PersistenceService
 import play.api.libs.json.Json
-import org.mockito.Mockito.mock
-import persistence.fileIO.jsonIOImpl.JsonIO
+
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+import akka.http.scaladsl.model.HttpResponse
+import akka.http.scaladsl.model.HttpRequest
+import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.testkit.RouteTestTimeout
 
 class PersistenceServiceSpec
     extends AnyWordSpec
@@ -48,6 +63,30 @@ class PersistenceServiceSpec
   )
 
   "PersistenceService" should {
+    "start a server" in {
+      val service = new PersistenceService()
+      service.start()
+
+      val responseFuture: Future[HttpResponse] =
+        Http().singleRequest(HttpRequest(uri = "http://localhost:5001/"))
+
+      responseFuture.onComplete(response => {
+        response.get.status shouldEqual StatusCodes.OK
+      })
+
+      service.stop()
+    }
+
+    "fail to start server when port is in use" in {
+      val responseFuture: Future[HttpResponse] =
+        Http().singleRequest(HttpRequest(uri = "http://localhost:5001/"))
+
+      responseFuture.onComplete(response => {
+        response.get.status shouldEqual 500
+      })
+
+    }
+
     "respond to GET request at the root path" in {
       val service = new PersistenceService()
       service.start()
@@ -89,6 +128,23 @@ class PersistenceServiceSpec
       service.stop()
     }
 
+    "return error when loading failed" in {
+      val mockJsonIO = mock(classOf[JsonIO])
+      when(mockJsonIO.load).thenReturn(
+        Failure(new Exception("Error loading field"))
+      )
+
+      val service = new PersistenceService(fileIO = mockJsonIO)
+      service.start()
+
+      Get("/persistence/load") ~> service.route ~> check {
+        status shouldEqual StatusCodes.InternalServerError
+        responseAs[String] shouldEqual "Error loading field"
+      }
+
+      service.stop()
+    }
+
     "stop the server when a POST request is sent" in {
       val service = new PersistenceService()
       service.start()
@@ -98,5 +154,4 @@ class PersistenceServiceSpec
       }
     }
   }
-
 }
