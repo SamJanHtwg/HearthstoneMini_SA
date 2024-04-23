@@ -1,4 +1,5 @@
 package core.controller.component.controllerImpl
+
 import core.controller.Strategy
 import core.controller.Strategy.Strategy
 import model.GameState.*
@@ -32,46 +33,15 @@ import akka.http.javadsl.model.RequestEntity
 import akka.http.scaladsl.model.HttpMethod
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.ContentTypes
+import scala.concurrent.ExecutionContext
+import core.controller.service.HttpService
 
-class ControllerRestClient() extends ControllerInterface {
+class ControllerRestClient(httpService: HttpService = HttpService()) extends ControllerInterface {
   private val controllerServiceUrl = "http://localhost:4001/controller"
 
   var field: FieldInterface = _
   fieldRequest(controllerServiceUrl, "field", HttpMethods.GET)
-  var errorMsg: Option[String] = None
-
-  def request(
-      endPoint: String,
-      command: String,
-      method: HttpMethod,
-      data: Option[JsValue] = None
-  ): Try[JsValue] = {
-    implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
-    implicit val executionContext = system.executionContext
-
-    val responseFuture = Http().singleRequest(
-      HttpRequest(
-        method = method,
-        uri = s"$endPoint/$command",
-        entity = data match {
-          case Some(data) =>
-            HttpEntity(ContentTypes.`application/json`, Json.stringify(data))
-          case None =>
-            HttpEntity.Empty
-        }
-      )
-    )
-
-    val responseJsonFuture = responseFuture.flatMap { response =>
-      Unmarshal(response.entity).to[String].map { jsonString =>
-        Json.parse(jsonString)
-      }
-    }
-
-    Try {
-      Await.result(responseJsonFuture, 3.seconds)
-    }
-  }
+  var errorMsg: Option[String] = None  
 
   def fieldRequest(
       endpoint: String,
@@ -79,8 +49,7 @@ class ControllerRestClient() extends ControllerInterface {
       method: HttpMethod,
       data: Option[JsValue] = None
   ): Unit = {
-    val response =
-      request(endpoint, command, method, data).map(Field.fromJson(_))
+    val response = httpService.request(endpoint, command, method, data).map(Field.fromJson(_))
     response match {
       case Success(newField) =>
         field = newField
@@ -93,13 +62,13 @@ class ControllerRestClient() extends ControllerInterface {
   }
 
   def canUndo: Boolean =
-    request(controllerServiceUrl, "canUndo", HttpMethods.GET) match {
+    httpService.request(controllerServiceUrl, "canUndo", HttpMethods.GET) match {
       case Success(json) => json.as[Boolean]
       case Failure(_)    => false
     }
 
   def canRedo: Boolean =
-    request(controllerServiceUrl, "canRedo", HttpMethods.GET) match {
+    httpService.request(controllerServiceUrl, "canRedo", HttpMethods.GET) match {
       case Success(json) => json.as[Boolean]
       case Failure(_)    => false
     }
@@ -179,7 +148,7 @@ class ControllerRestClient() extends ControllerInterface {
     }
   }
 
-  def saveField: Unit = request(
+  def saveField: Unit = httpService.request(
     controllerServiceUrl,
     "save",
     HttpMethods.GET
