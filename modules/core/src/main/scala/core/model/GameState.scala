@@ -1,4 +1,4 @@
-package model
+package core.model
 
 object GameState extends Enumeration {
   type GameState = Value

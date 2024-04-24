@@ -1,4 +1,4 @@
-package model
+package core.model
 package playerComponent.playerImpl
 
 import cardComponent.CardInterface

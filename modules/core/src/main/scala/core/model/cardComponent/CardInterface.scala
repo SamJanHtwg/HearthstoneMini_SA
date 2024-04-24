@@ -1,4 +1,4 @@
-package model
+package core.model
 package cardComponent
 
 import cardComponent.cardImpl.Card

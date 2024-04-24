@@ -9,7 +9,7 @@ import scala.io.StdIn
 import core.controller.component.ControllerInterface
 
 import core.controller.module.ControllerRestClientModule
-import model.GameState
+import core.model.GameState
 
 object TuiService:
   Starter(ControllerModule.given_ControllerInterface).start()

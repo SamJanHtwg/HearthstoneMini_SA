@@ -3,7 +3,7 @@ package Gui
 import Gui.enterPlayernamesScreen.EnterPlayerNamesImpl
 import Gui.mainGameScreen.MainGameScreen
 import Gui.modeSelectionScreen.ModeSelectionScreenImpl
-import model.GameState
+import core.model.GameState
 import core.controller.component.controllerImpl.Controller
 import javafx.scene.control.DialogPane
 import scalafx.application.{JFXApp3, Platform}

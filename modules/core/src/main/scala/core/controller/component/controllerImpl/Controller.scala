@@ -2,19 +2,19 @@ package core.controller.component.controllerImpl
 
 import com.google.inject.name.{Named, Names}
 import com.google.inject.{Guice, Inject, Injector}
-import model.GameState.*
+import core.model.GameState.*
 import core.controller.component.ControllerInterface
 import core.controller.Strategy.Strategy
 import core.controller.Strategy
-import model.GameState
-import model.fieldComponent.FieldInterface
-import model.Move
+import core.model.GameState
+import core.model.fieldComponent.FieldInterface
+import core.model.Move
 import persistence.fileIO.FileIOInterface
-import model.playerComponent.playerImpl.Player
+import core.model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
 import core.util.{Event, Observable, UndoManager}
 import core.util.commands.CommandInterface
-import model.fieldComponent.fieldImpl.Field
+import core.model.fieldComponent.fieldImpl.Field
 
 import java.lang.System.exit
 import java.text.Annotation
@@ -142,12 +142,12 @@ class Controller(
     notifyObservers(Event.PLAY, msg = None)
   }
   def saveField: Unit = {
-    fileIO.save(this.field)
+    fileIO.save(this.field.toJson)
   }
   def loadField: Unit = {
     fileIO.load() match {
       case Success(value) =>
-        this.field = value
+        this.field = Field.fromJson(value)
         errorMsg = None
         setGameState(GameState.MAINGAME)
       case Failure(exception) =>

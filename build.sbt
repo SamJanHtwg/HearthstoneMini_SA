@@ -54,7 +54,7 @@ lazy val gui = project
     name := "gui",
     commonSettings
   )
-  .dependsOn(core, model)
+  .dependsOn(core)
 
 lazy val tui = project
   .in(file("./modules/tui"))
@@ -62,14 +62,7 @@ lazy val tui = project
     name := "tui",
     commonSettings
   )
-  .dependsOn(core, model)
-
-lazy val model = project
-  .in(file("./modules/model"))
-  .settings(
-    name := "model",
-    commonSettings
-  )
+  .dependsOn(core)
 
 lazy val persistence = project
   .in(file("./modules/persistence"))
@@ -77,7 +70,6 @@ lazy val persistence = project
     name := "persistence",
     commonSettings
   )
-  .dependsOn(model % "compile->compile")
 
 lazy val core = project
   .in(file("./modules/core"))
@@ -86,7 +78,6 @@ lazy val core = project
     commonSettings
   )
   .dependsOn(
-    model % "compile->compile",
     persistence % "compile->compile"
   )
 
@@ -104,7 +95,6 @@ lazy val root = project
     core % "compile->compile;test->test",
     tui % "compile->compile;test->test",
     gui % "compile->compile;test->test",
-    model % "compile->compile;test->test",
     persistence % "compile->compile;test->test"
   )
-  .aggregate(core, tui, gui, model, persistence)
+  .aggregate(core, tui, gui, persistence)

@@ -1,15 +1,15 @@
 package tui
 
-import model.Move
+import core.model.Move
 import core.util.Observer
 import core.util.Event
-import model.GameState
+import core.model.GameState
 import core.controller.Strategy
 import core.controller.component.controllerImpl.Controller
 import scala.util.{Failure, Success, Try}
 import core.controller.component.ControllerInterface
 import core.util.matrix.Matrix
-import model.playerComponent.PlayerInterface
+import core.model.playerComponent.PlayerInterface
 import Tui.{
   zeilenUmbruch,
   endGameMsg,

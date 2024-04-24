@@ -2,7 +2,7 @@ package core.util
 
 import play.api.libs.json.*
 import scala.util.Random
-import model.cardComponent.cardImpl.Card
+import core.model.cardComponent.cardImpl.Card
 
 class CardProvider(inputFile: String) {
   private val json: JsValue =

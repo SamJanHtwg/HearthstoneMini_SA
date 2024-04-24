@@ -4,7 +4,7 @@ import Gui.Gui
 import core.controller.module.ControllerModule
 import core.controller.module.ControllerRestClientModule
 import core.controller.component.ControllerInterface
-import model.GameState
+import core.model.GameState
 import core.util.Event
 import scala.io.StdIn
 

@@ -5,17 +5,17 @@ import core.controller.Strategy
 import core.controller.component.controllerImpl.Controller
 import scalafx.event.EventHandler
 import scalafx.scene.input.MouseEvent
-import model.Move
+import core.model.Move
 import scalafx.geometry.Insets
 import javafx.scene.Node
 import scalafx.Includes.jfxNode2sfx
 import scalafx.scene.control.*
 import scalafx.scene.layout.GridPane
 import javafx.scene.layout.GridPane.getColumnIndex
-import model.cardComponent.cardImpl.Card
+import core.model.cardComponent.cardImpl.Card
 import scalafx.scene.paint.Color.{Black, Blue, Green, Grey, Red, White}
 import scalafx.scene.shape.Rectangle
-import model.cardComponent.CardInterface
+import core.model.cardComponent.CardInterface
 
 //noinspection DuplicatedCode
 class MainGameScreen(controller: ControllerInterface) extends GridPane {

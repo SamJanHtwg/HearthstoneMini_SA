@@ -1,14 +1,11 @@
-package model
+package core.model
 package fieldComponent.fieldImpl
 
-import model.GameState.*
-import model.GameState
 import fieldComponent.FieldInterface
 import playerComponent.playerImpl.Player
 import play.api.libs.json.*
-
-import javax.inject.Inject
-import model.playerComponent.PlayerInterface
+import core.model.GameState.GameState
+import core.model.playerComponent.PlayerInterface
 
 object Field {
   def fromJson(json: JsValue): Field = {

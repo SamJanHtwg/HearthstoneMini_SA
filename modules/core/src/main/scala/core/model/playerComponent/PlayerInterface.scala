@@ -1,4 +1,4 @@
-package model
+package core.model
 package playerComponent
 
 import play.api.libs.json.JsValue

@@ -6,7 +6,7 @@ import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
-import model.fieldComponent.FieldInterface
+import core.model.fieldComponent.FieldInterface
 import scalafx.geometry.Insets
 import persistence.fileIO.jsonIOImpl.JsonIO as FileIO
 import scalafx.scene.Node

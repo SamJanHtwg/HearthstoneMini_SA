@@ -1,11 +1,11 @@
-package model
+package core.model
 package fieldComponent
 
 import cardComponent.cardImpl.Card
 import playerComponent.playerImpl.Player
 import play.api.libs.json.JsValue
 import playerComponent.PlayerInterface
-import model.GameState.GameState
+import core.model.GameState.GameState
 
 trait FieldInterface {
   val players: Map[Int, PlayerInterface]

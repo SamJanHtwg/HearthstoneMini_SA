@@ -2,15 +2,15 @@ package core.controller.component.controllerImpl
 
 import core.controller.Strategy
 import core.controller.Strategy.Strategy
-import model.GameState.*
-import model.GameState
+import core.model.GameState.*
+import core.model.GameState
 import core.controller.component.ControllerInterface
-import model.fieldComponent.FieldInterface
-import model.Move
-import model.playerComponent.playerImpl.Player
+import core.model.fieldComponent.FieldInterface
+import core.model.Move
+import core.model.playerComponent.playerImpl.Player
 import core.util.{Event, Observable, UndoManager}
 import core.util.commands.CommandInterface
-import model.fieldComponent.fieldImpl.Field
+import core.model.fieldComponent.fieldImpl.Field
 import scala.util.{Failure, Success, Try}
 import core.util.commands.commandImpl.{
   PlaceCardCommand,
