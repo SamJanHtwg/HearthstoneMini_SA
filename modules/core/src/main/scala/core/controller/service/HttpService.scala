@@ -13,16 +13,18 @@ import play.api.libs.json.Json
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import scala.concurrent.Await
 import scala.concurrent.duration.*
+import scala.concurrent.ExecutionContext
 
 class HttpService {
+  implicit val system:ActorSystem[?] = ActorSystem(Behaviors.empty, "SingleRequest")
+  implicit val executionContext: ExecutionContext = system.executionContext
+
   def request(
       endPoint: String,
       command: String,
       method: HttpMethod,
       data: Option[JsValue] = None
   ): Try[JsValue] = {
-    implicit val system = ActorSystem(Behaviors.empty, "SingleRequest")
-    implicit val executionContext = system.executionContext
 
     val responseFuture = Http().singleRequest(
       HttpRequest(

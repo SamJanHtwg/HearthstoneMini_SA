@@ -34,11 +34,9 @@ import akka.http.scaladsl.server.StandardRoute
 class ControllerService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
 
-  implicit val system: ActorSystem[?] =
+  implicit val system: ActorSystem[Nothing] =
     ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
-
-
 
   val route: Route =
     concat(
