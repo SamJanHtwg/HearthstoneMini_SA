@@ -71,7 +71,7 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
     )
 
   def start(): Unit = {
-    bindingFuture = Http().newServerAt("localhost", 5001).bind(route)
+    bindingFuture = Http().newServerAt("0.0.0.0", 9021).bind(route)
 
     bindingFuture.onComplete({
       case Success(serverBinding) =>

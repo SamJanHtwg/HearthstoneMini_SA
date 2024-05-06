@@ -10,11 +10,10 @@ import persistence.fileIO.service.PersistenceService
 
 object HearthstoneMini {
   def main(args: Array[String]): Unit = {
-
+    PersistenceService().start()
     ControllerServiceModule
     GuiRestModule
     TuiRestService
-    PersistenceService().start()
     // TuiService
     // GuiService
     // ControllerService

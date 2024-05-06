@@ -32,7 +32,7 @@ import scala.annotation.meta.field
 import akka.http.scaladsl.server.StandardRoute
 
 class ControllerService(using controller: ControllerInterface) {
-  private val persistenceServiceEndpoint = "http://localhost:5001/persistence"
+  private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
 
   implicit val system: ActorSystem[Nothing] =
     ActorSystem(Behaviors.empty, "SprayExample")
@@ -184,7 +184,7 @@ class ControllerService(using controller: ControllerInterface) {
   }
 
   def start(): Unit = {
-    val binding = Http().newServerAt("localhost", 4001).bind(route)
+    val binding = Http().newServerAt("0.0.0.0", 9031).bind(route)
 
     binding.onComplete {
       case Success(serverBinding) =>
