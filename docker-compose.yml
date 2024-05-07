@@ -1,6 +1,6 @@
 services:
   gui:
-    image: gui:latest
+    image: gui:1.1.0
     depends_on:
       - core
       - persistence
@@ -9,7 +9,7 @@ services:
     network_mode: "host"
 
   tui:
-    image: tui:latest
+    image: tui:1.1.0
     network_mode: "host"
     stdin_open: true
     tty: true
@@ -18,13 +18,13 @@ services:
       - persistence
 
   persistence:
-    image: persistence:latest
+    image: persistence:1.1.0
     ports: 
       - "9021:9021"
     network_mode: "host"
 
   core:
-    image: core:latest
+    image: core:1.1.0
     ports: 
       - "9031:9031"
     depends_on:

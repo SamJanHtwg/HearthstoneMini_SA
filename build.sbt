@@ -13,7 +13,7 @@ assembly / assemblyMergeStrategy := {
 }
 
 ThisBuild / scalaVersion := scala3Version
-ThisBuild / version := "1.0"
+ThisBuild / version := "1.1.0"
 
 Compile / mainClass := Some("hearthstoneMini.HearthstoneMini")
 Compile / packageBin / mainClass := Some("hearthstoneMini.HearthstoneMini")
