@@ -36,7 +36,8 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-testkit" % "2.9.2" % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test,
+    "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime
   ) ++ Seq(
     "base",
     "controls",
@@ -77,7 +78,7 @@ lazy val tui = project
   .settings(
     name := "tui",
     commonSettings,
-    dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1"
+    dockerBaseImage := "nicolabeghin/liberica-openjdk-with-javafx-debian:17"
   )
   .dependsOn(core, model)
 
