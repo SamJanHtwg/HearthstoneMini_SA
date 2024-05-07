@@ -1,7 +1,7 @@
-import org.scoverage.coveralls.GitHubActions
-import org.scoverage.coveralls.Imports.CoverallsKeys.*
 import sbt.Keys.*
 import sbtassembly.AssemblyPlugin.autoImport.*
+import com.typesafe.sbt.packager.docker._
+import com.typesafe.sbt.packager.docker.DockerChmodType
 
 val scala3Version = "3.3.3"
 val AkkaVersion = "2.9.2"
@@ -36,7 +36,7 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-testkit" % "2.9.2" % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test
   ) ++ Seq(
     "base",
     "controls",
@@ -45,22 +45,39 @@ lazy val commonSettings = Seq(
     "media",
     "swing",
     "web"
-  ).map(m => "org.openjfx" % s"javafx-$m" % "20")
+  ).map(m => "org.openjfx" % s"javafx-$m" % "20"),
+  dockerLabels := Map("version" -> version.value),
+  dockerExposedVolumes := Seq("/opt/docker/"),
+  dockerUpdateLatest := true,
+  dockerChmodType := DockerChmodType.UserGroupWriteExecute,
+  Docker / daemonUserUid := None,
+  Docker / daemonUser := "root"
 )
 
 lazy val gui = project
   .in(file("./modules/gui"))
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "gui",
-    commonSettings
+    commonSettings,
+    dockerBaseImage := "nicolabeghin/liberica-openjdk-with-javafx-debian:17",
+    dockerCommands ++= Seq(
+      Cmd("RUN", "apt-get update"),
+      Cmd(
+        "RUN",
+        "apt-get install -y libxrender1 libxtst6 libxi6 libgl1-mesa-glx libgtk-3-0 openjfx libgl1-mesa-dri libgl1-mesa-dev libcanberra-gtk-module libcanberra-gtk3-module default-jdk"
+      )
+    )
   )
   .dependsOn(core, model)
 
 lazy val tui = project
   .in(file("./modules/tui"))
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "tui",
-    commonSettings
+    commonSettings,
+    dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1"
   )
   .dependsOn(core, model)
 
@@ -73,17 +90,23 @@ lazy val model = project
 
 lazy val persistence = project
   .in(file("./modules/persistence"))
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "persistence",
-    commonSettings
+    commonSettings,
+    dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
+    dockerExposedPorts := Seq(9021)
   )
   .dependsOn(model % "compile->compile")
 
 lazy val core = project
   .in(file("./modules/core"))
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "core",
-    commonSettings
+    commonSettings,
+    dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
+    dockerExposedPorts := Seq(9031)
   )
   .dependsOn(
     model % "compile->compile",
@@ -92,6 +115,7 @@ lazy val core = project
 
 lazy val root = project
   .in(file("."))
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "HearthstoneMini",
     version := "1.0",

@@ -1,0 +1,32 @@
+services:
+  gui:
+    image: gui
+    depends_on:
+      - core
+      - persistence
+    environment:
+      - DISPLAY=host.docker.internal:0
+    network_mode: "host"
+
+  tui:
+    network_mode: "host"
+    image: tui
+    stdin_open: true
+    tty: true
+    depends_on:
+      - core
+      - persistence
+
+  persistence:
+    image: persistence
+    ports: 
+      - "9021:9021"
+    network_mode: "host"
+
+  core:
+    image: core
+    ports: 
+      - "9031:9031"
+    depends_on:
+      - persistence
+    network_mode: "host"

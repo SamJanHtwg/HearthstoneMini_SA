@@ -37,7 +37,7 @@ import scala.concurrent.ExecutionContext
 import core.controller.service.HttpService
 
 class ControllerRestClient(httpService: HttpService = HttpService()) extends ControllerInterface {
-  private val controllerServiceUrl = "http://localhost:4001/controller"
+  private val controllerServiceUrl = "http://localhost:9031/controller"
 
   var field: FieldInterface = _
   fieldRequest(controllerServiceUrl, "field", HttpMethods.GET)
