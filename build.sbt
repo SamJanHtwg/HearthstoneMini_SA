@@ -37,7 +37,11 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-testkit" % "2.9.2" % Test,
     "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test,
-    "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime
+    "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime,
+    "com.typesafe.slick" %% "slick" % "3.5.1",
+    "org.postgresql" % "postgresql" % "42.6.0",
+    "com.typesafe.slick" %% "slick-hikaricp" % "3.5.1",
+    "org.slf4j" % "slf4j-nop" % "1.6.4"
   ) ++ Seq(
     "base",
     "controls",

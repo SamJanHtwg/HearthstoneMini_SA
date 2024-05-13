@@ -30,3 +30,21 @@ services:
     depends_on:
       - persistence
     network_mode: "host"
+
+  postgres_db:
+    image: postgres
+    restart: always
+    container_name: postgres_database
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: tbl
+      POSTGRES_HOST: database
+      POSTGRES_PORT: 5432
+    ports:
+      - "9051:5432"
+    networks:
+      - my_network
+
+networks:
+  my_network:
