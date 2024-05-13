@@ -22,6 +22,8 @@ import akka.compat.Future
 import scala.concurrent.Future
 import akka.http.scaladsl.model.StatusCodes
 import akka.Done
+import PersistenceRestApi.given_DaoInterface as Dao
+import model.fieldComponent.fieldImpl.Field
 
 class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
   implicit val system: ActorSystem[?] =
@@ -42,6 +44,7 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
             fileIO.save(json)
+            Dao.save(Field.fromJson(json))
             complete("Saved")
           }
         }
