@@ -75,7 +75,7 @@ class ControllerService(using controller: ControllerInterface) {
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
-                  failWith(exception)
+                  complete(status = 500, Json.prettyPrint(Json.obj("error" -> Json.parse(exception.getMessage))))
               }
             case "drawCard" =>
               controller.drawCard()

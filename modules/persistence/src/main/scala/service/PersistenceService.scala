@@ -24,8 +24,12 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.Done
 import model.fieldComponent.fieldImpl.Field
 import persistence.database.DaoInterface
+import persistence.database.slick.SlickDatabase
 
-class PersistenceService(fileIO: FileIOInterface = JsonIO(), dao: DaoInterface) {
+class PersistenceService(
+    fileIO: FileIOInterface = JsonIO(),
+    dao: DaoInterface = SlickDatabase
+) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
   implicit val executionContext: ExecutionContext = system.executionContext
@@ -51,7 +55,12 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO(), dao: DaoInterface) 
       },
       get {
         path("persistence" / "load") {
-          complete(Json.prettyPrint(dao.load()))
+          dao.load() match {
+            case Success(field) =>
+              complete(status = 200, Json.prettyPrint(field))
+            case Failure(error) =>
+              complete(status = 500, error.getMessage)
+          }
           // fileIO.load() match {
           //   case Success(field) =>
           //     complete(Json.prettyPrint(field.toJson))
@@ -66,9 +75,7 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO(), dao: DaoInterface) 
             case Success(_) =>
               complete("Server stopped")
             case Failure(ex) =>
-              complete(
-                StatusCodes.InternalServerError,
-                ex.getMessage)
+              complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
       }

@@ -22,14 +22,9 @@ import model.fieldComponent.FieldInterface
 import scalafx.scene.input.KeyCode.T
 import _root_.persistence.database.slick.tables.TestTable
 
-class  SlickDatabase extends DaoInterface {
-  
-  def startUp() = init(
-    DBIO.seq(
-      testTable.schema.dropIfExists,
-      testTable.schema.createIfNotExists
-    )
-  )
+object SlickDatabase extends DaoInterface {
+  private val connectionRetryAttempts = 5
+  private val maxWaitSeconds = 5.seconds
 
   val db = Database.forURL(
     url = "jdbc:postgresql://localhost:9051/postgres",
@@ -38,8 +33,12 @@ class  SlickDatabase extends DaoInterface {
     driver = "org.postgresql.Driver"
   )
 
-  private val connectionRetryAttempts = 5
-  private val maxWaitSeconds = 5.seconds
+  init(
+    DBIO.seq(
+      // testTable.schema.dropIfExists,
+      testTable.schema.createIfNotExists
+    )
+  )
 
   private def init(setup: DBIOAction[Unit, NoStream, Effect.Schema]): Unit =
     println("Connecting to DB...")
@@ -52,11 +51,12 @@ class  SlickDatabase extends DaoInterface {
           }
           case Failure(e) => {
             if (e.getMessage.contains("Multiple primary key defined")) {
-              // ugly workaround: https://github.com/slick/slick/issues/1999
               println("Assuming DB connection established")
               break
             } else {
-              println(s"DB connection failed - retrying... - $i/$connectionRetryAttempts")
+              println(
+                s"DB connection failed - retrying... - $i/$connectionRetryAttempts"
+              )
               println(e.getMessage)
               if (i != connectionRetryAttempts) {
                 Thread.sleep(maxWaitSeconds.toMillis)
@@ -75,13 +75,10 @@ class  SlickDatabase extends DaoInterface {
     println(res)
   }
 
-  override def load(): JsValue = {
+  override def load(): Try[JsValue] = {
     val query = testTable.filter(_.key === "1").result.headOption
     val res = Await.result(db.run(query), maxWaitSeconds)
-    res match {
-      case Some(value) => value._2
-      case None        => throw new Exception("No data found")
-    }
+    res.map(_._2).toRight(new Exception("No data found")).toTry
   }
 
   override def update(): Unit = ???

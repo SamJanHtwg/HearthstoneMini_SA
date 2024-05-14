@@ -12,10 +12,10 @@ object PersistenceRestApi {
 
 class Starter() {
   val thread: Thread = new Thread {
-    val dao = new SlickDatabase()
-    dao.startUp()
+    
+    
     override def run(): Unit = {
-      val persistenceService = new PersistenceService(dao = dao)
+      val persistenceService = new PersistenceService()
       persistenceService.start()
     }
   }
