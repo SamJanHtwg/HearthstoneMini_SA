@@ -22,6 +22,8 @@ services:
     ports: 
       - "9021:9021"
     network_mode: "host"
+    depends_on:
+      - postgres_db
 
   core:
     image: core:1.1.0

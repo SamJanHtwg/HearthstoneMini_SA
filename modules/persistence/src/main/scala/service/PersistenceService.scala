@@ -22,10 +22,10 @@ import akka.compat.Future
 import scala.concurrent.Future
 import akka.http.scaladsl.model.StatusCodes
 import akka.Done
-import PersistenceRestApi.given_DaoInterface as Dao
 import model.fieldComponent.fieldImpl.Field
+import persistence.database.DaoInterface
 
-class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
+class PersistenceService(fileIO: FileIOInterface = JsonIO(), dao: DaoInterface) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
   implicit val executionContext: ExecutionContext = system.executionContext
@@ -44,19 +44,20 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
             fileIO.save(json)
-            Dao.save(Field.fromJson(json))
+            dao.save(Field.fromJson(json))
             complete("Saved")
           }
         }
       },
       get {
         path("persistence" / "load") {
-          fileIO.load() match {
-            case Success(field) =>
-              complete(Json.prettyPrint(field.toJson))
-            case Failure(exception) =>
-              complete(status = 500, exception.getMessage)
-          }
+          complete(Json.prettyPrint(dao.load()))
+          // fileIO.load() match {
+          //   case Success(field) =>
+          //     complete(Json.prettyPrint(field.toJson))
+          //   case Failure(exception) =>
+          //     complete(status = 500, exception.getMessage)
+          // }
         }
       },
       post {
