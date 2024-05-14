@@ -14,8 +14,7 @@ import scala.concurrent.duration.DurationInt
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-import scala.util.control.Breaks.break
-import scala.util.control.Breaks.breakable
+import scala.util.control.Breaks._
 
 import database.DaoInterface
 import scala.annotation.meta.field
@@ -40,29 +39,34 @@ class  SlickDatabase extends DaoInterface {
   )
 
   private val connectionRetryAttempts = 5
-  private val maxWaitSeconds = 1.seconds
+  private val maxWaitSeconds = 5.seconds
 
   private def init(setup: DBIOAction[Unit, NoStream, Effect.Schema]): Unit =
     println("Connecting to DB...")
     breakable {
-      for (i <- 1 to connectionRetryAttempts)
+      for (i <- 1 to connectionRetryAttempts) {
         Try(Await.result(db.run(setup), maxWaitSeconds)) match {
           case Success(_) => {
-            println("DB connection established");
+            println("DB connection established")
             break
           }
           case Failure(e) => {
-            if e.getMessage.contains("Multiple primary key defined")
-            then // ugly workaround: https://github.com/slick/slick/issues/1999
+            if (e.getMessage.contains("Multiple primary key defined")) {
+              // ugly workaround: https://github.com/slick/slick/issues/1999
               println("Assuming DB connection established")
-            break
-            println(
-              s"DB connection failed - retrying... - $i/$connectionRetryAttempts"
-            )
-            println(e.getMessage)
-            Thread.sleep(maxWaitSeconds.toMillis)
+              break
+            } else {
+              println(s"DB connection failed - retrying... - $i/$connectionRetryAttempts")
+              println(e.getMessage)
+              if (i != connectionRetryAttempts) {
+                Thread.sleep(maxWaitSeconds.toMillis)
+              } else {
+                println("Max retry attempts reached. Connection failed.")
+              }
+            }
           }
         }
+      }
     }
 
   override def save(field: FieldInterface): Unit = {
