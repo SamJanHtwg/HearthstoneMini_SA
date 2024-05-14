@@ -13,10 +13,10 @@ class TestTable(tag: Tag) extends Table[(String, JsValue)](tag, "test") {
   def * = (key, value)
 }
 
-class PlayerTable(tag: Tag) extends Table[(String, String, String, String, JsValue, Int, String, Int, Int, Int)](tag, "player") {
+class PlayerTable(tag: Tag) extends Table[(String, String, JsValue, String, JsValue, Int, String, Int, Int, Int)](tag, "player") {
   def id = column[String]("id", O.PrimaryKey)
   def deck = column[String]("deck")
-  def hand = column[String]("hand")
+  def hand = column[JsValue]("hand")
   def name = column[String]("name")
   def field = column[JsValue]("field")
   def hpValue = column[Int]("hpValue")

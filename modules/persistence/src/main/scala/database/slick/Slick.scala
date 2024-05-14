@@ -38,7 +38,7 @@ object SlickDatabase extends DaoInterface {
 
   init(
     DBIO.seq(
-      // testTable.schema.dropIfExists,
+      testTable.schema.dropIfExists,
       testTable.schema.createIfNotExists,
       playerTable.schema.dropIfExists,
       playerTable.schema.createIfNotExists
@@ -83,19 +83,20 @@ object SlickDatabase extends DaoInterface {
     val player1 =
       (
         player1Id,
-        Json.stringify(Json.toJson(field.players(0).deck.map(_.toJson))),
-        Json.stringify(Json.toJson(field.players(0).hand.map(_.toJson))),
+        field.players(0).deck.toString(),
+        Json.arr(field.players(0).hand.map(_.toJson)),
         field.players(0).name,
         field.players(0).toJson,
         field.players(0).hpValue,
-        Json.stringify(Json.toJson(field.players(0).friedhof.map(_.toJson))),
+        field.players(0).friedhof.map(_.toJson).toString(),
         field.players(0).manaValue,
         field.players(0).maxHpValue,
         field.players(0).maxManaValue
       )
 
     val insertPlayersAction = playerTable += player1
-    Await.result(db.run(insertPlayersAction), maxWaitSeconds)
+    val res = Await.result(db.run(insertPlayersAction), maxWaitSeconds)
+    println(res)
 
     // var res = Await.result(db.run(insertAction), maxWaitSeconds)
     // println(res)
