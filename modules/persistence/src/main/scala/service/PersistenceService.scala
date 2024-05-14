@@ -23,8 +23,8 @@ import scala.concurrent.Future
 import akka.http.scaladsl.model.StatusCodes
 import akka.Done
 import model.fieldComponent.fieldImpl.Field
-import persistence.database.DaoInterface
-import persistence.database.slick.SlickDatabase
+import _root_.persistence.database.DaoInterface
+import _root_.persistence.database.slick.SlickDatabase
 
 class PersistenceService(
     fileIO: FileIOInterface = JsonIO(),

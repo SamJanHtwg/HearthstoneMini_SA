@@ -2,243 +2,12 @@
   "field" : {
     "activePlayerId" : 1,
     "players" : [ {
-      "name" : "s",
+      "name" : "a",
       "id" : 1,
       "hand" : [ {
         "card" : {
-          "id" : "BARL_008H_01",
-          "name" : "Mutanus",
-          "manaCost" : 5,
-          "attValue" : 9,
-          "defenseValue" : 80,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "LETL_824H",
-          "name" : "Raven der ",
-          "manaCost" : 3,
-          "attValue" : 5,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_06_TrickTotem",
-          "name" : "Tricktotem",
-          "manaCost" : 2,
-          "attValue" : 0,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "VAN_EX1_005",
-          "name" : "Großwildjä",
-          "manaCost" : 3,
-          "attValue" : 4,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "FP1_019t",
-          "name" : "Treant",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      } ],
-      "deck" : [ {
-        "card" : {
-          "id" : "GIL_190",
-          "name" : "Nachtschup",
-          "manaCost" : 7,
-          "attValue" : 4,
-          "defenseValue" : 9,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DAL_077",
-          "name" : "Giftflosse",
-          "manaCost" : 1,
-          "attValue" : 1,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "WC_024",
-          "name" : "Waffenknec",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "LETL_026P4_05m",
-          "name" : "Riesenflos",
-          "manaCost" : 5,
-          "attValue" : 16,
-          "defenseValue" : 16,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DRG_254",
-          "name" : "Urzeitlich",
-          "manaCost" : 3,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DRG_050",
-          "name" : "Ergebener ",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_05_BlightCauldron",
-          "name" : "Seuchenkes",
-          "manaCost" : 2,
-          "attValue" : 0,
-          "defenseValue" : 50,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "LETL_823H3",
-          "name" : "Wichtelver",
-          "manaCost" : 3,
-          "attValue" : 3,
-          "defenseValue" : 25,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DAL_085",
-          "name" : "Kreuzritte",
-          "manaCost" : 5,
-          "attValue" : 5,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "SW_112",
-          "name" : "Prestors P",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "OG_024",
-          "name" : "Gesichtslo",
-          "manaCost" : 4,
-          "attValue" : 7,
-          "defenseValue" : 7,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BGS_018",
-          "name" : "Goldrinn, ",
-          "manaCost" : 8,
-          "attValue" : 4,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BT_722",
-          "name" : "Schutzaufr",
-          "manaCost" : 1,
-          "attValue" : 2,
-          "defenseValue" : 1,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TBST_001",
-          "name" : "Noob-Tank",
-          "manaCost" : 1,
-          "attValue" : 2,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "OG_120",
-          "name" : "Anomalus",
-          "manaCost" : 8,
-          "attValue" : 8,
-          "defenseValue" : 6,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_09_DurotanMinion",
-          "name" : "Durotan",
-          "manaCost" : 3,
-          "attValue" : 3,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TU5_CS2_127",
-          "name" : "Silberrück",
-          "manaCost" : 3,
-          "attValue" : 1,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "SCH_199t7",
-          "name" : "Austauschs",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "SCH_343",
-          "name" : "Leerensaug",
+          "id" : "SCH_244",
+          "name" : "Klassenhau",
           "manaCost" : 5,
           "attValue" : 4,
           "defenseValue" : 5,
@@ -247,48 +16,18 @@
         }
       }, {
         "card" : {
-          "id" : "DAL_748",
-          "name" : "Manaspeich",
-          "manaCost" : 2,
+          "id" : "TRLA_147",
+          "name" : "Bund mit B",
+          "manaCost" : 0,
           "attValue" : 0,
-          "defenseValue" : 6,
+          "defenseValue" : 8,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "ULD_184",
-          "name" : "Koboldsand",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 1,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "VAN_CS2_147",
-          "name" : "Gnomische ",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BAR_888",
-          "name" : "Reifzunge",
-          "manaCost" : 3,
-          "attValue" : 3,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "GVG_102",
-          "name" : "Tüftelstad",
+          "id" : "AT_083",
+          "name" : "Drachenfal",
           "manaCost" : 3,
           "attValue" : 3,
           "defenseValue" : 3,
@@ -297,61 +36,322 @@
         }
       }, {
         "card" : {
-          "id" : "TB_MnkWf01",
-          "name" : "Nadia, Man",
-          "manaCost" : 2,
-          "attValue" : 7,
-          "defenseValue" : 7,
+          "id" : "BG20_103",
+          "name" : "Borstennac",
+          "manaCost" : 5,
+          "attValue" : 4,
+          "defenseValue" : 4,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "BAR_537",
-          "name" : "Klingenmäh",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TB_KTRAF_2",
-          "name" : "Lady Blaum",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 7,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_03_Rexxar",
-          "name" : "Rexxar",
-          "manaCost" : 6,
-          "attValue" : 6,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "OG_279",
-          "name" : "C’Thun",
+          "id" : "DMF_254",
+          "name" : "C’Thun der",
           "manaCost" : 10,
           "attValue" : 6,
           "defenseValue" : 6,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
+      } ],
+      "deck" : [ {
+        "card" : {
+          "id" : "Story_02_Warship",
+          "name" : "Kriegsschi",
+          "manaCost" : 4,
+          "attValue" : 2,
+          "defenseValue" : 6,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
       }, {
         "card" : {
-          "id" : "TOT_109",
-          "name" : "Stasisdrac",
+          "id" : "BGS_008",
+          "name" : "Schreckens",
           "manaCost" : 6,
+          "attValue" : 7,
+          "defenseValue" : 7,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ICCA01_009",
+          "name" : "Bedürftige",
+          "manaCost" : 3,
+          "attValue" : 3,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "BAR_060t",
+          "name" : "Schwein",
+          "manaCost" : 1,
+          "attValue" : 2,
+          "defenseValue" : 1,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ULD_721",
+          "name" : "Koloss des",
+          "manaCost" : 10,
           "attValue" : 10,
           "defenseValue" : 10,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "Story_02_Mogrin",
+          "name" : "Mogrin der",
+          "manaCost" : 0,
+          "attValue" : 0,
+          "defenseValue" : 12,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "SW_444",
+          "name" : "Zwielichtt",
+          "manaCost" : 2,
+          "attValue" : 2,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TB_BaconUps_155",
+          "name" : "Maexxna",
+          "manaCost" : 6,
+          "attValue" : 4,
+          "defenseValue" : 16,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TRL_311",
+          "name" : "Arkanosaur",
+          "manaCost" : 6,
+          "attValue" : 3,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "LOEA09_13",
+          "name" : "Hungriger ",
+          "manaCost" : 5,
+          "attValue" : 5,
+          "defenseValue" : 1,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "CFM_756",
+          "name" : "Hinterhofs",
+          "manaCost" : 5,
+          "attValue" : 2,
+          "defenseValue" : 7,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "GIL_667",
+          "name" : "Verfaulter",
+          "manaCost" : 5,
+          "attValue" : 4,
+          "defenseValue" : 5,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "LETL_825H3",
+          "name" : "Felian Ste",
+          "manaCost" : 3,
+          "attValue" : 5,
+          "defenseValue" : 5,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "CORE_EX1_010",
+          "name" : "Worgenspit",
+          "manaCost" : 1,
+          "attValue" : 2,
+          "defenseValue" : 1,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "BAR_750",
+          "name" : "Erdklagege",
+          "manaCost" : 4,
+          "attValue" : 2,
+          "defenseValue" : 6,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "VAN_NEW1_008",
+          "name" : "Urtum der ",
+          "manaCost" : 7,
+          "attValue" : 5,
+          "defenseValue" : 5,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "AT_032",
+          "name" : "Zwielichti",
+          "manaCost" : 3,
+          "attValue" : 4,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ULD_157",
+          "name" : "Tatendurst",
+          "manaCost" : 2,
+          "attValue" : 2,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "OG_292",
+          "name" : "Einsamer P",
+          "manaCost" : 3,
+          "attValue" : 4,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "BG21_040",
+          "name" : "Wiederverw",
+          "manaCost" : 3,
+          "attValue" : 5,
+          "defenseValue" : 4,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "BG21_011",
+          "name" : "Fischwerfe",
+          "manaCost" : 6,
+          "attValue" : 5,
+          "defenseValue" : 5,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "VAN_EX1_412",
+          "name" : "Tobender W",
+          "manaCost" : 3,
+          "attValue" : 3,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "UNG_937",
+          "name" : "Späher der",
+          "manaCost" : 3,
+          "attValue" : 3,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "CRED_77",
+          "name" : "Lorenzo Mi",
+          "manaCost" : 5,
+          "attValue" : 3,
+          "defenseValue" : 9,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TRL_527",
+          "name" : "Trickdieb ",
+          "manaCost" : 3,
+          "attValue" : 3,
+          "defenseValue" : 4,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "CRED_103",
+          "name" : "Brett Dixo",
+          "manaCost" : 7,
+          "attValue" : 3,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TB_BaconUps_075",
+          "name" : "Seelenjong",
+          "manaCost" : 3,
+          "attValue" : 6,
+          "defenseValue" : 10,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "SCH_707",
+          "name" : "Fischiger ",
+          "manaCost" : 4,
+          "attValue" : 4,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "DMF_118",
+          "name" : "Tickatus",
+          "manaCost" : 6,
+          "attValue" : 8,
+          "defenseValue" : 8,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "DMF_514t2",
+          "name" : "Kuschelbär",
+          "manaCost" : 3,
+          "attValue" : 3,
+          "defenseValue" : 3,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
@@ -363,13 +363,13 @@
       "maxManaValue" : 100,
       "field" : [ null, null, null, null, null ]
     }, {
-      "name" : "a",
+      "name" : "b",
       "id" : 2,
       "hand" : [ {
         "card" : {
-          "id" : "EX1_165b",
-          "name" : "Bärengesta",
-          "manaCost" : 5,
+          "id" : "DAL_771",
+          "name" : "Schatzhüte",
+          "manaCost" : 4,
           "attValue" : 5,
           "defenseValue" : 6,
           "effect" : "Effect",
@@ -377,80 +377,50 @@
         }
       }, {
         "card" : {
-          "id" : "CFM_853",
-          "name" : "Kiezschmug",
-          "manaCost" : 3,
-          "attValue" : 2,
+          "id" : "AT_012",
+          "name" : "Ausgeburt ",
+          "manaCost" : 4,
+          "attValue" : 5,
           "defenseValue" : 4,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "LETL_033P4_04m",
-          "name" : "Drachenmal",
-          "manaCost" : 3,
-          "attValue" : 14,
-          "defenseValue" : 14,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "LETL_657_01m",
-          "name" : "Rabe 1",
-          "manaCost" : 0,
-          "attValue" : 3,
-          "defenseValue" : 3,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BT_114",
-          "name" : "Zerbrochen",
+          "id" : "CFM_668",
+          "name" : "Doppelgang",
           "manaCost" : 5,
-          "attValue" : 5,
-          "defenseValue" : 6,
+          "attValue" : 2,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "LOEA16_23H",
+          "name" : "Lord Schlä",
+          "manaCost" : 10,
+          "attValue" : 10,
+          "defenseValue" : 10,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "AT_003",
+          "name" : "Gefallener",
+          "manaCost" : 2,
+          "attValue" : 3,
+          "defenseValue" : 2,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       } ],
       "deck" : [ {
         "card" : {
-          "id" : "TRLA_160",
-          "name" : "Nagazungen",
-          "manaCost" : 1,
-          "attValue" : 4,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DRG_088",
-          "name" : "Schreckens",
-          "manaCost" : 3,
-          "attValue" : 3,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BAR_551",
-          "name" : "Barak Kodo",
-          "manaCost" : 5,
-          "attValue" : 3,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "DRG_304",
-          "name" : "Chronobrec",
-          "manaCost" : 5,
+          "id" : "BOT_914",
+          "name" : "Wurbelfitz",
+          "manaCost" : 4,
           "attValue" : 4,
           "defenseValue" : 5,
           "effect" : "Effect",
@@ -458,168 +428,98 @@
         }
       }, {
         "card" : {
-          "id" : "YOP_005t",
-          "name" : "Rennwache",
+          "id" : "NAX9_03H",
+          "name" : "Than Korth",
           "manaCost" : 3,
           "attValue" : 2,
-          "defenseValue" : 4,
+          "defenseValue" : 7,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "TB_BaconUps_083",
-          "name" : "Annihilank",
-          "manaCost" : 8,
-          "attValue" : 6,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "GVG_004",
-          "name" : "Goblinspre",
+          "id" : "CFM_063",
+          "name" : "Durchgekna",
           "manaCost" : 4,
-          "attValue" : 5,
+          "attValue" : 4,
           "defenseValue" : 4,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "LETL_027H_03",
-          "name" : "Morgl das ",
-          "manaCost" : 6,
-          "attValue" : 9,
+          "id" : "LETL_039H_03",
+          "name" : "Tavish Stu",
+          "manaCost" : 4,
+          "attValue" : 7,
           "defenseValue" : 83,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "TRL_020t",
-          "name" : "Fledermaus",
-          "manaCost" : 1,
-          "attValue" : 1,
-          "defenseValue" : 1,
+          "id" : "ICC_829t4",
+          "name" : "Inquisitor",
+          "manaCost" : 2,
+          "attValue" : 2,
+          "defenseValue" : 2,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "Story_10_GreaterMyrmidon",
-          "name" : "Großer Myr",
+          "id" : "GIL_905",
+          "name" : "Aasdrache",
           "manaCost" : 5,
-          "attValue" : 6,
+          "attValue" : 3,
+          "defenseValue" : 7,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ICC_032",
+          "name" : "Giftwirker",
+          "manaCost" : 5,
+          "attValue" : 2,
           "defenseValue" : 5,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "AT_042a",
-          "name" : "Löwengesta",
+          "id" : "TRLA_155",
+          "name" : "Krag’was G",
+          "manaCost" : 0,
+          "attValue" : 0,
+          "defenseValue" : 10,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TB_BaconUps_006t",
+          "name" : "Beschädigt",
+          "manaCost" : 1,
+          "attValue" : 4,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "BOM_01_SecurityGolem_05t",
+          "name" : "Sicherheit",
           "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 1,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "TB_BaconUps_109",
-          "name" : "Kalecgos, ",
-          "manaCost" : 8,
-          "attValue" : 8,
-          "defenseValue" : 24,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BT_735",
-          "name" : "Al'ar",
-          "manaCost" : 5,
-          "attValue" : 7,
+          "attValue" : 3,
           "defenseValue" : 3,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "LOEA07_24",
-          "name" : "Stachelatt",
-          "manaCost" : 1,
-          "attValue" : 3,
-          "defenseValue" : 6,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "CRED_35",
-          "name" : "Max McCall",
-          "manaCost" : 4,
-          "attValue" : 9,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BT_486",
-          "name" : "Grubenkomm",
-          "manaCost" : 9,
-          "attValue" : 7,
-          "defenseValue" : 9,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_05_Greymane",
-          "name" : "Genn Graum",
-          "manaCost" : 1,
-          "attValue" : 6,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BT_249",
-          "name" : "Schrottgol",
-          "manaCost" : 5,
-          "attValue" : 4,
-          "defenseValue" : 5,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "LOOT_534",
-          "name" : "Goldener G",
-          "manaCost" : 3,
-          "attValue" : 2,
-          "defenseValue" : 2,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "Story_03_Beram",
-          "name" : "Beram Himm",
-          "manaCost" : 4,
-          "attValue" : 2,
-          "defenseValue" : 4,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "YOD_030",
-          "name" : "Lizenziert",
+          "id" : "AT_089",
+          "name" : "Knochenwac",
           "manaCost" : 2,
           "attValue" : 3,
           "defenseValue" : 2,
@@ -628,11 +528,111 @@
         }
       }, {
         "card" : {
-          "id" : "CFM_809",
-          "name" : "Tanaris-Bo",
+          "id" : "DAL_040",
+          "name" : "Stachler d",
           "manaCost" : 4,
           "attValue" : 4,
+          "defenseValue" : 7,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "ICC_858",
+          "name" : "Bolvar Feu",
+          "manaCost" : 5,
+          "attValue" : 1,
+          "defenseValue" : 7,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "GVG_062",
+          "name" : "Kobaltwäch",
+          "manaCost" : 5,
+          "attValue" : 6,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "GIL_694",
+          "name" : "Prinz Liam",
+          "manaCost" : 5,
+          "attValue" : 5,
+          "defenseValue" : 5,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "KARA_06_01heroic",
+          "name" : "Romulo",
+          "manaCost" : 3,
+          "attValue" : 4,
+          "defenseValue" : 2,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TB_BaconUps_206",
+          "name" : "Orkaneleme",
+          "manaCost" : 8,
+          "attValue" : 12,
+          "defenseValue" : 12,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "SCH_537",
+          "name" : "Tricktotem",
+          "manaCost" : 2,
+          "attValue" : 0,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "Story_04_TuralyonMinion",
+          "name" : "Turalyon",
+          "manaCost" : 6,
+          "attValue" : 3,
+          "defenseValue" : 12,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "LOOT_528",
+          "name" : "Zwielichta",
+          "manaCost" : 3,
+          "attValue" : 2,
           "defenseValue" : 4,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "TB_Coopv3_009t",
+          "name" : "Explosive ",
+          "manaCost" : 2,
+          "attValue" : 0,
+          "defenseValue" : 3,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "OG_328",
+          "name" : "Meister de",
+          "manaCost" : 4,
+          "attValue" : 4,
+          "defenseValue" : 5,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
@@ -648,28 +648,18 @@
         }
       }, {
         "card" : {
-          "id" : "VAN_EX1_561",
-          "name" : "Alexstrasz",
-          "manaCost" : 9,
-          "attValue" : 8,
-          "defenseValue" : 8,
-          "effect" : "Effect",
-          "rarity" : "Rarity"
-        }
-      }, {
-        "card" : {
-          "id" : "BRM_006",
-          "name" : "Boss der W",
+          "id" : "TB_BaconUps_156",
+          "name" : "Verscherbe",
           "manaCost" : 3,
-          "attValue" : 2,
+          "attValue" : 4,
           "defenseValue" : 4,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "VAN_EX1_587",
-          "name" : "Windsprech",
+          "id" : "PVPDR_YOP_PaladinT1",
+          "name" : "Rennfavori",
           "manaCost" : 4,
           "attValue" : 3,
           "defenseValue" : 3,
@@ -678,41 +668,51 @@
         }
       }, {
         "card" : {
-          "id" : "TOT_110",
-          "name" : "Zeitgebund",
-          "manaCost" : 15,
-          "attValue" : 8,
-          "defenseValue" : 8,
+          "id" : "CFM_852",
+          "name" : "Lotusagent",
+          "manaCost" : 5,
+          "attValue" : 5,
+          "defenseValue" : 3,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "LOEA16_25H",
-          "name" : "Lady Naz’j",
-          "manaCost" : 10,
-          "attValue" : 10,
-          "defenseValue" : 10,
+          "id" : "EX1_188",
+          "name" : "Brachlands",
+          "manaCost" : 7,
+          "attValue" : 5,
+          "defenseValue" : 5,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "SCH_199t15",
-          "name" : "Austauschs",
-          "manaCost" : 2,
-          "attValue" : 2,
-          "defenseValue" : 2,
+          "id" : "NAX8_05t",
+          "name" : "Spektraler",
+          "manaCost" : 5,
+          "attValue" : 0,
+          "defenseValue" : 6,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
       }, {
         "card" : {
-          "id" : "BT_850",
-          "name" : "Magtherido",
-          "manaCost" : 4,
-          "attValue" : 12,
-          "defenseValue" : 12,
+          "id" : "NEW1_010",
+          "name" : "Al’Akir de",
+          "manaCost" : 8,
+          "attValue" : 3,
+          "defenseValue" : 6,
+          "effect" : "Effect",
+          "rarity" : "Rarity"
+        }
+      }, {
+        "card" : {
+          "id" : "LETL_019H_02",
+          "name" : "Valeera Sa",
+          "manaCost" : 5,
+          "attValue" : 6,
+          "defenseValue" : 50,
           "effect" : "Effect",
           "rarity" : "Rarity"
         }
