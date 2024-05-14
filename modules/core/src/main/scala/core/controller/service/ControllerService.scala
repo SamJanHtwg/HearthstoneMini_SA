@@ -46,7 +46,33 @@ class ControllerService(using controller: ControllerInterface) {
   implicit val system: ActorSystem[String] =
     ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
+  object UpdateObserver extends Observer {
 
+    override def update(e: Event, msg: Option[String]): Unit = {
+      val updateRequest = Http().singleRequest(
+        HttpRequest(
+          uri = s"$persistenceServiceEndpoint/update",
+          method = HttpMethods.POST,
+          entity = HttpEntity(
+            ContentTypes.`application/json`,
+            controller.field.toJson.toString
+          )
+        )
+      )
+
+      val responseJsonFuture = updateRequest.flatMap { response =>
+        Unmarshal(response.entity).to[String].map { jsonString =>
+          Json.parse(jsonString)
+        }
+      }
+
+      Try {
+        Await.result(responseJsonFuture, 300.seconds)
+      }.map(_ => ())
+    }
+
+  }
+  controller.add(UpdateObserver)
   var queues: List[SourceQueueWithComplete[Message]] = List()
   val route: Route =
     concat(
@@ -75,7 +101,12 @@ class ControllerService(using controller: ControllerInterface) {
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
-                  complete(status = 500, Json.prettyPrint(Json.obj("error" -> Json.parse(exception.getMessage))))
+                  complete(
+                    status = 500,
+                    Json.prettyPrint(
+                      Json.obj("error" -> Json.parse(exception.getMessage))
+                    )
+                  )
               }
             case "drawCard" =>
               controller.drawCard()

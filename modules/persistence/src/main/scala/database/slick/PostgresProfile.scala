@@ -4,6 +4,7 @@ package database.slick
 import com.github.tminglei.slickpg.*
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
+import scala.util.Try
 
 trait MyPostgresProfile
     extends ExPostgresProfile
@@ -44,6 +45,13 @@ trait MyPostgresProfile
         (s) =>
           utils.SimpleArrayUtils.fromString[JsValue](Json.parse(_))(s).orNull,
         (v) => utils.SimpleArrayUtils.mkString[JsValue](_.toString())(v)
+      ).to(_.toList)
+    implicit val playJsonArrayOptionTypeMapper: DriverJdbcType[List[Option[JsValue]]] =
+      new AdvancedArrayJdbcType[Option[JsValue]](
+        pgjson,
+        (s) =>
+          utils.SimpleArrayUtils.fromString[Option[JsValue]](value => Try(Json.parse(value)).toOption)(s).orNull,
+        (v) => utils.SimpleArrayUtils.mkString[Option[JsValue]](_.getOrElse(null).toString())(v)
       ).to(_.toList)
   }
 }

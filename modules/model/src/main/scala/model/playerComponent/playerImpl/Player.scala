@@ -10,10 +10,6 @@ import play.api.libs.json.*
 import scala.collection.immutable.Vector
 import scala.util.Try
 
-/** TODO:
-  *   - karten zum friedhof hinzufügen sollte kein optional bekommen
-  */
-
 object Player {
   def fromJson(json: JsValue): Player =
     Player(

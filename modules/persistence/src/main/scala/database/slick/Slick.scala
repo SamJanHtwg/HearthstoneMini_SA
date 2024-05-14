@@ -21,15 +21,24 @@ import scala.annotation.meta.field
 import model.fieldComponent.FieldInterface
 import model.playerComponent.PlayerInterface
 import scalafx.scene.input.KeyCode.T
-import _root_.persistence.database.slick.tables.TestTable
+import _root_.persistence.database.slick.tables.GameTable
 import _root_.persistence.database.slick.tables.PlayerTable
 import play.api.libs.json.Json
+import model.playerComponent.playerImpl.Player
+import scalafx.scene.input.KeyCode.Play
+import model.cardComponent.cardImpl.Card
+import scalafx.scene.input.KeyCode.J
+import model.fieldComponent.fieldImpl.Field
+import model.GameState.GameState
+import model.GameState
 
 object SlickDatabase extends DaoInterface {
   private val connectionRetryAttempts = 5
   private val maxWaitSeconds = 5.seconds
-
-  val db = Database.forURL(
+  private val player1Id = "100"
+  private val player2Id = "200"
+  private val gameId = "1"
+  private val db = Database.forURL(
     url = "jdbc:postgresql://localhost:9051/postgres",
     user = "postgres",
     password = "postgres",
@@ -38,10 +47,10 @@ object SlickDatabase extends DaoInterface {
 
   init(
     DBIO.seq(
-      testTable.schema.dropIfExists,
-      testTable.schema.createIfNotExists,
+      gameTable.schema.dropIfExists,
       playerTable.schema.dropIfExists,
-      playerTable.schema.createIfNotExists
+      playerTable.schema.createIfNotExists,
+      gameTable.schema.createIfNotExists
     )
   )
 
@@ -75,44 +84,130 @@ object SlickDatabase extends DaoInterface {
     }
 
   override def save(field: FieldInterface): Unit = {
-    // val insertAction = testTable += ("2", field.toJson)
+    val insertGameAction =
+      gameTable += (gameId, player1Id, player2Id, field.turns, field.gameState.toString, field.activePlayerId)
 
-    val player1Id = "100"
-    val player2Id = "200"
-
-    val player1 =
+    val players = field.players.map((id, player) =>
       (
-        player1Id,
-        field.players(0).deck.toString(),
-        Json.arr(field.players(0).hand.map(_.toJson)),
-        field.players(0).name,
-        field.players(0).toJson,
-        field.players(0).hpValue,
-        field.players(0).friedhof.map(_.toJson).toString(),
-        field.players(0).manaValue,
-        field.players(0).maxHpValue,
-        field.players(0).maxManaValue
+        s"${player.id}00",
+        player.id,
+        player.deck.map(_.toJson),
+        player.hand.map(_.toJson),
+        player.name,
+        player.field.map(slot => slot.map(_.toJson)).toList,
+        player.hpValue,
+        player.friedhof.map(_.toJson).toList,
+        player.manaValue,
+        player.maxHpValue,
+        player.maxManaValue
       )
+    )
 
-    val insertPlayersAction = playerTable += player1
-    val res = Await.result(db.run(insertPlayersAction), maxWaitSeconds)
-    println(res)
+    val insertPlayersAction = playerTable ++= players
 
-    // var res = Await.result(db.run(insertAction), maxWaitSeconds)
-    // println(res)
+    val actions = DBIO.seq(insertGameAction, insertPlayersAction)
 
-    // res = Await.result(db.run(player1), maxWaitSeconds)
+    val res1 = Await.result(db.run(insertPlayersAction), maxWaitSeconds)
+    val res2 = Await.result(db.run(insertGameAction), maxWaitSeconds)
   }
 
   override def load(): Try[JsValue] = {
-    val query = testTable.filter(_.key === "1").result.headOption
-    val res = Await.result(db.run(query), maxWaitSeconds)
-    res.map(_._2).toRight(new Exception("No data found")).toTry
+    val gameQuery = gameTable.filter(_.key === gameId).result.headOption
+    val player1Query = playerTable.filter(_.key === player1Id).result.headOption
+    val player2Query = playerTable.filter(_.key === player2Id).result.headOption
+    val player1 = Await.result(db.run(player1Query), maxWaitSeconds)
+    val player2 = Await.result(db.run(player2Query), maxWaitSeconds)
+    val game = Await.result(db.run(gameQuery), maxWaitSeconds)
+
+    Try {
+      Field(
+        Map(
+          player1.get._2 -> Player(
+            id = player1.get._2,
+            deck = player1.get._3.map(Card.fromJson),
+            hand = player1.get._4.map(Card.fromJson),
+            name = player1.get._5,
+            field =
+              player1.get._6.map(slot => slot.map(Card.fromJson)).toVector,
+            hpValue = player1.get._7,
+            friedhof = player1.get._8.map(Card.fromJson).toArray,
+            manaValue = player1.get._9,
+            maxHpValue = player1.get._10,
+            maxManaValue = player1.get._11
+          ),
+          player2.get._2 -> Player(
+            id = player2.get._2,
+            deck = player2.get._3.map(Card.fromJson),
+            hand = player2.get._4.map(Card.fromJson),
+            name = player2.get._5,
+            field =
+              player2.get._6.map(slot => slot.map(Card.fromJson)).toVector,
+            hpValue = player2.get._7,
+            friedhof = player2.get._8.map(Card.fromJson).toArray,
+            manaValue = player2.get._9,
+            maxHpValue = player2.get._10,
+            maxManaValue = player2.get._11
+          )
+        ),
+        activePlayerId = game.get._6,
+        turns = game.get._4,
+        gameState = GameState.withName(game.get._5)
+      ).toJson
+    }
+
   }
 
-  override def update(): Unit = ???
+  override def update(game: FieldInterface): Unit = {
+    val updateGameAction = gameTable
+      .filter(_.key === gameId)
+      .map(g => (g.turns, g.gameState, g.activePlayerId))
+      .update(
+        (game.turns, game.gameState.toString, game.activePlayerId)
+      )
 
-  private def testTable = new TableQuery[TestTable](new TestTable(_))
+    val updatePlayer1Action = playerTable
+      .filter(_.key === player1Id)
+      .update(
+        (
+          player1Id,
+          game.players(1).id,
+          game.players(1).deck.map(_.toJson),
+          game.players(1).hand.map(_.toJson),
+          game.players(1).name,
+          game.players(1).field.map(slot => slot.map(_.toJson)).toList,
+          game.players(1).hpValue,
+          game.players(1).friedhof.map(_.toJson).toList,
+          game.players(1).manaValue,
+          game.players(1).maxHpValue,
+          game.players(1).maxManaValue
+        )
+      )
+
+    val updatePlayer2Action = playerTable
+      .filter(_.key === player1Id)
+      .update(
+        (
+          player1Id,
+          game.players(2).id,
+          game.players(2).deck.map(_.toJson),
+          game.players(2).hand.map(_.toJson),
+          game.players(2).name,
+          game.players(2).field.map(slot => slot.map(_.toJson)).toList,
+          game.players(2).hpValue,
+          game.players(2).friedhof.map(_.toJson).toList,
+          game.players(2).manaValue,
+          game.players(2).maxHpValue,
+          game.players(2).maxManaValue
+        )
+      )
+
+    Await.result(db.run(updatePlayer1Action), maxWaitSeconds)
+    Await.result(db.run(updatePlayer2Action), maxWaitSeconds)
+    Await.result(db.run(updateGameAction), maxWaitSeconds)
+
+  }
+
+  private def gameTable = new TableQuery[GameTable](new GameTable(_))
   private def playerTable = new TableQuery[PlayerTable](new PlayerTable(_))
 
 }

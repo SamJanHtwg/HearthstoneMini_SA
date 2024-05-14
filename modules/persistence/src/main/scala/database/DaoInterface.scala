@@ -9,6 +9,6 @@ trait DaoInterface {
 // TODO: use Field over JsValue
   def save(field: FieldInterface): Unit
   def load(): Try[JsValue]
-  def update(): Unit
+  def update(field: FieldInterface): Unit
 //   def delete(): Unit
 }
