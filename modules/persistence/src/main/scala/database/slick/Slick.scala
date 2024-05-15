@@ -165,6 +165,21 @@ object SlickDatabase extends DaoInterface {
       .toTry
   }
 
+  override def delete(): Try[Unit] = {
+    val deleteGameAction = gameTable.filter(_.key === gameId).delete
+    val deletePlayer1Action = playerTable.filter(_.key === player1Id).delete
+    val deletePlayer2Action = playerTable.filter(_.key === player2Id).delete
+
+    val actions =
+      DBIO.seq(deleteGameAction, deletePlayer1Action, deletePlayer2Action)
+
+    Try[Unit] {
+      Await.result(db.run(deleteGameAction), maxWaitSeconds)
+      Await.result(db.run(deletePlayer1Action), maxWaitSeconds)
+      Await.result(db.run(deletePlayer2Action), maxWaitSeconds)
+    }
+  }
+
   override def update(game: FieldInterface): Unit = {
     val updateGameAction = gameTable
       .filter(_.key === gameId)

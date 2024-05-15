@@ -27,4 +27,5 @@ trait ControllerInterface extends Observable {
   def getWinner(): Option[String]
   def loadField: Unit
   def saveField: Unit
+  def deleteField: Unit
 }

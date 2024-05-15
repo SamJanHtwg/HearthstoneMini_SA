@@ -78,6 +78,15 @@ class PersistenceService(
           // }
         }
       },
+      get {
+        path("persistence" / "delete") {
+          dao.delete() match
+            case Success(_) =>
+              complete(status = 200, "deleted")
+            case Failure(error) =>
+              complete(status = 500, error.getMessage)
+        }
+      },
       post {
         path("persistence" / "stopServer") {
           onComplete(stop()) {

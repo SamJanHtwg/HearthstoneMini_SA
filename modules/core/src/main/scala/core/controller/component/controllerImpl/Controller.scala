@@ -29,9 +29,9 @@ import core.util.commands.commandImpl.{
 import core.util.CardProvider
 
 class Controller(
-  val fileIO: FileIOInterface,
-  private val undoManager: UndoManager,
-  private val cardProvider: CardProvider,
+    val fileIO: FileIOInterface,
+    private val undoManager: UndoManager,
+    private val cardProvider: CardProvider
 ) extends ControllerInterface {
 
   var field: FieldInterface = Field(
@@ -103,7 +103,7 @@ class Controller(
         errorMsg = None
         notifyObservers(Event.PLAY, msg = None)
   }
-
+  def deleteField: Unit = {}
   def exitGame(): Unit = {
     errorMsg = None
     setGameState(GameState.EXIT)

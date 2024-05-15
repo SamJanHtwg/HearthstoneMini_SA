@@ -24,13 +24,15 @@ class ModeSelectionScreenImpl(controller: ControllerInterface)
   )
   override val radiogroup: ToggleGroup = new ToggleGroup()
   radiobuttons.foreach(_.setToggleGroup(radiogroup))
-  override val nextbutton: Button = new Button("next")
+  override val nextbutton: Button = new Button("Next")
   nextbutton.onMouseClicked = _ =>
     controller.setStrategy(
       radiogroup.getSelectedToggle.getUserData.asInstanceOf[Strategy]
     )
-
-  private val loadButton: Button = new Button("load")
+  
+  private val deleteFieldButton: Button = new Button("Delete field")
+  deleteFieldButton.onMouseClicked = _ => controller.deleteField
+  private val loadButton: Button = new Button("Load")
   loadButton.onMouseClicked = _ => controller.loadField
 
   radiobuttons.head.setUserData(Strategy.normal)
@@ -46,5 +48,6 @@ class ModeSelectionScreenImpl(controller: ControllerInterface)
   add(radiobuttons(2), 0, 2)
   add(nextbutton, 1, 3)
   add(loadButton, 3, 3)
+  add(deleteFieldButton, 4, 3)
 
 }
