@@ -18,7 +18,7 @@ import Tui.{
   istDranMsg,
   gewonnenMsg,
   commands,
-  cleanScreen,
+  // cleanScreen,
   colorYellow,
   boldText,
   resetStyles
@@ -41,7 +41,7 @@ object Tui {
   val commands: String =
     "place(hand,solt) | d-draw() | a-attack(yours, theirs) |" +
       " e-direct attack | " + "s-Endturn |" + "\n" + "z-undo | y-redo | q-Quit"
-  val cleanScreen: String = "\u001b[2J"
+  // val cleanScreen: String = "\u001b[2J"
   val colorYellow: String = "\u001b[33m"
   val boldText: String = "\u001b[1m"
   val resetStyles: String = "\u001b[0m"
@@ -110,7 +110,7 @@ class Tui(controller: ControllerInterface) extends Observer {
   }
 
   private def printField(): Unit = {
-    print(cleanScreen)
+    // print(cleanScreen)
     print(resetStyles)
     println(buildFieldMatrix.toString)
     print(colorYellow + boldText)

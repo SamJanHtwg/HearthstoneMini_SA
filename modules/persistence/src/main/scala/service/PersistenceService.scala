@@ -47,7 +47,7 @@ class PersistenceService(
         path("persistence" / "save") {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
-            fileIO.save(json)
+            // fileIO.save(json)
             dao.save(Field.fromJson(json))
             complete("Saved")
           }

@@ -47,8 +47,8 @@ object SlickDatabase extends DaoInterface {
 
   init(
     DBIO.seq(
-      gameTable.schema.dropIfExists,
-      playerTable.schema.dropIfExists,
+      // gameTable.schema.dropIfExists,
+      // playerTable.schema.dropIfExists,
       playerTable.schema.createIfNotExists,
       gameTable.schema.createIfNotExists
     )
@@ -90,7 +90,7 @@ object SlickDatabase extends DaoInterface {
     val players = field.players.map((id, player) =>
       (
         s"${player.id}00",
-        player.id,
+        id,
         player.deck.map(_.toJson),
         player.hand.map(_.toJson),
         player.name,
@@ -120,22 +120,20 @@ object SlickDatabase extends DaoInterface {
     val game = Await.result(db.run(gameQuery), maxWaitSeconds)
 
     Try {
-      Field(
-        Map(
-          player1.get._2 -> Player(
-            id = player1.get._2,
-            deck = player1.get._3.map(Card.fromJson),
-            hand = player1.get._4.map(Card.fromJson),
-            name = player1.get._5,
-            field =
-              player1.get._6.map(slot => slot.map(Card.fromJson)).toVector,
-            hpValue = player1.get._7,
-            friedhof = player1.get._8.map(Card.fromJson).toArray,
-            manaValue = player1.get._9,
-            maxHpValue = player1.get._10,
-            maxManaValue = player1.get._11
-          ),
-          player2.get._2 -> Player(
+      val players = Map(
+        player1.get._2 -> Player(
+          id = player1.get._2,
+          deck = player1.get._3.map(Card.fromJson),
+          hand = player1.get._4.map(Card.fromJson),
+          name = player1.get._5,
+          field = player1.get._6.map(slot => slot.map(Card.fromJson)).toVector,
+          hpValue = player1.get._7,
+          friedhof = player1.get._8.map(Card.fromJson).toArray,
+          manaValue = player1.get._9,
+          maxHpValue = player1.get._10,
+          maxManaValue = player1.get._11
+        ),
+         player2.get._2 -> Player(
             id = player2.get._2,
             deck = player2.get._3.map(Card.fromJson),
             hand = player2.get._4.map(Card.fromJson),
@@ -148,7 +146,10 @@ object SlickDatabase extends DaoInterface {
             maxHpValue = player2.get._10,
             maxManaValue = player2.get._11
           )
-        ),
+      )
+
+      Field(
+        players = players,
         activePlayerId = game.get._6,
         turns = game.get._4,
         gameState = GameState.withName(game.get._5)
@@ -184,10 +185,10 @@ object SlickDatabase extends DaoInterface {
       )
 
     val updatePlayer2Action = playerTable
-      .filter(_.key === player1Id)
+      .filter(_.key === player2Id)
       .update(
         (
-          player1Id,
+          player2Id,
           game.players(2).id,
           game.players(2).deck.map(_.toJson),
           game.players(2).hand.map(_.toJson),
@@ -201,9 +202,12 @@ object SlickDatabase extends DaoInterface {
         )
       )
 
-    Await.result(db.run(updatePlayer1Action), maxWaitSeconds)
-    Await.result(db.run(updatePlayer2Action), maxWaitSeconds)
-    Await.result(db.run(updateGameAction), maxWaitSeconds)
+    var result = Await.result(db.run(updatePlayer1Action), maxWaitSeconds)
+    print(result)
+    result = Await.result(db.run(updatePlayer2Action), maxWaitSeconds)
+    print(result)
+    result = Await.result(db.run(updateGameAction), maxWaitSeconds)
+    print(result)
 
   }
 
