@@ -112,50 +112,57 @@ object SlickDatabase extends DaoInterface {
   }
 
   override def load(): Try[JsValue] = {
-    val gameQuery = gameTable.filter(_.key === gameId).result.headOption
-    val player1Query = playerTable.filter(_.key === player1Id).result.headOption
-    val player2Query = playerTable.filter(_.key === player2Id).result.headOption
-    val player1 = Await.result(db.run(player1Query), maxWaitSeconds)
-    val player2 = Await.result(db.run(player2Query), maxWaitSeconds)
-    val game = Await.result(db.run(gameQuery), maxWaitSeconds)
+    val gameWithPlayersQuery = for {
+      ((game, player1), player2) <- gameTable
+        .join(playerTable)
+        .on(_.player1 === _.key)
+        .join(playerTable)
+        .on(_._1.player2 === _.key)
+      if game.key === gameId
+    } yield (game, player1, player2)
 
-    Try {
-      val players = Map(
-        player1.get._2 -> Player(
-          id = player1.get._2,
-          deck = player1.get._3.map(Card.fromJson),
-          hand = player1.get._4.map(Card.fromJson),
-          name = player1.get._5,
-          field = player1.get._6.map(slot => slot.map(Card.fromJson)).toVector,
-          hpValue = player1.get._7,
-          friedhof = player1.get._8.map(Card.fromJson).toArray,
-          manaValue = player1.get._9,
-          maxHpValue = player1.get._10,
-          maxManaValue = player1.get._11
-        ),
-         player2.get._2 -> Player(
-            id = player2.get._2,
-            deck = player2.get._3.map(Card.fromJson),
-            hand = player2.get._4.map(Card.fromJson),
-            name = player2.get._5,
-            field =
-              player2.get._6.map(slot => slot.map(Card.fromJson)).toVector,
-            hpValue = player2.get._7,
-            friedhof = player2.get._8.map(Card.fromJson).toArray,
-            manaValue = player2.get._9,
-            maxHpValue = player2.get._10,
-            maxManaValue = player2.get._11
-          )
+    Await
+      .result(
+        db.run(gameWithPlayersQuery.result.headOption),
+        maxWaitSeconds
       )
+      .map((game, player1, player2) => {
+        val players = Map(
+          player1._2 -> Player(
+            id = player1._2,
+            deck = player1._3.map(Card.fromJson),
+            hand = player1._4.map(Card.fromJson),
+            name = player1._5,
+            field = player1._6.map(slot => slot.map(Card.fromJson)).toVector,
+            hpValue = player1._7,
+            friedhof = player1._8.map(Card.fromJson).toArray,
+            manaValue = player1._9,
+            maxHpValue = player1._10,
+            maxManaValue = player1._11
+          ),
+          player2._2 -> Player(
+            id = player2._2,
+            deck = player2._3.map(Card.fromJson),
+            hand = player2._4.map(Card.fromJson),
+            name = player2._5,
+            field = player2._6.map(slot => slot.map(Card.fromJson)).toVector,
+            hpValue = player2._7,
+            friedhof = player2._8.map(Card.fromJson).toArray,
+            manaValue = player2._9,
+            maxHpValue = player2._10,
+            maxManaValue = player2._11
+          )
+        )
 
-      Field(
-        players = players,
-        activePlayerId = game.get._6,
-        turns = game.get._4,
-        gameState = GameState.withName(game.get._5)
-      ).toJson
-    }
-
+        Field(
+          players = players,
+          activePlayerId = game._6,
+          turns = game._4,
+          gameState = GameState.withName(game._5)
+        ).toJson
+      })
+      .toRight(new Exception("Game not found"))
+      .toTry
   }
 
   override def update(game: FieldInterface): Unit = {
