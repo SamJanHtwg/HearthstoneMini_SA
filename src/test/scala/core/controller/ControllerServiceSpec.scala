@@ -118,17 +118,17 @@ class ControllerServiceSpec
     }
 
     "save field when calling GET /controller/save" in {
-        val service = new ControllerService(using mockController)
-        service.start()
-        val persistenceService = new PersistenceService()
-        persistenceService.start()
+      val service = new ControllerService(using mockController)
+      service.start()
+      val persistenceService = new PersistenceService()
+      persistenceService.start()
 
-        Get("/controller/save") ~> service.route ~> check {
-          responseAs[String] shouldEqual "There was an internal server error."
-        }
+      Get("/controller/save") ~> service.route ~> check {
+        responseAs[String] shouldEqual "There was an internal server error."
+      }
 
-        service.stop()
-        persistenceService.stop()
+      service.stop()
+      persistenceService.stop()
     }
 
     "load field " in {

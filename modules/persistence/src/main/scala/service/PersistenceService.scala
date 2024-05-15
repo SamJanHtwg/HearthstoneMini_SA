@@ -56,7 +56,7 @@ class PersistenceService(
       post {
         path("persistence" / "update") {
           entity(as[String]) { updateRequest =>
-            val json = Json.parse(updateRequest)            
+            val json = Json.parse(updateRequest)
             dao.update(Field.fromJson(json))
             complete("Updated")
           }

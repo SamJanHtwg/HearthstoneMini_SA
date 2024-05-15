@@ -46,46 +46,46 @@ class UndoManagerSpec extends AnyWordSpec with Matchers {
   }
 
   "Undo Manager" should {
-      "not be able to do undo/redo at beginning" in {
-        val undoManager = new UndoManager()
-        undoManager.canUndo() should be(false)
-        undoManager.canRedo() should be(false)
-      }
+    "not be able to do undo/redo at beginning" in {
+      val undoManager = new UndoManager()
+      undoManager.canUndo() should be(false)
+      undoManager.canRedo() should be(false)
+    }
 
-      "and throw exceptions" in {
-        val undoManager = new UndoManager()
-        val resultUndo = undoManager.undoStep(testField)
-        val resultRedo = undoManager.redoStep(testField)
+    "and throw exceptions" in {
+      val undoManager = new UndoManager()
+      val resultUndo = undoManager.undoStep(testField)
+      val resultRedo = undoManager.redoStep(testField)
 
-        resultUndo shouldBe a[Failure[_]]
-        resultUndo.failed.get.getMessage should be("No more undo steps available")
+      resultUndo shouldBe a[Failure[_]]
+      resultUndo.failed.get.getMessage should be("No more undo steps available")
 
-        resultRedo shouldBe a[Failure[_]]
-        resultRedo.failed.get.getMessage should be("No more redo steps available")
-      }
+      resultRedo shouldBe a[Failure[_]]
+      resultRedo.failed.get.getMessage should be("No more redo steps available")
+    }
 
-      "be able to save step" in {
-        val undoManager = new UndoManager()
-        undoManager.doStep(command)
-        undoManager.undoStack.size should be(1)
-      }
+    "be able to save step" in {
+      val undoManager = new UndoManager()
+      undoManager.doStep(command)
+      undoManager.undoStack.size should be(1)
+    }
 
-      "be able to undo step" in {
-        val undoManager = new UndoManager()
-        undoManager.doStep(command)
-        undoManager.undoStep(testField) should be(Success(testField))
-        undoManager.undoStack.size should be(0)
-        undoManager.redoStack.size should be(1)
-      }
+    "be able to undo step" in {
+      val undoManager = new UndoManager()
+      undoManager.doStep(command)
+      undoManager.undoStep(testField) should be(Success(testField))
+      undoManager.undoStack.size should be(0)
+      undoManager.redoStack.size should be(1)
+    }
 
-      "be able to redo step" in {
-        val undoManager = new UndoManager()
-        undoManager.doStep(command)
-        undoManager.undoStep(testField)
-        undoManager.redoStep(testField) should be(Success(testField))
-        undoManager.redoStack.size should be(0)
-        undoManager.undoStack.size should be(1)
-      }
+    "be able to redo step" in {
+      val undoManager = new UndoManager()
+      undoManager.doStep(command)
+      undoManager.undoStep(testField)
+      undoManager.redoStep(testField) should be(Success(testField))
+      undoManager.redoStack.size should be(0)
+      undoManager.undoStack.size should be(1)
+    }
   }
 
 }

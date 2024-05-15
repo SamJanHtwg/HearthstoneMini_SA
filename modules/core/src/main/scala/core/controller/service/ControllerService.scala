@@ -85,11 +85,12 @@ class ControllerService(using controller: ControllerInterface) {
         path("controller" / Segment) { command =>
           command match {
             case "ws" => handleWebSocketMessages(websocketChanges)
-            case "delete" => delete match {
-              case Success(_) => completeWithData("success")
-              case Failure(exception) =>
-                failWith(exception)
-            }
+            case "delete" =>
+              delete match {
+                case Success(_) => completeWithData("success")
+                case Failure(exception) =>
+                  failWith(exception)
+              }
             case "gameState" =>
               completeWithData(controller.field.gameState.toString())
             case "field" =>
@@ -230,7 +231,7 @@ class ControllerService(using controller: ControllerInterface) {
       Await.result(responseJsonFuture, 3.seconds)
     }
   }
-  
+
   def delete: Try[Unit] = {
     val loadRequest = Http().singleRequest(
       HttpRequest(

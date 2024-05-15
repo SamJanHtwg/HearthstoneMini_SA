@@ -29,7 +29,7 @@ class ModeSelectionScreenImpl(controller: ControllerInterface)
     controller.setStrategy(
       radiogroup.getSelectedToggle.getUserData.asInstanceOf[Strategy]
     )
-  
+
   private val deleteFieldButton: Button = new Button("Delete field")
   deleteFieldButton.onMouseClicked = _ => controller.deleteField
   private val loadButton: Button = new Button("Load")

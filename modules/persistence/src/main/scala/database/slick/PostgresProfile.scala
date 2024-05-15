@@ -16,10 +16,10 @@ trait MyPostgresProfile
     with PgSearchSupport
     with PgNetSupport
     with PgLTreeSupport {
-  
+
   // jsonb support is in postgres 9.4.0 onward; for 9.3.x use "json"
   def pgjson =
-    "jsonb" 
+    "jsonb"
 
   override protected def computeCapabilities: Set[slick.basic.Capability] =
     super.computeCapabilities + slick.jdbc.JdbcCapabilities.insertOrUpdate
@@ -46,12 +46,20 @@ trait MyPostgresProfile
           utils.SimpleArrayUtils.fromString[JsValue](Json.parse(_))(s).orNull,
         (v) => utils.SimpleArrayUtils.mkString[JsValue](_.toString())(v)
       ).to(_.toList)
-    implicit val playJsonArrayOptionTypeMapper: DriverJdbcType[List[Option[JsValue]]] =
+    implicit val playJsonArrayOptionTypeMapper
+        : DriverJdbcType[List[Option[JsValue]]] =
       new AdvancedArrayJdbcType[Option[JsValue]](
         pgjson,
         (s) =>
-          utils.SimpleArrayUtils.fromString[Option[JsValue]](value => Try(Json.parse(value)).toOption)(s).orNull,
-        (v) => utils.SimpleArrayUtils.mkString[Option[JsValue]](_.getOrElse(null).toString())(v)
+          utils.SimpleArrayUtils
+            .fromString[Option[JsValue]](value =>
+              Try(Json.parse(value)).toOption
+            )(s)
+            .orNull,
+        (v) =>
+          utils.SimpleArrayUtils.mkString[Option[JsValue]](
+            _.getOrElse(null).toString()
+          )(v)
       ).to(_.toList)
   }
 }

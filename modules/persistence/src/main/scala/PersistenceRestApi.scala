@@ -12,8 +12,7 @@ object PersistenceRestApi {
 
 class Starter() {
   val thread: Thread = new Thread {
-    
-    
+
     override def run(): Unit = {
       val persistenceService = new PersistenceService()
       persistenceService.start()
