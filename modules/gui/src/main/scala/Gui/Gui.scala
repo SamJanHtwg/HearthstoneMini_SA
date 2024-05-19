@@ -14,8 +14,7 @@ import scalafx.scene.control.Alert
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.image.{Image, ImageView}
 import core.controller.component.ControllerInterface
-import core.util.Observer
-import core.util.Event
+import util.{Observer, Event}
 
 class Gui(using controller: ControllerInterface) extends JFXApp3, Observer {
   controller.add(this)

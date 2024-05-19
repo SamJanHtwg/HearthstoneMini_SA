@@ -1,8 +1,7 @@
 package tui
 
 import model.Move
-import core.util.Observer
-import core.util.Event
+import util.{Observer, Event}
 import model.GameState
 import core.controller.Strategy
 import core.controller.component.controllerImpl.Controller

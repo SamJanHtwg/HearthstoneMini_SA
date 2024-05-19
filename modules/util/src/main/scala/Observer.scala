@@ -1,4 +1,3 @@
-package core
 package util
 
 trait Observer:

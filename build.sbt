@@ -107,7 +107,7 @@ lazy val persistence = project
     dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
     dockerExposedPorts := Seq(9021)
   )
-  .dependsOn(model % "compile->compile")
+  .dependsOn(model % "compile->compile", util % "compile->compile")
 
 lazy val core = project
   .in(file("./modules/core"))
@@ -120,7 +120,15 @@ lazy val core = project
   )
   .dependsOn(
     model % "compile->compile",
-    persistence % "compile->compile"
+    persistence % "compile->compile",
+    util % "compile->compile"
+  )
+
+lazy val util = project
+  .in(file("./modules/util"))
+  .settings(
+    name := "util",
+    commonSettings
   )
 
 lazy val root = project
@@ -139,6 +147,7 @@ lazy val root = project
     tui % "compile->compile;test->test",
     gui % "compile->compile;test->test",
     model % "compile->compile;test->test",
-    persistence % "compile->compile;test->test"
+    persistence % "compile->compile;test->test",
+    util % "compile->compile;test->test"
   )
   .aggregate(core, tui, gui, model, persistence)

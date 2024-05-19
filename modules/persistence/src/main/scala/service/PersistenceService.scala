@@ -23,12 +23,13 @@ import scala.concurrent.Future
 import akka.http.scaladsl.model.StatusCodes
 import akka.Done
 import model.fieldComponent.fieldImpl.Field
-import _root_.persistence.database.DaoInterface
-import _root_.persistence.database.slick.SlickDatabase
+import persistence.database.DaoInterface
+import persistence.database.slick.SlickDatabase
+import persistence.database.mongodb.MongoDatabase
 
 class PersistenceService(
     fileIO: FileIOInterface = JsonIO(),
-    dao: DaoInterface = SlickDatabase
+    dao: DaoInterface = MongoDatabase
 ) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
@@ -68,6 +69,7 @@ class PersistenceService(
             case Success(field) =>
               complete(status = 200, Json.prettyPrint(field))
             case Failure(error) =>
+              println(error)
               complete(status = 500, error.getMessage)
           }
           // fileIO.load() match {

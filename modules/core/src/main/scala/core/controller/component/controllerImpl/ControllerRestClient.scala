@@ -21,9 +21,7 @@ import core.controller.Strategy.Strategy
 import core.controller.component.ControllerInterface
 import core.controller.service.HttpService
 import core.util.CardProvider
-import core.util.Event
-import core.util.Observable
-import core.util.Observer
+import util.{Event, Observable, Observer}
 import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.AttackCommand

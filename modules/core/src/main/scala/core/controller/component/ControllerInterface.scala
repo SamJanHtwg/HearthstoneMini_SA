@@ -1,5 +1,4 @@
-package core
-package controller.component
+package core.controller.component
 import model.Move
 import model.fieldComponent.FieldInterface
 import util.Observable

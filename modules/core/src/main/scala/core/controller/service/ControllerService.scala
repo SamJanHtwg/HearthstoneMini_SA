@@ -1,5 +1,4 @@
-package core
-package controller.service
+package core.controller.service
 
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
@@ -37,8 +36,7 @@ import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Flow
 import akka.stream.SourceShape
 import akka.http.scaladsl.model.ws.Message
-import core.util.Observer
-import core.util.Event
+import util.{Observer, Event}
 
 class ControllerService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
