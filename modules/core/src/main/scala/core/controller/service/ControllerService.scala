@@ -30,14 +30,24 @@ import scala.util.Try
 import model.fieldComponent.fieldImpl.Field
 import scala.annotation.meta.field
 import akka.http.scaladsl.server.StandardRoute
+import akka.actor.ActorRef
+import akka.actor.Actor
+import akka.http.scaladsl.model.ws.TextMessage
+import akka.stream.OverflowStrategy
+import akka.stream.scaladsl.Flow
+import akka.stream.SourceShape
+import akka.http.scaladsl.model.ws.Message
+import core.util.Observer
+import core.util.Event
 
 class ControllerService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
 
-  implicit val system: ActorSystem[Nothing] =
+  implicit val system: ActorSystem[String] =
     ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
 
+  var queues: List[SourceQueueWithComplete[Message]] = List()
   val route: Route =
     concat(
       get {
@@ -48,6 +58,7 @@ class ControllerService(using controller: ControllerInterface) {
       get {
         path("controller" / Segment) { command =>
           command match {
+            case "ws" => handleWebSocketMessages(websocketChanges)
             case "gameState" =>
               completeWithData(controller.field.gameState.toString())
             case "field" =>
@@ -133,6 +144,7 @@ class ControllerService(using controller: ControllerInterface) {
     )
 
   private def completeWithData(data: String): StandardRoute = {
+    queues.foreach(_.offer(TextMessage(data)))
     complete(
       HttpEntity(
         ContentTypes.`application/json`,
@@ -198,6 +210,17 @@ class ControllerService(using controller: ControllerInterface) {
     system.terminate()
   }
 
-
+  private def websocketChanges: Flow[Message, Message, Any] =
+    val incomingMessages: Sink[Message, Any] =
+      Sink.foreach {
+        case message: TextMessage.Strict =>
+        case _                           =>
+      }
+    val outgoingMessages: Source[Message, SourceQueueWithComplete[Message]] =
+      Source.queue(10, OverflowStrategy.fail).mapMaterializedValue { queue =>
+        queues = queue :: queues
+        queue
+      }
+    Flow.fromSinkAndSource(incomingMessages, outgoingMessages)
 
 }
