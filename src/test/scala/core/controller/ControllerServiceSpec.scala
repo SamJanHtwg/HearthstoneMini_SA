@@ -34,6 +34,7 @@ import org.checkerframework.checker.units.qual.s
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.when
+import org.mockito.Mockito.verify
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.BeforeAndAfterEach
@@ -52,6 +53,7 @@ import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
 import spray.json.JsString
+import persistence.database.DaoInterface
 
 class ControllerServiceSpec
     extends AnyWordSpec
@@ -118,23 +120,26 @@ class ControllerServiceSpec
     }
 
     "save field when calling GET /controller/save" in {
-        val service = new ControllerService(using mockController)
-        service.start()
-        val persistenceService = new PersistenceService()
-        persistenceService.start()
-
-        Get("/controller/save") ~> service.route ~> check {
-          responseAs[String] shouldEqual "There was an internal server error."
-        }
-
-        service.stop()
-        persistenceService.stop()
-    }
-
-    "load field " in {
       val service = new ControllerService(using mockController)
       service.start()
       val persistenceService = new PersistenceService()
+      persistenceService.start()
+
+      Get("/controller/save") ~> service.route ~> check {
+        responseAs[String] shouldEqual "There was an internal server error."
+      }
+
+      service.stop()
+      persistenceService.stop()
+    }
+
+    "load field" in {
+      val mockDao = mock[DaoInterface]
+      (mockDao.load _).expects().returning(Success(mockController.field.toJson))
+
+      val service = new ControllerService(using mockController)
+      service.start()
+      val persistenceService = new PersistenceService(mockFileIO, mockDao)
       persistenceService.start()
 
       Get("/controller/load") ~> service.route ~> check {

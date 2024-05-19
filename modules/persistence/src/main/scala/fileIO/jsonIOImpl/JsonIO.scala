@@ -12,7 +12,7 @@ import scala.util.Try
 import fileIO.FileIOInterface
 
 class JsonIO extends FileIOInterface {
-  override def load(): Try[Field] = Try {
+  override def load(): Try[FieldInterface] = Try {
     val source = Source.fromFile("field.json")
     val json = Json.parse(source.getLines().mkString)
     source.close()

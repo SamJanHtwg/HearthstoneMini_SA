@@ -22,8 +22,14 @@ import akka.compat.Future
 import scala.concurrent.Future
 import akka.http.scaladsl.model.StatusCodes
 import akka.Done
+import model.fieldComponent.fieldImpl.Field
+import _root_.persistence.database.DaoInterface
+import _root_.persistence.database.slick.SlickDatabase
 
-class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
+class PersistenceService(
+    fileIO: FileIOInterface = JsonIO(),
+    dao: DaoInterface = SlickDatabase
+) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
   implicit val executionContext: ExecutionContext = system.executionContext
@@ -42,18 +48,43 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
           entity(as[String]) { saveRequest =>
             val json = Json.parse(saveRequest)
             fileIO.save(json)
+            dao.save(Field.fromJson(json))
             complete("Saved")
+          }
+        }
+      },
+      post {
+        path("persistence" / "update") {
+          entity(as[String]) { updateRequest =>
+            val json = Json.parse(updateRequest)
+            dao.update(Field.fromJson(json))
+            complete("Updated")
           }
         }
       },
       get {
         path("persistence" / "load") {
-          fileIO.load() match {
+          dao.load() match {
             case Success(field) =>
-              complete(Json.prettyPrint(field.toJson))
-            case Failure(exception) =>
-              complete(status = 500, exception.getMessage)
+              complete(status = 200, Json.prettyPrint(field))
+            case Failure(error) =>
+              complete(status = 500, error.getMessage)
           }
+          // fileIO.load() match {
+          //   case Success(field) =>
+          //     complete(Json.prettyPrint(field.toJson))
+          //   case Failure(exception) =>
+          //     complete(status = 500, exception.getMessage)
+          // }
+        }
+      },
+      get {
+        path("persistence" / "delete") {
+          dao.delete() match
+            case Success(_) =>
+              complete(status = 200, "deleted")
+            case Failure(error) =>
+              complete(status = 500, error.getMessage)
         }
       },
       post {
@@ -62,9 +93,7 @@ class PersistenceService(fileIO: FileIOInterface = JsonIO()) {
             case Success(_) =>
               complete("Server stopped")
             case Failure(ex) =>
-              complete(
-                StatusCodes.InternalServerError,
-                ex.getMessage)
+              complete(StatusCodes.InternalServerError, ex.getMessage)
           }
         }
       }

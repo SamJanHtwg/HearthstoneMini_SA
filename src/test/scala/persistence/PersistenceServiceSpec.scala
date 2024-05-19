@@ -35,6 +35,10 @@ import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.HttpRequest
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.RouteTestTimeout
+import persistence.database.DaoInterface
+import scala.util.Try
+import model.fieldComponent.FieldInterface
+import play.api.libs.json.JsValue
 
 class PersistenceServiceSpec
     extends AnyWordSpec
@@ -88,7 +92,11 @@ class PersistenceServiceSpec
     }
 
     "respond to GET request at the root path" in {
-      val service = new PersistenceService()
+      val mockDao = mock(classOf[DaoInterface])
+      when(mockDao.load()).thenReturn(
+        Failure(new Exception("Error loading field"))
+      )
+      val service = new PersistenceService(dao = mockDao)
       service.start()
 
       Get("/") ~> service.route ~> check {
@@ -99,7 +107,11 @@ class PersistenceServiceSpec
     }
 
     "save a field when a POST request is sent" in {
-      val service = new PersistenceService()
+      val mockDao = mock(classOf[DaoInterface])
+      when(mockDao.load()).thenReturn(
+        Failure(new Exception("Error loading field"))
+      )
+      val service = new PersistenceService(dao = mockDao)
       service.start()
 
       Post(
@@ -112,29 +124,39 @@ class PersistenceServiceSpec
       service.stop()
     }
 
-    "load a field when a GET request is sent " in {
-      val service = new PersistenceService()
-      service.start()
-
-      Post(
-        "/persistence/save",
-        Json.prettyPrint(field.toJson)
+    "load a field when a GET request is sent" in {
+      val mockDao = mock(classOf[DaoInterface])
+      val mockJsonIO = mock(classOf[JsonIO])
+      when(mockJsonIO.load()).thenReturn(
+        Success(new Field())
+      )
+      when(mockDao.load()).thenReturn(
+        Success(new Field().toJson)
       )
 
+      val service = new PersistenceService(mockJsonIO, dao = mockDao)
+      service.start()
+
       Get("/persistence/load") ~> service.route ~> check {
-        responseAs[String] shouldEqual Json.prettyPrint(field.toJson)
+        responseAs[String] shouldEqual Json.prettyPrint(new Field().toJson)
       }
 
       service.stop()
     }
 
+    
+
     "return error when loading failed" in {
       val mockJsonIO = mock(classOf[JsonIO])
+      val mockDao = mock(classOf[DaoInterface])
       when(mockJsonIO.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
+      when(mockDao.load()).thenReturn(
+        Failure(new Exception("Error loading field"))
+      )
 
-      val service = new PersistenceService(fileIO = mockJsonIO)
+      val service = new PersistenceService(fileIO = mockJsonIO, dao = mockDao)
       service.start()
 
       Get("/persistence/load") ~> service.route ~> check {

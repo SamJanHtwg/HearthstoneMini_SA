@@ -89,6 +89,13 @@ class ControllerRestClient(httpService: HttpService = HttpService())
     }
   }
 
+  def deleteField: Unit =
+    httpService.request(
+      controllerServiceUrl,
+      "delete",
+      HttpMethods.GET
+    )
+
   def canUndo: Boolean =
     httpService.request(
       controllerServiceUrl,

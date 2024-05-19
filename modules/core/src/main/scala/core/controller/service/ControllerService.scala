@@ -46,7 +46,33 @@ class ControllerService(using controller: ControllerInterface) {
   implicit val system: ActorSystem[String] =
     ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
+  object UpdateObserver extends Observer {
 
+    override def update(e: Event, msg: Option[String]): Unit = {
+      val updateRequest = Http().singleRequest(
+        HttpRequest(
+          uri = s"$persistenceServiceEndpoint/update",
+          method = HttpMethods.POST,
+          entity = HttpEntity(
+            ContentTypes.`application/json`,
+            controller.field.toJson.toString
+          )
+        )
+      )
+
+      val responseJsonFuture = updateRequest.flatMap { response =>
+        Unmarshal(response.entity).to[String].map { jsonString =>
+          Json.parse(jsonString)
+        }
+      }
+
+      Try {
+        Await.result(responseJsonFuture, 300.seconds)
+      }.map(_ => ())
+    }
+
+  }
+  controller.add(UpdateObserver)
   var queues: List[SourceQueueWithComplete[Message]] = List()
   val route: Route =
     concat(
@@ -59,6 +85,12 @@ class ControllerService(using controller: ControllerInterface) {
         path("controller" / Segment) { command =>
           command match {
             case "ws" => handleWebSocketMessages(websocketChanges)
+            case "delete" =>
+              delete match {
+                case Success(_) => completeWithData("success")
+                case Failure(exception) =>
+                  failWith(exception)
+              }
             case "gameState" =>
               completeWithData(controller.field.gameState.toString())
             case "field" =>
@@ -75,7 +107,12 @@ class ControllerService(using controller: ControllerInterface) {
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
-                  failWith(exception)
+                  complete(
+                    status = 500,
+                    Json.prettyPrint(
+                      Json.obj("error" -> Json.parse(exception.getMessage))
+                    )
+                  )
               }
             case "drawCard" =>
               controller.drawCard()
@@ -192,6 +229,19 @@ class ControllerService(using controller: ControllerInterface) {
 
     Try {
       Await.result(responseJsonFuture, 3.seconds)
+    }
+  }
+
+  def delete: Try[Unit] = {
+    val loadRequest = Http().singleRequest(
+      HttpRequest(
+        uri = s"$persistenceServiceEndpoint/delete",
+        method = HttpMethods.GET
+      )
+    )
+
+    Try[Unit] {
+      Await.result(loadRequest, 3.seconds)
     }
   }
 
