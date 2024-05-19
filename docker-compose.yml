@@ -48,5 +48,18 @@ services:
     networks:
       - my_network
 
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "9061:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - my_network
+
 networks:
   my_network:

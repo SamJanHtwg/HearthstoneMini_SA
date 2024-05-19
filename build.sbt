@@ -27,7 +27,7 @@ lazy val commonSettings = Seq(
     "org.mockito" % "mockito-core" % "3.12.4" % "test",
     "org.scalamock" %% "scalamock" % "6.0.0" % "test",
     ("com.typesafe.play" %% "play-json" % "2.10.4")
-    .cross(CrossVersion.for3Use2_13),
+      .cross(CrossVersion.for3Use2_13),
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
     "net.codingwell" %% "scala-guice" % "7.0.0",
     "javax.inject" % "javax.inject" % "1",
@@ -44,7 +44,7 @@ lazy val commonSettings = Seq(
     "com.typesafe.slick" %% "slick-hikaricp" % "3.5.1",
     "org.slf4j" % "slf4j-nop" % "1.6.4",
     "com.github.tminglei" %% "slick-pg" % "0.22.1",
-    "com.github.tminglei" %% "slick-pg_play-json" % "0.22.1",
+    "com.github.tminglei" %% "slick-pg_play-json" % "0.22.1"
   ) ++ Seq(
     "base",
     "controls",
@@ -102,6 +102,8 @@ lazy val persistence = project
   .settings(
     name := "persistence",
     commonSettings,
+    libraryDependencies += ("org.mongodb.scala" %% "mongo-scala-driver" % "5.1.0")
+      .cross(CrossVersion.for3Use2_13),
     dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
     dockerExposedPorts := Seq(9021)
   )
