@@ -62,29 +62,29 @@ class HttpService {
       command: String,
       method: HttpMethod,
       data: Option[JsValue] = None
-  ): Try[JsValue] = {
-
-    val responseFuture = Http().singleRequest(
-      HttpRequest(
-        method = method,
-        uri = s"$endPoint/$command",
-        entity = data match {
-          case Some(data) =>
-            HttpEntity(ContentTypes.`application/json`, Json.stringify(data))
-          case None =>
-            HttpEntity.Empty
-        }
+  ): Try[JsValue] = Try {
+      val responseFuture = Http().singleRequest(
+        HttpRequest(
+          method = method,
+          uri = s"$endPoint/$command",
+          entity = data match {
+            case Some(data) =>
+              HttpEntity(ContentTypes.`application/json`, Json.stringify(data))
+            case None =>
+              HttpEntity.Empty
+          }
+        )
       )
-    )
-
-    val responseJsonFuture = responseFuture.flatMap { response =>
-      Unmarshal(response.entity).to[String].map { jsonString =>
-        Json.parse(jsonString)
+      val responseJsonFuture = responseFuture.flatMap { response =>
+        Unmarshal(response.entity).to[String].flatMap { entityString =>
+          if (response.status.isSuccess()) {
+            Future.successful(Json.parse(entityString))
+          } else {
+            Future.failed(new RuntimeException(entityString))
+          }
+        }
       }
-    }
 
-    Try {
       Await.result(responseJsonFuture, 3.seconds)
     }
-  }
 }

@@ -223,13 +223,9 @@ object SlickDatabase extends DaoInterface {
         )
       )
 
-    var result = Await.result(db.run(updatePlayer1Action), maxWaitSeconds)
-    print(result)
-    result = Await.result(db.run(updatePlayer2Action), maxWaitSeconds)
-    print(result)
-    result = Await.result(db.run(updateGameAction), maxWaitSeconds)
-    print(result)
-
+    Await.result(db.run(updatePlayer1Action), maxWaitSeconds)
+    Await.result(db.run(updatePlayer2Action), maxWaitSeconds)
+    Await.result(db.run(updateGameAction), maxWaitSeconds)
   }
 
   private def gameTable = new TableQuery[GameTable](new GameTable(_))

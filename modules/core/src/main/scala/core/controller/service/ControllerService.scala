@@ -37,6 +37,7 @@ import akka.stream.scaladsl.Flow
 import akka.stream.SourceShape
 import akka.http.scaladsl.model.ws.Message
 import util.{Observer, Event}
+import scala.concurrent.Future
 
 class ControllerService(using controller: ControllerInterface) {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
@@ -65,7 +66,7 @@ class ControllerService(using controller: ControllerInterface) {
       }
 
       Try {
-        Await.result(responseJsonFuture, 300.seconds)
+        Await.result(responseJsonFuture, 3.seconds)
       }.map(_ => ())
     }
 
@@ -105,12 +106,7 @@ class ControllerService(using controller: ControllerInterface) {
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
-                  complete(
-                    status = 500,
-                    Json.prettyPrint(
-                      Json.obj("error" -> Json.parse(exception.getMessage))
-                    )
-                  )
+                  failWith(exception)
               }
             case "drawCard" =>
               controller.drawCard()
@@ -178,6 +174,10 @@ class ControllerService(using controller: ControllerInterface) {
       }
     )
 
+  private def failWith(exception: Throwable): StandardRoute = {
+    complete(status = 500, exception.getMessage)
+  }
+
   private def completeWithData(data: String): StandardRoute = {
     queues.foreach(_.offer(TextMessage(data)))
     complete(
@@ -219,11 +219,15 @@ class ControllerService(using controller: ControllerInterface) {
       )
     )
 
-    val responseJsonFuture = loadRequest.flatMap { response =>
-      Unmarshal(response.entity).to[String].map { jsonString =>
-        Json.parse(jsonString)
+     val responseJsonFuture = loadRequest.flatMap { response =>
+        Unmarshal(response.entity).to[String].flatMap { entityString =>
+          if (response.status.isSuccess()) {
+            Future.successful(Json.parse(entityString))
+          } else {
+            Future.failed(new RuntimeException(entityString))
+          }
+        }
       }
-    }
 
     Try {
       Await.result(responseJsonFuture, 3.seconds)

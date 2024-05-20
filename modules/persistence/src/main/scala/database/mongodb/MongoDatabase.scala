@@ -22,6 +22,7 @@ object MongoDatabase extends DaoInterface with Observable {
   private val endpoint: String = "mongodb://localhost:9061"
   private val databaseName: String = "hearthstone"
   private val collectionName: String = "games"
+  private val maxWaitSeconds = 3.seconds
 
   private val client: MongoClient = MongoClient(
     MongoClientSettings
@@ -40,14 +41,14 @@ object MongoDatabase extends DaoInterface with Observable {
   private val database: MongoDatabase = client.getDatabase(databaseName)
   Await.result(
     database.createCollection(collectionName).toFuture(),
-    100.seconds
+    maxWaitSeconds
   )
 
   override def save(field: FieldInterface): Unit = {
     val document = Document("game" -> field.toJson.toString, "_id" -> 1)
     Await.result(
       database.getCollection(collectionName).insertOne(document).toFuture(),
-      3.seconds
+      maxWaitSeconds
     )
   }
 
@@ -59,7 +60,7 @@ object MongoDatabase extends DaoInterface with Observable {
             .getCollection(collectionName)
             .find(equal("_id", 1))
             .headOption(),
-          300.seconds
+          maxWaitSeconds
         )
         .map(document => {
           println(document)
@@ -77,7 +78,7 @@ object MongoDatabase extends DaoInterface with Observable {
         .getCollection(collectionName)
         .updateOne(equal("_id", 1), set("game", field.toJson.toString))
         .toFuture(),
-      3.seconds
+      maxWaitSeconds
     )
   }
 
@@ -88,7 +89,7 @@ object MongoDatabase extends DaoInterface with Observable {
           .getCollection(collectionName)
           .deleteOne(equal("_id", 1))
           .toFuture(),
-        3.seconds
+        maxWaitSeconds
       )
     )
 }
