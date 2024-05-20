@@ -27,9 +27,9 @@ import persistence.database.DaoInterface
 import persistence.database.slick.SlickDatabase
 import persistence.database.mongodb.MongoDatabase
 
-class PersistenceService(
-    fileIO: FileIOInterface = JsonIO(),
-    dao: DaoInterface = MongoDatabase
+class PersistenceService(using
+    fileIO: FileIOInterface,
+    dao: DaoInterface
 ) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")

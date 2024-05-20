@@ -120,9 +120,14 @@ class ControllerServiceSpec
     }
 
     "save field when calling GET /controller/save" in {
+      val mockFileIO = mock[FileIOInterface]
+      val mockDao = mock[DaoInterface]
       val service = new ControllerService(using mockController)
       service.start()
-      val persistenceService = new PersistenceService()
+      val persistenceService = new PersistenceService(using
+        mockFileIO,
+        mockDao
+      )
       persistenceService.start()
 
       Get("/controller/save") ~> service.route ~> check {
@@ -139,7 +144,7 @@ class ControllerServiceSpec
 
       val service = new ControllerService(using mockController)
       service.start()
-      val persistenceService = new PersistenceService(mockFileIO, mockDao)
+      val persistenceService = new PersistenceService(using mockFileIO, mockDao)
       persistenceService.start()
 
       Get("/controller/load") ~> service.route ~> check {

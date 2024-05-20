@@ -1,5 +1,4 @@
-package persistence
-package database
+package persistence.database
 
 import play.api.libs.json.JsValue
 import model.fieldComponent.FieldInterface

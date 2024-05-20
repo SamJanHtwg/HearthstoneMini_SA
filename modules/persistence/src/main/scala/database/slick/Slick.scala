@@ -1,5 +1,4 @@
-package persistence
-package database.slick
+package persistence.database.slick
 
 import play.api.libs.json.JsValue
 import slick.dbio.DBIOAction
@@ -16,7 +15,7 @@ import scala.util.Success
 import scala.util.Try
 import scala.util.control.Breaks._
 
-import database.DaoInterface
+import persistence.database.DaoInterface
 import scala.annotation.meta.field
 import model.fieldComponent.FieldInterface
 import model.playerComponent.PlayerInterface

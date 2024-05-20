@@ -38,7 +38,10 @@ object MongoDatabase extends DaoInterface with Observable {
       .build()
   )
   private val database: MongoDatabase = client.getDatabase(databaseName)
-  Await.result(database.createCollection(collectionName).toFuture(), 100.seconds)
+  Await.result(
+    database.createCollection(collectionName).toFuture(),
+    100.seconds
+  )
 
   override def save(field: FieldInterface): Unit = {
     val document = Document("game" -> field.toJson.toString, "_id" -> 1)
@@ -78,7 +81,7 @@ object MongoDatabase extends DaoInterface with Observable {
     )
   }
 
-  override def delete(): Try[Unit] = 
+  override def delete(): Try[Unit] =
     Try[Unit](
       Await.result(
         database
