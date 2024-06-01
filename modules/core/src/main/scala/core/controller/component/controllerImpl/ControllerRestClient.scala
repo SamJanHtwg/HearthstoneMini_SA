@@ -21,9 +21,7 @@ import core.controller.Strategy.Strategy
 import core.controller.component.ControllerInterface
 import core.controller.service.HttpService
 import core.util.CardProvider
-import core.util.Event
-import core.util.Observable
-import core.util.Observer
+import util.{Event, Observable, Observer}
 import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.AttackCommand
@@ -46,7 +44,7 @@ import scala.concurrent.duration.*
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-class ControllerRestClient(httpService: HttpService = HttpService())
+class ControllerRestClient(using httpService: HttpService)
     extends ControllerInterface {
   private val controllerServiceUrl = "http://localhost:9031/controller"
 
@@ -66,27 +64,29 @@ class ControllerRestClient(httpService: HttpService = HttpService())
   connectToWebsocket
 
   var field: FieldInterface = _
-  fieldRequest(controllerServiceUrl, "field", HttpMethods.GET)
+  setState(fieldRequest(controllerServiceUrl, "field", HttpMethods.GET))
   var errorMsg: Option[String] = None
 
-  def fieldRequest(
+  private def fieldRequest(
       endpoint: String,
       command: String,
       method: HttpMethod,
       data: Option[JsValue] = None
-  ): Unit = {
-    val response = httpService
+  ): Try[FieldInterface] = {
+    httpService
       .request(endpoint, command, method, data)
-      .map(Field.fromJson(_))
-    response match {
-      case Success(newField) =>
-        field = newField
-        errorMsg = None
-        notifyObservers(Event.PLAY, msg = errorMsg)
-      case Failure(exception) =>
-        errorMsg = Some(exception.getMessage)
-        notifyObservers(Event.ERROR, msg = errorMsg)
-    }
+      .map(Field.fromJson)
+  }
+
+  private def setState(newField: Try[FieldInterface]): Unit = newField match {
+    case Success(newField) =>
+      field = newField
+      errorMsg = None
+      notifyObservers(Event.PLAY, msg = errorMsg)
+    case Failure(exception) =>
+      errorMsg = Some(exception.getMessage)
+      notifyObservers(Event.ERROR, msg = errorMsg)
+
   }
 
   def deleteField: Unit =
@@ -117,68 +117,82 @@ class ControllerRestClient(httpService: HttpService = HttpService())
     }
 
   def placeCard(move: Move): Unit =
-    fieldRequest(
-      controllerServiceUrl,
-      "placeCard",
-      HttpMethods.POST,
-      Some(move.toJson)
+    setState(
+      fieldRequest(
+        controllerServiceUrl,
+        "placeCard",
+        HttpMethods.POST,
+        Some(move.toJson)
+      )
     )
 
   def drawCard(): Unit =
-    fieldRequest(controllerServiceUrl, "drawCard", HttpMethods.GET)
+    setState(fieldRequest(controllerServiceUrl, "drawCard", HttpMethods.GET))
 
   def setPlayerNames(playername1: String, playername2: String): Unit = {
-    fieldRequest(
-      controllerServiceUrl,
-      "setPlayerNames",
-      HttpMethods.POST,
-      Some(
-        Json.obj(
-          "playername1" -> playername1,
-          "playername2" -> playername2
+    setState(
+      fieldRequest(
+        controllerServiceUrl,
+        "setPlayerNames",
+        HttpMethods.POST,
+        Some(
+          Json.obj(
+            "playername1" -> playername1,
+            "playername2" -> playername2
+          )
         )
       )
     )
   }
 
-  def setGameState(gameState: GameState): Unit = fieldRequest(
-    controllerServiceUrl,
-    "setGameState",
-    HttpMethods.POST,
-    Some(Json.obj("gameState" -> gameState.toString))
+  def setGameState(gameState: GameState): Unit = setState(
+    fieldRequest(
+      controllerServiceUrl,
+      "setGameState",
+      HttpMethods.POST,
+      Some(Json.obj("gameState" -> gameState.toString))
+    )
   )
-  def attack(move: Move): Unit = fieldRequest(
-    controllerServiceUrl,
-    "attack",
-    HttpMethods.POST,
-    Some(move.toJson)
+  def attack(move: Move): Unit = setState(
+    fieldRequest(
+      controllerServiceUrl,
+      "attack",
+      HttpMethods.POST,
+      Some(move.toJson)
+    )
   )
-  def directAttack(move: Move): Unit = fieldRequest(
-    controllerServiceUrl,
-    "directAttack",
-    HttpMethods.POST,
-    Some(move.toJson)
+  def directAttack(move: Move): Unit = setState(
+    fieldRequest(
+      controllerServiceUrl,
+      "directAttack",
+      HttpMethods.POST,
+      Some(move.toJson)
+    )
   )
-  def switchPlayer(): Unit = fieldRequest(
-    controllerServiceUrl,
-    "switchPlayer",
-    HttpMethods.GET
+  def switchPlayer(): Unit = setState(
+    fieldRequest(
+      controllerServiceUrl,
+      "switchPlayer",
+      HttpMethods.GET
+    )
   )
 
   def undo: Unit =
-    fieldRequest(controllerServiceUrl, "undo", HttpMethods.GET)
+    setState(fieldRequest(controllerServiceUrl, "undo", HttpMethods.GET))
 
   def redo: Unit =
-    fieldRequest(controllerServiceUrl, "redo", HttpMethods.GET)
+    setState(fieldRequest(controllerServiceUrl, "redo", HttpMethods.GET))
 
   def exitGame(): Unit =
-    fieldRequest(controllerServiceUrl, "exitGame", HttpMethods.GET)
+    setState(fieldRequest(controllerServiceUrl, "exitGame", HttpMethods.GET))
 
-  def setStrategy(strat: Strategy): Unit = fieldRequest(
-    controllerServiceUrl,
-    "setStrategy",
-    HttpMethods.POST,
-    Some(Json.obj("strategy" -> strat.toString))
+  def setStrategy(strat: Strategy): Unit = setState(
+    fieldRequest(
+      controllerServiceUrl,
+      "setStrategy",
+      HttpMethods.POST,
+      Some(Json.obj("strategy" -> strat.toString))
+    )
   )
 
   def getWinner(): Option[String] = {
@@ -197,8 +211,7 @@ class ControllerRestClient(httpService: HttpService = HttpService())
     HttpMethods.GET
   )
 
-  def loadField: Unit = {
-    fieldRequest(controllerServiceUrl, "load", HttpMethods.GET)
-  }
+  def loadField: Unit =
+    setState(fieldRequest(controllerServiceUrl, "load", HttpMethods.GET))
 
 }

@@ -12,7 +12,8 @@ import model.Move
 import persistence.fileIO.FileIOInterface
 import model.playerComponent.playerImpl.Player
 import net.codingwell.scalaguice.InjectorExtensions.*
-import core.util.{Event, Observable, UndoManager}
+import core.util.UndoManager
+import util.{Observer, Observable, Event}
 import core.util.commands.CommandInterface
 import model.fieldComponent.fieldImpl.Field
 

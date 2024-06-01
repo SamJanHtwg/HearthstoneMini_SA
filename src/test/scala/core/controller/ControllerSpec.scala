@@ -10,8 +10,8 @@ import core.controller.Strategy
 import core.controller.Strategy.hardcore
 import core.controller.component.controllerImpl.Controller
 import core.util.CardProvider
-import core.util.Event
-import core.util.Observer
+import util.Event
+import util.Observer
 import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.DrawCardCommand

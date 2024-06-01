@@ -54,6 +54,7 @@ import scala.util.Failure
 import scala.util.Success
 import spray.json.JsString
 import persistence.database.DaoInterface
+import core.controller.service.HttpService
 
 class ControllerServiceSpec
     extends AnyWordSpec
@@ -67,6 +68,7 @@ class ControllerServiceSpec
   var mockCardProvider: CardProvider = _
   var mockFileIO: FileIOInterface = _
   var controllerService: ControllerService = _
+  var mockHttpService: HttpService = _
   var mockField: FieldInterface = _
   var mockController: ControllerInterface = _
 
@@ -76,6 +78,7 @@ class ControllerServiceSpec
     mockUndoManager = mock[UndoManager]
     mockFileIO = mock[FileIOInterface]
     mockController = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+    mockHttpService = mock[HttpService]
 
     testCards = List[Card](
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -88,7 +91,7 @@ class ControllerServiceSpec
 
   "Controller Service" should {
     "return message when calling GET /" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
       Get("/") ~> service.route ~> check {
         responseAs[
@@ -100,7 +103,7 @@ class ControllerServiceSpec
     }
 
     "return game state when calling GET /controller/gameState" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
       Get("/controller/gameState") ~> service.route ~> check {
         responseAs[String] shouldEqual GameState.CHOOSEMODE.toString()
@@ -110,7 +113,7 @@ class ControllerServiceSpec
     }
 
     "return field when calling GET /controller/field" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
       Get("/controller/field") ~> service.route ~> check {
         responseAs[String] shouldEqual mockController.field.toJson.toString()
@@ -120,9 +123,14 @@ class ControllerServiceSpec
     }
 
     "save field when calling GET /controller/save" in {
-      val service = new ControllerService(using mockController)
+      val mockFileIO = mock[FileIOInterface]
+      val mockDao = mock[DaoInterface]
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
-      val persistenceService = new PersistenceService()
+      val persistenceService = new PersistenceService(using
+        mockFileIO,
+        mockDao
+      )
       persistenceService.start()
 
       Get("/controller/save") ~> service.route ~> check {
@@ -137,9 +145,9 @@ class ControllerServiceSpec
       val mockDao = mock[DaoInterface]
       (mockDao.load _).expects().returning(Success(mockController.field.toJson))
 
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
-      val persistenceService = new PersistenceService(mockFileIO, mockDao)
+      val persistenceService = new PersistenceService(using mockFileIO, mockDao)
       persistenceService.start()
 
       Get("/controller/load") ~> service.route ~> check {
@@ -151,7 +159,7 @@ class ControllerServiceSpec
     }
 
     "draw card" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/drawCard") ~> service.route ~> check {
@@ -163,7 +171,7 @@ class ControllerServiceSpec
 
     "switch player" in {
       (mockUndoManager.doStep _).expects(*)
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/switchPlayer") ~> service.route ~> check {
@@ -176,7 +184,7 @@ class ControllerServiceSpec
     "can undo" in {
       (mockUndoManager.canUndo _).expects().returning(false)
 
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/canUndo") ~> service.route ~> check {
@@ -189,7 +197,7 @@ class ControllerServiceSpec
     "can redo" in {
       (mockUndoManager.canRedo _).expects().returning(false)
 
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/canRedo") ~> service.route ~> check {
@@ -203,7 +211,7 @@ class ControllerServiceSpec
       (mockUndoManager.undoStep _)
         .expects(*)
         .returning(Success(mockController.field))
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/undo") ~> service.route ~> check {
@@ -217,7 +225,7 @@ class ControllerServiceSpec
       (mockUndoManager.redoStep _)
         .expects(*)
         .returning(Success(mockController.field))
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/redo") ~> service.route ~> check {
@@ -228,7 +236,7 @@ class ControllerServiceSpec
     }
 
     "exit game" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/exitGame") ~> service.route ~> check {
@@ -239,7 +247,7 @@ class ControllerServiceSpec
     }
 
     "return error message when calling invalid command" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Get("/controller/invalid") ~> service.route ~> check {
@@ -257,7 +265,7 @@ class ControllerServiceSpec
           (2, Player(id = 2))
         )
       )
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -271,7 +279,7 @@ class ControllerServiceSpec
     }
 
     "set player names" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -287,7 +295,7 @@ class ControllerServiceSpec
     }
 
     "set game state" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -301,7 +309,7 @@ class ControllerServiceSpec
     }
 
     "attack" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -315,7 +323,7 @@ class ControllerServiceSpec
     }
 
     "direct attack" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -329,7 +337,7 @@ class ControllerServiceSpec
     }
 
     "set strategy" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(
@@ -343,7 +351,7 @@ class ControllerServiceSpec
     }
 
     "return error message when calling invalid post command" in {
-      val service = new ControllerService(using mockController)
+      val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
       Post(

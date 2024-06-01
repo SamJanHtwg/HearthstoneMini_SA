@@ -1,5 +1,4 @@
-package core
-package controller.service
+package core.controller.service
 
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
@@ -37,10 +36,13 @@ import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Flow
 import akka.stream.SourceShape
 import akka.http.scaladsl.model.ws.Message
-import core.util.Observer
-import core.util.Event
+import util.{Observer, Event}
+import scala.concurrent.Future
 
-class ControllerService(using controller: ControllerInterface) {
+class ControllerService(using
+    controller: ControllerInterface,
+    httpService: HttpService
+) {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
 
   implicit val system: ActorSystem[String] =
@@ -49,26 +51,12 @@ class ControllerService(using controller: ControllerInterface) {
   object UpdateObserver extends Observer {
 
     override def update(e: Event, msg: Option[String]): Unit = {
-      val updateRequest = Http().singleRequest(
-        HttpRequest(
-          uri = s"$persistenceServiceEndpoint/update",
-          method = HttpMethods.POST,
-          entity = HttpEntity(
-            ContentTypes.`application/json`,
-            controller.field.toJson.toString
-          )
-        )
+      httpService.request(
+        persistenceServiceEndpoint,
+        "update",
+        method = HttpMethods.POST,
+        data = Some(controller.field.toJson)
       )
-
-      val responseJsonFuture = updateRequest.flatMap { response =>
-        Unmarshal(response.entity).to[String].map { jsonString =>
-          Json.parse(jsonString)
-        }
-      }
-
-      Try {
-        Await.result(responseJsonFuture, 300.seconds)
-      }.map(_ => ())
     }
 
   }
@@ -107,12 +95,7 @@ class ControllerService(using controller: ControllerInterface) {
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
-                  complete(
-                    status = 500,
-                    Json.prettyPrint(
-                      Json.obj("error" -> Json.parse(exception.getMessage))
-                    )
-                  )
+                  failWith(exception)
               }
             case "drawCard" =>
               controller.drawCard()
@@ -180,6 +163,10 @@ class ControllerService(using controller: ControllerInterface) {
       }
     )
 
+  private def failWith(exception: Throwable): StandardRoute = {
+    complete(status = 500, exception.getMessage)
+  }
+
   private def completeWithData(data: String): StandardRoute = {
     queues.foreach(_.offer(TextMessage(data)))
     complete(
@@ -214,36 +201,20 @@ class ControllerService(using controller: ControllerInterface) {
   }
 
   def load: Try[JsValue] = {
-    val loadRequest = Http().singleRequest(
-      HttpRequest(
-        uri = s"$persistenceServiceEndpoint/load",
-        method = HttpMethods.GET
-      )
+    httpService.request(
+      persistenceServiceEndpoint,
+      "load",
+      method = HttpMethods.GET
     )
-
-    val responseJsonFuture = loadRequest.flatMap { response =>
-      Unmarshal(response.entity).to[String].map { jsonString =>
-        Json.parse(jsonString)
-      }
-    }
-
-    Try {
-      Await.result(responseJsonFuture, 3.seconds)
-    }
   }
 
-  def delete: Try[Unit] = {
-    val loadRequest = Http().singleRequest(
-      HttpRequest(
-        uri = s"$persistenceServiceEndpoint/delete",
-        method = HttpMethods.GET
-      )
+  def delete: Try[Unit] = httpService
+    .request(
+      persistenceServiceEndpoint,
+      "delete",
+      method = HttpMethods.GET
     )
-
-    Try[Unit] {
-      Await.result(loadRequest, 3.seconds)
-    }
-  }
+    .map(_ => ())
 
   def start(): Unit = {
     val binding = Http().newServerAt("0.0.0.0", 9031).bind(route)

@@ -24,6 +24,7 @@ services:
     network_mode: "host"
     depends_on:
       - postgres_db
+      - mongodb
 
   core:
     image: core:1.1.0
@@ -40,11 +41,23 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
-      POSTGRES_DB: tbl
+      POSTGRES_DB: postgres
       POSTGRES_HOST: database
       POSTGRES_PORT: 5432
     ports:
       - "9051:5432"
+    networks:
+      - my_network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "9061:27017"
+    restart: always
     networks:
       - my_network
 

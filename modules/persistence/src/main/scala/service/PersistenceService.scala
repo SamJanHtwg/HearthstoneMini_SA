@@ -1,34 +1,35 @@
-package persistence
-package fileIO.service
+package persistence.fileIO.service
 
-import fileIO.FileIOInterface
-import fileIO.jsonIOImpl.JsonIO
-
+import akka.Done
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
-import akka.stream.scaladsl._
-import akka.util.ByteString
-import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpEntity, ContentTypes}
-import akka.http.scaladsl.server.Directives._
-import scala.io.StdIn
-import scala.concurrent.ExecutionContext
-import akka.http.scaladsl.server.Route
-import scala.util.{Failure, Success}
-import play.api.libs.json.Json
-import akka.protobufv3.internal.compiler.PluginProtos.CodeGeneratorResponse.File
-import org.checkerframework.checker.units.qual.s
 import akka.compat.Future
-import scala.concurrent.Future
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.ContentTypes
+import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.StatusCodes
-import akka.Done
+import akka.http.scaladsl.server.Directives.*
+import akka.http.scaladsl.server.Route
+import akka.stream.scaladsl.*
+import akka.util.ByteString
 import model.fieldComponent.fieldImpl.Field
-import _root_.persistence.database.DaoInterface
-import _root_.persistence.database.slick.SlickDatabase
+import persistence.database.DaoInterface
+import persistence.database.mongodb.MongoDatabase
+import persistence.database.slick.SlickDatabase
+import play.api.libs.json.Json
 
-class PersistenceService(
-    fileIO: FileIOInterface = JsonIO(),
-    dao: DaoInterface = SlickDatabase
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.io.StdIn
+import scala.util.Failure
+import scala.util.Success
+
+import persistence.fileIO.FileIOInterface
+import persistence.fileIO.jsonIOImpl.JsonIO
+
+class PersistenceService(using
+    fileIO: FileIOInterface,
+    dao: DaoInterface
 ) {
   implicit val system: ActorSystem[?] =
     ActorSystem(Behaviors.empty, "SingleRequest")
@@ -68,7 +69,8 @@ class PersistenceService(
             case Success(field) =>
               complete(status = 200, Json.prettyPrint(field))
             case Failure(error) =>
-              complete(status = 500, error.getMessage)
+              println("persistence service: " + error.getMessage)
+              complete(status = 500,  error.getMessage)
           }
           // fileIO.load() match {
           //   case Success(field) =>

@@ -4,7 +4,7 @@ import scala.io.StdIn.readLine
 import tui.Tui
 import java.io.IOException
 import core.controller.module.ControllerModule
-import core.util.Event
+import util.Event
 import scala.io.StdIn
 import core.controller.component.ControllerInterface
 

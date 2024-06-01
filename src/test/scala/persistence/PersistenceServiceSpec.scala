@@ -39,6 +39,7 @@ import persistence.database.DaoInterface
 import scala.util.Try
 import model.fieldComponent.FieldInterface
 import play.api.libs.json.JsValue
+import persistence.fileIO.FileIOInterface
 
 class PersistenceServiceSpec
     extends AnyWordSpec
@@ -68,7 +69,13 @@ class PersistenceServiceSpec
 
   "PersistenceService" should {
     "start a server" in {
-      val service = new PersistenceService()
+      val mockFileIO = mock(classOf[FileIOInterface])
+      val mockDao = mock(classOf[DaoInterface])
+      
+      val service = new PersistenceService(
+        using mockFileIO,
+        mockDao
+      )
       service.start()
 
       val responseFuture: Future[HttpResponse] =
@@ -93,10 +100,11 @@ class PersistenceServiceSpec
 
     "respond to GET request at the root path" in {
       val mockDao = mock(classOf[DaoInterface])
+      val mockFileIO = mock(classOf[FileIOInterface])
       when(mockDao.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
-      val service = new PersistenceService(dao = mockDao)
+      val service = new PersistenceService(using mockFileIO,dao = mockDao)
       service.start()
 
       Get("/") ~> service.route ~> check {
@@ -108,10 +116,11 @@ class PersistenceServiceSpec
 
     "save a field when a POST request is sent" in {
       val mockDao = mock(classOf[DaoInterface])
+      val mockFileIO = mock(classOf[FileIOInterface])
       when(mockDao.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
-      val service = new PersistenceService(dao = mockDao)
+      val service = new PersistenceService(using mockFileIO,dao = mockDao)
       service.start()
 
       Post(
@@ -134,7 +143,7 @@ class PersistenceServiceSpec
         Success(new Field().toJson)
       )
 
-      val service = new PersistenceService(mockJsonIO, dao = mockDao)
+      val service = new PersistenceService(using mockJsonIO, dao = mockDao)
       service.start()
 
       Get("/persistence/load") ~> service.route ~> check {
@@ -143,8 +152,6 @@ class PersistenceServiceSpec
 
       service.stop()
     }
-
-    
 
     "return error when loading failed" in {
       val mockJsonIO = mock(classOf[JsonIO])
@@ -156,7 +163,7 @@ class PersistenceServiceSpec
         Failure(new Exception("Error loading field"))
       )
 
-      val service = new PersistenceService(fileIO = mockJsonIO, dao = mockDao)
+      val service = new PersistenceService(using fileIO = mockJsonIO, dao = mockDao)
       service.start()
 
       Get("/persistence/load") ~> service.route ~> check {
@@ -168,7 +175,12 @@ class PersistenceServiceSpec
     }
 
     "stop the server when a POST request is sent" in {
-      val service = new PersistenceService()
+      val mockFileIO = mock(classOf[FileIOInterface])
+      val mockDao = mock(classOf[DaoInterface])
+      val service = new PersistenceService(
+        using mockFileIO,
+        mockDao
+      )
       service.start()
 
       Post("/persistence/stopServer") ~> service.route ~> check {
