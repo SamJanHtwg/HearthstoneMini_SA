@@ -7,7 +7,7 @@ import io.gatling.jdbc.Predef._
 import io.gatling.core.structure.ChainBuilder
 import io.gatling.core.body.Body
 
-abstract class SimulationSkeleton extends Simulation {
+abstract class CoreSimulationSkeleton extends Simulation {
   val operations: List[ChainBuilder]
 
   val httpProtocol = http
@@ -52,7 +52,6 @@ abstract class SimulationSkeleton extends Simulation {
   def buildScenario(name: String) =
     scenario(name)
       .exec(
-        // exec the operations and between each pause a second
         operations.reduce((a, b) => a.pause(1.second).exec(b))
       )
 

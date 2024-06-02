@@ -8,7 +8,7 @@ import play.api.libs.json.Json
 import model.GameState
 import model.Move
 
-class CoreSpikeTest extends SimulationSkeleton {
+class CoreSpikeTest extends CoreSimulationSkeleton {
   override val operations = List(
     buildOperation("API root", "GET", "/", StringBody("")),
     buildOperation("Place a card", "POST", "/controller/placeCard", StringBody(Json.stringify(Move(handSlot = 0, fieldSlotActive = 0).toJson))),
