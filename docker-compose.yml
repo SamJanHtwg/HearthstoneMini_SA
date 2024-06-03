@@ -32,7 +32,7 @@ services:
       - "9031:9031"
     depends_on:
       - persistence
-    network_mode: "host"
+    # network_mode: "host"
 
   postgres_db:
     image: postgres

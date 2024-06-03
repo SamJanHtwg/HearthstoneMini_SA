@@ -6,9 +6,13 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 import io.gatling.core.structure.ChainBuilder
 import io.gatling.core.body.Body
+import play.api.libs.json.Json
+import model.Move
+import core.controller.Strategy
+import model.GameState
 
 abstract class CoreSimulationSkeleton extends Simulation {
-  val operations: List[ChainBuilder]
+  val operations: List[ChainBuilder] = operations
 
   val httpProtocol = http
     .baseUrl("http://localhost:9031")
@@ -35,19 +39,6 @@ abstract class CoreSimulationSkeleton extends Simulation {
     "sec-ch-ua-mobile" -> "?0",
     "sec-ch-ua-platform" -> "macOS"
   )
-
-  def buildOperation(
-      name: String,
-      request: String,
-      operation: String,
-      body: Body
-  ): ChainBuilder = {
-    exec(
-      http(name)
-        .httpRequest(request, operation)
-        .body(body)
-    )
-  }
 
   def buildScenario(name: String) =
     scenario(name)
