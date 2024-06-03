@@ -15,15 +15,18 @@ class CoreSpikeTest extends CoreSimulationSkeleton {
     var scn2 = buildScenario("Spike Test Scenario - Overload")
 
     setUp(
-      scn.inject(
-        rampUsers(20) during (20.seconds),
-        atOnceUsers(1000),
-        rampUsers(1000) during (20.seconds),
-      ),
-      // scn2.inject(
-      //   rampUsers(20) during (10.seconds),
-      //   atOnceUsers(10000),
-      // )
+      scn
+        .inject(
+          rampUsers(20) during (20.seconds),
+          atOnceUsers(1000),
+          rampUsers(1000) during (20.seconds)
+        )
+        .andThen(
+          scn2.inject(
+            rampUsers(20) during (10.seconds),
+            atOnceUsers(10000)
+          )
+        )
     ).protocols(httpProtocol)
   }
 

@@ -20,14 +20,15 @@ val gatlingExclude = Seq(
   ("com.typesafe.akka", "akka-actor_2.13"),
   ("org.scala-lang.modules", "scala-java8-compat_2.13"),
   ("com.typesafe.akka", "akka-slf4j_2.13"),
-  ("org.scala-lang.modules","scala-parser-combinators_2.13")
+  ("org.scala-lang.modules","scala-parser-combinators_2.13"),
+  ("org.scala-lang.modules", "scala-collection-compat_2.13")
 ).toVector.map((org_name: Tuple2[String, String]) =>
   InclExclRule(org_name._1, org_name._2)
 )
 val gatlingHigh =
-  ("io.gatling.highcharts" % "gatling-charts-highcharts" % "3.9.5" % "test")
+  ("io.gatling.highcharts" % "gatling-charts-highcharts" % "3.11.3" % "test")
     .withExclusions(gatlingExclude)
-val gatlingTest = ("io.gatling" % "gatling-test-framework" % "3.9.5" % "test")
+val gatlingTest = ("io.gatling" % "gatling-test-framework" % "3.11.3" % "test")
   .withExclusions(gatlingExclude)
 
 lazy val commonSettings = Seq(

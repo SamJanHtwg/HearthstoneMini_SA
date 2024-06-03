@@ -12,7 +12,7 @@ import core.controller.Strategy
 import model.GameState
 
 abstract class CoreSimulationSkeleton extends Simulation {
-  val operations: List[ChainBuilder] = operations
+  val operations: List[ChainBuilder] = operationList
 
   val httpProtocol = http
     .baseUrl("http://localhost:9031")

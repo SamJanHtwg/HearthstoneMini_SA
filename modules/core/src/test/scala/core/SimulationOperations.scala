@@ -9,7 +9,7 @@ import model.GameState
 import model.Move
 import play.api.libs.json.Json
 
-val operations: List[ChainBuilder] = List(
+val operationList: List[ChainBuilder] = List(
   buildOperation(
     "Reset",
     "POST",
@@ -17,12 +17,6 @@ val operations: List[ChainBuilder] = List(
     StringBody(
       Json.stringify(Json.obj("gameState" -> GameState.MAINGAME.toString()))
     )
-  ),
-  buildOperation(
-    "Reset the Game",
-    "GET",
-    "/controller/delete",
-    StringBody("")
   ),
   buildOperation(
     "Start a new Game",
@@ -50,7 +44,6 @@ val operations: List[ChainBuilder] = List(
   ),
   buildOperation("Undo step", "GET", "/controller/undo", StringBody("")),
   buildOperation("Redo step", "GET", "/controller/redo", StringBody("")),
-  buildOperation("Save the Game", "GET", "/controller/save", StringBody(""))
 )
 
 def buildOperation(

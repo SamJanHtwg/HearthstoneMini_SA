@@ -14,12 +14,15 @@ class CoreLoadTest extends CoreSimulationSkeleton {
     var scn2 = buildScenario("Load Test Scenario - Overload")
 
     setUp(
-      scn.inject(
-        rampUsers(2000) during (20.seconds)
-      ),
-      scn2.inject(
-        rampUsers(10000) during (20.seconds)
-      ),
+      scn
+        .inject(
+          rampUsers(2000) during (20.seconds)
+        )
+        .andThen(
+          scn2.inject(
+            rampUsers(10000) during (20.seconds)
+          )
+        )
     ).protocols(httpProtocol)
   }
 
