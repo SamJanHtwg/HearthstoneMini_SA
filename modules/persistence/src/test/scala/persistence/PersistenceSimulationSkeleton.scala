@@ -8,8 +8,8 @@ import io.gatling.jdbc.Predef._
 import io.gatling.core.body.Body
 import io.gatling.core.structure.ChainBuilder
 
-abstract class PersistenceRecordedSimulation extends Simulation {
-  val operations: List[ChainBuilder]
+abstract class PersistenceSimulationSkeleton extends Simulation {
+  val operations: List[ChainBuilder] = operationList
 
   val httpProtocol = http
     .baseUrl("http://localhost:9021")
@@ -19,7 +19,7 @@ abstract class PersistenceRecordedSimulation extends Simulation {
     .acceptLanguageHeader("de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7")
     .upgradeInsecureRequestsHeader("1")
     .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36")
-  
+
   val headers_0 = Map(
   		"Cache-Control" -> "max-age=0",
   		"Sec-Fetch-Dest" -> "document",
@@ -30,20 +30,6 @@ abstract class PersistenceRecordedSimulation extends Simulation {
   		"sec-ch-ua-mobile" -> "?0",
   		"sec-ch-ua-platform" -> "macOS"
   )
-
-
-  def buildOperation(
-      name: String,
-      request: String,
-      operation: String,
-      body: Body
-  ): ChainBuilder = {
-    exec(
-      http(name)
-        .httpRequest(request, operation)
-        .body(body)
-    )
-  }
 
   def buildScenario(name: String) =
     scenario(name)
