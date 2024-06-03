@@ -178,26 +178,12 @@ class ControllerService(using
   }
 
   def save: Try[Unit] = {
-    val saveRequest = Http().singleRequest(
-      HttpRequest(
-        uri = s"$persistenceServiceEndpoint/save",
-        method = HttpMethods.POST,
-        entity = HttpEntity(
-          ContentTypes.`application/json`,
-          controller.field.toJson.toString
-        )
-      )
-    )
-
-    val responseJsonFuture = saveRequest.flatMap { response =>
-      Unmarshal(response.entity).to[String].map { jsonString =>
-        Json.parse(jsonString)
-      }
-    }
-
-    Try {
-      Await.result(responseJsonFuture, 3.seconds)
-    }.map(_ => ())
+    httpService.request(
+      persistenceServiceEndpoint,
+      "save",
+      method = HttpMethods.POST,
+      data = Some(controller.field.toJson)
+    ).map(_ => ())
   }
 
   def load: Try[JsValue] = {
