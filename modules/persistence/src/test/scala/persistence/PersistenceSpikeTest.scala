@@ -6,19 +6,23 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 import play.api.libs.json.Json
 
-class PersistenceLoadTest extends PersistenceSimulationSkeleton {
+class PersistenceSpikeTest extends PersistenceSimulationSkeleton {
   override def executeOperations(): Unit = {
-    var scn = buildScenario("Load Test Scenario - Managable")
-    var scn2 = buildScenario("Load Test Scenario - Overload")
+    var scn = buildScenario("Spike Test Scenario - Managable")
+    var scn2 = buildScenario("Spike Test Scenario - Overload")
 
     setUp(
       scn
         .inject(
-          rampUsers(100) during (20.seconds)
+          atOnceUsers(100),
+          nothingFor(5.seconds),
+          atOnceUsers(100),
         )
         .andThen(
           scn2.inject(
-            rampUsers(500) during (20.seconds)
+            atOnceUsers(500),
+            nothingFor(5.seconds),
+            atOnceUsers(500),
           )
         )
     ).protocols(httpProtocol)

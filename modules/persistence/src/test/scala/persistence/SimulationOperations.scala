@@ -9,18 +9,19 @@ import model.Move
 import play.api.libs.json.Json
 import scalafx.scene.input.KeyCode.E
 
+private val dummyFieldPath = "field.json"
 val operationList: List[ChainBuilder] = List(
   buildOperation(
     "Save",
     "POST",
     "/persistence/save",
-    ElFileBody("./resources/field.json")
+    ElFileBody(dummyFieldPath)
   ),
   buildOperation(
     "Update",
     "POST",
     "/persistence/update",
-    ElFileBody("./resources/field.json")
+    ElFileBody(dummyFieldPath)
   ),
   buildOperation(
     "Load",

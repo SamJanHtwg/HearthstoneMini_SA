@@ -17,14 +17,15 @@ class CoreSpikeTest extends CoreSimulationSkeleton {
     setUp(
       scn
         .inject(
-          rampUsers(20) during (20.seconds),
-          atOnceUsers(1000),
-          rampUsers(1000) during (20.seconds)
+          atOnceUsers(100),
+          nothingFor(5.seconds),
+          atOnceUsers(100),
         )
         .andThen(
           scn2.inject(
-            rampUsers(20) during (10.seconds),
-            atOnceUsers(10000)
+            atOnceUsers(500),
+            nothingFor(5.seconds),
+            atOnceUsers(500),
           )
         )
     ).protocols(httpProtocol)

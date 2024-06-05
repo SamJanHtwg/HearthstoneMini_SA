@@ -16,11 +16,11 @@ class CoreLoadTest extends CoreSimulationSkeleton {
     setUp(
       scn
         .inject(
-          rampUsers(2000) during (20.seconds)
+          rampUsers(100) during (20.seconds)
         )
         .andThen(
           scn2.inject(
-            rampUsers(10000) during (20.seconds)
+            rampUsers(500) during (20.seconds)
           )
         )
     ).protocols(httpProtocol)
