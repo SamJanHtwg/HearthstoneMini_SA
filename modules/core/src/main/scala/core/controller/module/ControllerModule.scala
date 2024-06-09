@@ -4,7 +4,7 @@ import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
 import persistence.fileIO.jsonIOImpl.JsonIO
 import core.controller.component.controllerImpl.ControllerRestClient
-import core.controller.service.ControllerService
+import core.controller.service.RestBackendService
 import core.util.*
 import core.controller.service.HttpService
 import core.controller.component.BackendServiceInterface
@@ -17,7 +17,7 @@ import scala.util.Failure
 object ControllerModule:
   private val executorService = Executors.newSingleThreadExecutor()
   private implicit val executionContext: ExecutionContext = ExecutionContext.fromExecutorService(executorService)
-  private var backendService: BackendServiceInterface = ControllerService(using
+  private var backendService: BackendServiceInterface = RestBackendService(using
       given_HttpService
     )
 

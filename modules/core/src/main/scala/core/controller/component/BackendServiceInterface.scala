@@ -28,6 +28,7 @@ import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.*
 import scala.concurrent.duration.*
 import akka.pattern.after
+import scala.util.Try
 
 trait BackendServiceInterface {
   implicit val system: ActorSystem[ServiceMessage] =
@@ -64,10 +65,10 @@ trait BackendServiceInterface {
 
   def outputB: Source[ServiceMessage, NotUsed] = sourceB
 
-    def sendRequestToInputA(
+  def sendRequestToInputA(
       request: ServiceMessage,
       timeout: FiniteDuration = 2.seconds
-  ): Future[ServiceMessage] = {
+  ): Try[ServiceMessage] = {
     val promise = Promise[ServiceMessage]()
 
     // Subscribe to outputB and wait for the matching response
@@ -83,7 +84,7 @@ trait BackendServiceInterface {
       after(timeout)(Future.failed(new TimeoutException("Request timed out")))
 
     // Return the future that completes first: either the promise when a response is received, or the timeoutFuture when the timeout is reached
-    Future.firstCompletedOf(Seq(promise.future, timeoutFuture))
+    Try(Await.result(Future.firstCompletedOf(Seq(promise.future, timeoutFuture)), timeout))
   }
   
   def generateRandomMessageId(): String = java.util.UUID.randomUUID().toString
@@ -98,7 +99,22 @@ sealed trait ServiceMessage {
 
 case class GetFieldMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
 case class UpdateFieldMessage(data: Option[JsValue], id: String) extends ServiceMessage
-case class DeleteFieldMessage(data: Option[JsValue], id: String) extends ServiceMessage
+case class DeleteMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class DrawCardMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class SwitchPlayerMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class CanUndoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class CanUndoResponeMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class CanRedoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class CanRedoResponeMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class UndoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class RedoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class PlaceCardMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class SetPlayerNamesMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class SetGameStateMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class SetStrategyMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class AttackMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class DirectAttackMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class EndTurnMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
 
 
 

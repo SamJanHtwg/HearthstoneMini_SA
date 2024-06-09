@@ -1,11 +1,5 @@
 package core.controller.service
 
-import akka.Done
-import akka.NotUsed
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.actor.typed.ActorSystem
-import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.ContentTypes
 import akka.http.scaladsl.model.HttpEntity
@@ -20,43 +14,20 @@ import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.http.scaladsl.unmarshalling.Unmarshaller
 import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.*
-import akka.stream.scaladsl.Flow
-import akka.util.ByteString
-import core.controller.Strategy
-import core.controller.Strategy.*
-import core.controller.component
+import core.controller.component.*
 import core.controller.component.BackendServiceInterface
-import core.controller.component.ControllerInterface
-import core.controller.component.GetFieldMessage
-import core.controller.component.ServiceMessage
-import core.controller.component.controllerImpl.Controller
-import model.GameState
-import model.Move
 import model.fieldComponent.fieldImpl.Field
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
-import util.Event
-import util.Observer
 
-import scala.annotation.meta.field
-import scala.concurrent.Await
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.concurrent.duration.*
-import scala.io.StdIn
-import scala.util.Failure
-import scala.util.Success
-import scala.util.Try
-import scala.concurrent.Promise
-import java.util.concurrent.TimeoutException
-import core.controller.component.UpdateFieldMessage
+import scala.util.*
 
-class ControllerService(using
+class RestBackendService(using
     httpService: HttpService
 ) extends BackendServiceInterface {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
-  var controller: ControllerInterface = _
-  var queues: List[SourceQueueWithComplete[Message]] = List()
+  private var queues: List[SourceQueueWithComplete[Message]] = List()
   handleControllerUpdates
   val route: Route =
     concat(
@@ -70,6 +41,7 @@ class ControllerService(using
           command match {
             case "ws"     => handleWebSocketMessages(websocketChanges)
             case "delete" =>
+              // TODO: Check if needed (i dont think so)
               // DeleteMessage()
               delete match {
                 case Success(_) => completeWithData("success")
@@ -77,19 +49,17 @@ class ControllerService(using
                   failWith(exception)
               }
             case "gameState" =>
-              // GetFieldMessage()
-              completeWithData(controller.field.gameState.toString())
+              sendRequestToInputA(GetFieldMessage(id = generateRandomMessageId()), 2.seconds) match
+                case Success(message) => completeWithData(message.data.map(Field.fromJson(_)).get.gameState.toString)
+                case Failure(exception) => failWith(exception)
             case "field" => {
-              var res = Await.result(
                 sendRequestToInputA(
                   GetFieldMessage(id = generateRandomMessageId()),
-                  2.seconds
-                ),
-                2.seconds
-              )
-              completeWithData(res.data.get.toString)
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
             }
-            // completeWithData(controller.field.toJson.toString())
             case "save" =>
               save match {
                 case Success(_) => completeWithData("success")
@@ -99,43 +69,59 @@ class ControllerService(using
             case "load" =>
               load match {
                 case Success(json) =>
-                  // UpdateFieldMessage(json)
-                  controller.field = Field.fromJson(json)
-                  completeWithData(controller.field.toJson.toString)
+                  sendRequestToInputA(
+                    UpdateFieldMessage(Some(json), id = generateRandomMessageId()),
+                  ) match {
+                    case Success(message) => completeWithData(message.data.get.toString)
+                    case Failure(exception) => failWith(exception)
+                  }
                 case Failure(exception) =>
                   failWith(exception)
               }
             case "drawCard" =>
-              controller.drawCard()
-              // DrawCardMessage()
-              // UpdateFieldMessage(controller.field.toJson)
-              completeWithData(controller.field.toJson.toString)
+              sendRequestToInputA(
+                DrawCardMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => completeWithData(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "switchPlayer" =>
-              // SwitchPlayerMessage()
-              // UpdateFieldMessage(controller.field.toJson)
-              controller.switchPlayer()
-              completeWithData(controller.field.toJson.toString)
+              sendRequestToInputA(
+                SwitchPlayerMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => completeWithData(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "canUndo" =>
-              // GetCanUndoMessage()
-              // CanUndoResponeMessage()
-              complete(controller.canUndo.toString())
+              sendRequestToInputA(
+                CanUndoMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => complete(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "canRedo" =>
-              // GetCanRedoMessage()
-              // CanRedoResponeMessage()
-              complete(controller.canRedo.toString())
+              sendRequestToInputA(
+                CanRedoMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => complete(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "undo" =>
-              // UndoMessage()
-              // UpdateFieldMessage(controller.field.toJson)
-              controller.undo
-              completeWithData(controller.field.toJson.toString)
+              sendRequestToInputA(
+                UndoMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => completeWithData(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "redo" =>
-              // RedoMessage()
-              // UpdateFieldMessage(controller.field.toJson)
-              controller.redo
-              completeWithData(controller.field.toJson.toString)
+              sendRequestToInputA(
+                RedoMessage(id = generateRandomMessageId()),
+              ) match {
+                case Success(message) => completeWithData(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             case "exitGame" =>
-              controller.exitGame()
-              completeWithData(controller.field.toJson.toString)
+              completeWithData("Exited")
             case _ => failWith(new Exception("Invalid command"))
           }
         }
@@ -151,45 +137,50 @@ class ControllerService(using
           entity(as[JsValue]) { jsValue =>
             command match {
               case "placeCard" =>
-                // PlaceCardMessage(Move.fromJson(jsValue))
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.placeCard(Move.fromJson(jsValue))
+                sendRequestToInputA(
+                  PlaceCardMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               case "setPlayerNames" =>
-                // SetPlayerNamesMessage()
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.setPlayerNames(
-                  (jsValue \ "playername1").as[String],
-                  (jsValue \ "playername2").as[String]
-                )
+                sendRequestToInputA(
+                  SetPlayerNamesMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               case "setGameState" =>
-                // SetGameStateMessage()
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.setGameState(
-                  GameState.withName(
-                    jsValue("gameState").toString.replace("\"", "")
-                  )
-                )
+                sendRequestToInputA(
+                  SetGameStateMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               case "attack" =>
-                // AttackMessage()
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.attack(Move.fromJson(jsValue))
+                sendRequestToInputA(
+                  AttackMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               case "directAttack" =>
-                // DirectAttackMessage()
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.directAttack(Move.fromJson(jsValue))
+                sendRequestToInputA(
+                  DirectAttackMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               case "setStrategy" => {
-                // SetStrategyMessage()
-                // UpdateFieldMessage(controller.field.toJson)
-                controller.setStrategy(
-                  Strategy.withName(
-                    jsValue("strategy").toString.replace("\"", "")
-                  )
-                )
+                sendRequestToInputA(
+                  SetStrategyMessage(Some(jsValue), id = generateRandomMessageId()),
+                ) match {
+                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Failure(exception) => failWith(exception)
+                }
               }
               case _ => failWith(new Exception("Invalid command"))
             }
-
-            completeWithData(controller.field.toJson.toString)
           }
         }
       }
@@ -210,14 +201,20 @@ class ControllerService(using
   }
 
   def save: Try[Unit] = {
-    httpService
-      .request(
-        persistenceServiceEndpoint,
-        "save",
-        method = HttpMethods.POST,
-        data = Some(controller.field.toJson)
-      )
-      .map(_ => ())
+    sendRequestToInputA(
+      GetFieldMessage(id = generateRandomMessageId()),
+    ) match {
+      case Success(message) =>
+        httpService.request(
+          persistenceServiceEndpoint,
+          "save",
+          method = HttpMethods.POST,
+          data = message.data
+        ).map(_ => ())
+      case Failure(exception) =>
+        Failure(exception)
+    }
+    
   }
 
   def load: Try[JsValue] = {

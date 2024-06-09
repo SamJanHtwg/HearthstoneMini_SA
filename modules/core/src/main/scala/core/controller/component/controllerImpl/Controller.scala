@@ -59,6 +59,23 @@ class Controller(
     )
   )
   backendService.outputA.runWith(Sink.foreach(msg => {
+    msg match {
+      case UpdateFieldMessage(Some(jsValue), _) =>
+        field = Field.fromJson(jsValue)
+        notifyObservers(Event.PLAY, msg = None)
+      case SetStrategyMessage(data, id) =>
+        setStrategy(
+          Strategy.withName(
+            data.get("strategy").toString.replace("\"", "")
+          )
+        )
+      case SetPlayerNamesMessage(data, id) => 
+        setPlayerNames(
+          data.get("playername1").toString.replace("\"", ""),
+          data.get("playername2").toString.replace("\"", "")
+        )
+      case _ => println("Unknown message type: " + msg.getClass.getSimpleName) 
+    }
     Source
       .single(
         UpdateFieldMessage(Some(field.toJson), id = msg.id)

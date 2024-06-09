@@ -13,7 +13,7 @@ object HearthstoneMini {
   def main(args: Array[String]): Unit = {
     PersistenceRestApi.main(args)
     ControllerModule
-    // GuiRestModule
+    GuiRestModule
     // TuiRestService
     // TuiService
     // GuiService
