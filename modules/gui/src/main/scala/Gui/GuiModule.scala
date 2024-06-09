@@ -9,9 +9,9 @@ import util.Event
 import scala.io.StdIn
 import core.controller.component.controllerImpl.ControllerRestClient
 
-object GuiModule {
-  Starter(ControllerModule.given_ControllerInterface).start()
-}
+// object GuiModule {
+//   Starter(ControllerModule.given_ControllerInterface).start()
+// }
 
 object GuiRestModule {
   Starter(ControllerRestClientModule.given_ControllerInterface).start()

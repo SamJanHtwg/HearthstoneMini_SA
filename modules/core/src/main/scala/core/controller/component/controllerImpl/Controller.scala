@@ -28,11 +28,20 @@ import core.util.commands.commandImpl.{
   AttackCommand
 }
 import core.util.CardProvider
+import core.controller.component.BackendServiceInterface
+import akka.stream.scaladsl.Sink
+import org.reactivestreams.Subscriber
+import akka.stream.scaladsl.Source
+import akka.actor.Actor
+import core.controller.component.*
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 
 class Controller(
     val fileIO: FileIOInterface,
     private val undoManager: UndoManager,
-    private val cardProvider: CardProvider
+    private val cardProvider: CardProvider,
+    private val backendService: BackendServiceInterface
 ) extends ControllerInterface {
 
   var field: FieldInterface = Field(
@@ -49,6 +58,14 @@ class Controller(
       )
     )
   )
+  backendService.outputA.runWith(Sink.foreach(msg => {
+    // TODO: Handle incomming messages from service
+  }))(backendService.materializer)
+
+  // TODO: Send messages to service
+  Source
+    .single(UpdateFieldMessage(Some(field.toJson)))
+    .runWith(backendService.inputB)(backendService.materializer)
 
   var errorMsg: Option[String] = None
 

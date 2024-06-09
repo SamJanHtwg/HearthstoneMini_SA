@@ -13,10 +13,10 @@ class PersistenceVolumeTest extends PersistenceSimulationSkeleton {
 
     setUp(
      scn.inject(
-        constantUsersPerSec(100) during (30.seconds)
+        constantUsersPerSec(100) during (10.seconds)
       ).andThen(
         scn2.inject(
-          constantUsersPerSec(500) during (30.seconds)
+          constantUsersPerSec(500) during (10.seconds)
         )
       )
     ).protocols(httpProtocol)

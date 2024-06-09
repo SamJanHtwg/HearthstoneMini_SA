@@ -1,7 +1,7 @@
-import core.controller.module.ControllerServiceModule
+import core.controller.module.ControllerModule
 
 class CoreRunner {
   def main(args: Array[String]): Unit = {
-    ControllerServiceModule
+    ControllerModule
   }
 }

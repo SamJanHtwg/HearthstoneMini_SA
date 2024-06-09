@@ -1,71 +1,92 @@
 package core.controller.service
 
+import akka.Done
+import akka.NotUsed
+import akka.actor.Actor
+import akka.actor.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
-import akka.stream.scaladsl._
-import akka.util.ByteString
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.model.{HttpEntity, ContentTypes}
-import akka.http.scaladsl.server.Directives._
-import scala.io.StdIn
-
-import scala.concurrent.ExecutionContext
-import akka.http.scaladsl.server.Route
-import scala.util.{Failure, Success}
-import play.api.libs.json.Json
-import core.controller.component.ControllerInterface
-import akka.http.scaladsl.unmarshalling.Unmarshaller
-import play.api.libs.json.JsValue
-import akka.http.scaladsl.unmarshalling.Unmarshal
-import model.Move
-import core.controller.Strategy.*
-import core.controller.Strategy
-import model.GameState
+import akka.http.scaladsl.model.ContentTypes
+import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.HttpMethods
 import akka.http.scaladsl.model.HttpRequest
-import scala.concurrent.Await
-import scala.concurrent.duration.*
-import scala.util.Try
-import model.fieldComponent.fieldImpl.Field
-import scala.annotation.meta.field
-import akka.http.scaladsl.server.StandardRoute
-import akka.actor.ActorRef
-import akka.actor.Actor
-import akka.http.scaladsl.model.ws.TextMessage
-import akka.stream.OverflowStrategy
-import akka.stream.scaladsl.Flow
-import akka.stream.SourceShape
 import akka.http.scaladsl.model.ws.Message
-import util.{Observer, Event}
+import akka.http.scaladsl.model.ws.TextMessage
+import akka.http.scaladsl.server.Directives.*
+import akka.http.scaladsl.server.Route
+import akka.http.scaladsl.server.StandardRoute
+import akka.http.scaladsl.unmarshalling.Unmarshal
+import akka.http.scaladsl.unmarshalling.Unmarshaller
+import akka.stream.OverflowStrategy
+import akka.stream.scaladsl.*
+import akka.stream.scaladsl.Flow
+import akka.util.ByteString
+import core.controller.Strategy
+import core.controller.Strategy.*
+import core.controller.component
+import core.controller.component.BackendServiceInterface
+import core.controller.component.ControllerInterface
+import core.controller.component.GetFieldMessage
+import core.controller.component.ServiceMessage
+import core.controller.component.controllerImpl.Controller
+import model.GameState
+import model.Move
+import model.fieldComponent.fieldImpl.Field
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
+import util.Event
+import util.Observer
+
+import scala.annotation.meta.field
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
+import scala.concurrent.duration.*
+import scala.io.StdIn
+import scala.util.Failure
+import scala.util.Success
+import scala.util.Try
+/*
+  Remove the controlelr dependency from the ControllerService
+  controller wants an backend service interface
+  Rest service should be a backend service
+  Kafka service should be a backend service
+  service and controlelr communicate through streams and messages
+ */
 
 class ControllerService(using
-    controller: ControllerInterface,
     httpService: HttpService
-) {
+) extends BackendServiceInterface {
+  // TODO: Handle incomming ServiceMessages from controller
+  outputB.runForeach(println)
+
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
-
-  implicit val system: ActorSystem[String] =
-    ActorSystem(Behaviors.empty, "SprayExample")
   implicit val executionContext: ExecutionContext = system.executionContext
-  object UpdateObserver extends Observer {
+  // object UpdateObserver extends Observer {
 
-    override def update(e: Event, msg: Option[String]): Unit = {
-      httpService.request(
-        persistenceServiceEndpoint,
-        "update",
-        method = HttpMethods.POST,
-        data = Some(controller.field.toJson)
-      )
-    }
+  //   override def update(e: Event, msg: Option[String]): Unit = {
+  //     httpService.request(
+  //       persistenceServiceEndpoint,
+  //       "update",
+  //       method = HttpMethods.POST,
+  //       data = Some(controller.field.toJson)
+  //     )
+  //   }
+  // }
+  // controller.add(UpdateObserver)
 
-  }
-  controller.add(UpdateObserver)
+  println("init service")
+  var controller: ControllerInterface = _
+
   var queues: List[SourceQueueWithComplete[Message]] = List()
   val route: Route =
     concat(
       get {
         pathSingleSlash {
+          Source
+            .single(GetFieldMessage())
+            .runWith(inputA)
           complete("HearthstoneMini ControllerAPI Service is online.")
         }
       },
@@ -178,12 +199,14 @@ class ControllerService(using
   }
 
   def save: Try[Unit] = {
-    httpService.request(
-      persistenceServiceEndpoint,
-      "save",
-      method = HttpMethods.POST,
-      data = Some(controller.field.toJson)
-    ).map(_ => ())
+    httpService
+      .request(
+        persistenceServiceEndpoint,
+        "save",
+        method = HttpMethods.POST,
+        data = Some(controller.field.toJson)
+      )
+      .map(_ => ())
   }
 
   def load: Try[JsValue] = {
@@ -216,6 +239,7 @@ class ControllerService(using
   def stop(): Unit = {
     system.terminate()
   }
+  private val x = websocketChanges
 
   private def websocketChanges: Flow[Message, Message, Any] =
     val incomingMessages: Sink[Message, Any] =
