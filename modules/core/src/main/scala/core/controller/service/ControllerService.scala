@@ -50,13 +50,6 @@ import scala.util.Try
 import scala.concurrent.Promise
 import java.util.concurrent.TimeoutException
 import core.controller.component.UpdateFieldMessage
-/*
-  Remove the controlelr dependency from the ControllerService
-  controller wants an backend service interface
-  Rest service should be a backend service
-  Kafka service should be a backend service
-  service and controlelr communicate through streams and messages
- */
 
 class ControllerService(using
     httpService: HttpService
@@ -65,7 +58,6 @@ class ControllerService(using
   var controller: ControllerInterface = _
   var queues: List[SourceQueueWithComplete[Message]] = List()
   handleControllerUpdates
-  
   val route: Route =
     concat(
       get {
@@ -125,11 +117,11 @@ class ControllerService(using
               completeWithData(controller.field.toJson.toString)
             case "canUndo" =>
               // GetCanUndoMessage()
-              // UpdateFieldMessage(controller.field.toJson)
+              // CanUndoResponeMessage()
               complete(controller.canUndo.toString())
             case "canRedo" =>
               // GetCanRedoMessage()
-              // UpdateFieldMessage(controller.field.toJson)
+              // CanRedoResponeMessage()
               complete(controller.canRedo.toString())
             case "undo" =>
               // UndoMessage()
@@ -160,15 +152,18 @@ class ControllerService(using
             command match {
               case "placeCard" =>
                 // PlaceCardMessage(Move.fromJson(jsValue))
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.placeCard(Move.fromJson(jsValue))
               case "setPlayerNames" =>
                 // SetPlayerNamesMessage()
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.setPlayerNames(
                   (jsValue \ "playername1").as[String],
                   (jsValue \ "playername2").as[String]
                 )
               case "setGameState" =>
                 // SetGameStateMessage()
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.setGameState(
                   GameState.withName(
                     jsValue("gameState").toString.replace("\"", "")
@@ -176,12 +171,15 @@ class ControllerService(using
                 )
               case "attack" =>
                 // AttackMessage()
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.attack(Move.fromJson(jsValue))
               case "directAttack" =>
                 // DirectAttackMessage()
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.directAttack(Move.fromJson(jsValue))
               case "setStrategy" => {
                 // SetStrategyMessage()
+                // UpdateFieldMessage(controller.field.toJson)
                 controller.setStrategy(
                   Strategy.withName(
                     jsValue("strategy").toString.replace("\"", "")
@@ -191,7 +189,6 @@ class ControllerService(using
               case _ => failWith(new Exception("Invalid command"))
             }
 
-            // UpdateFieldMessage(controller.field.toJson)
             completeWithData(controller.field.toJson.toString)
           }
         }

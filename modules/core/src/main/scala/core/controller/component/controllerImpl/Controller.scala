@@ -65,6 +65,7 @@ class Controller(
       )
       .runWith(backendService.inputB)(backendService.materializer)
     // TODO: Handle incomming messages from service
+    // switch message types handle accordingly
   }))(backendService.materializer)
 
   // TODO: Send messages to service
