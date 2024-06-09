@@ -12,7 +12,6 @@ import akka.NotUsed
 import akka.actor.typed.Props
 import akka.util.ByteString
 import java.nio.ByteOrder
-import akka.actor.Actor
 import akka.actor.Props
 import akka.stream.scaladsl.BidiFlow
 import akka.stream.scaladsl.GraphDSL
@@ -25,11 +24,16 @@ import akka.Done
 import scala.concurrent.Future
 import akka.stream.scaladsl.BroadcastHub
 import akka.stream.scaladsl.Keep
+import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.*
+import scala.concurrent.duration.*
+import akka.pattern.after
 
 trait BackendServiceInterface {
   implicit val system: ActorSystem[ServiceMessage] =
     ActorSystem(Behaviors.empty, "BackendService")
   implicit val materializer: Materializer = Materializer(system)
+  implicit val executionContext: ExecutionContext = system.executionContext
   val bufferSize = 256
 
   // Source and Sink A
@@ -60,16 +64,41 @@ trait BackendServiceInterface {
 
   def outputB: Source[ServiceMessage, NotUsed] = sourceB
 
+    def sendRequestToInputA(
+      request: ServiceMessage,
+      timeout: FiniteDuration = 2.seconds
+  ): Future[ServiceMessage] = {
+    val promise = Promise[ServiceMessage]()
+
+    // Subscribe to outputB and wait for the matching response
+    val cancellable = outputB.runForeach {
+      case msg if msg.id == request.id => promise.success(msg)
+      case cause                       => promise.failure(Throwable(cause.toString()))// Ignore other messages
+    }
+
+    // Send the request
+    inputA.runWith(Source.single(request))
+
+    val timeoutFuture =
+      after(timeout)(Future.failed(new TimeoutException("Request timed out")))
+
+    // Return the future that completes first: either the promise when a response is received, or the timeoutFuture when the timeout is reached
+    Future.firstCompletedOf(Seq(promise.future, timeoutFuture))
+  }
+  
+  def generateRandomMessageId(): String = java.util.UUID.randomUUID().toString
+  
   def start(): Unit;
 }
 
 sealed trait ServiceMessage {
+  val id: String
   val data: Option[JsValue]
 }
 
-case class GetFieldMessage(data: Option[JsValue] = None) extends ServiceMessage
-case class UpdateFieldMessage(data: Option[JsValue]) extends ServiceMessage
-case class DeleteFieldMessage(data: Option[JsValue]) extends ServiceMessage
+case class GetFieldMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
+case class UpdateFieldMessage(data: Option[JsValue], id: String) extends ServiceMessage
+case class DeleteFieldMessage(data: Option[JsValue], id: String) extends ServiceMessage
 
 
 

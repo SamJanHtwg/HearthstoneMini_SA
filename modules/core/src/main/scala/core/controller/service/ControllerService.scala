@@ -47,6 +47,9 @@ import scala.io.StdIn
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
+import scala.concurrent.Promise
+import java.util.concurrent.TimeoutException
+import core.controller.component.UpdateFieldMessage
 /*
   Remove the controlelr dependency from the ControllerService
   controller wants an backend service interface
@@ -58,52 +61,43 @@ import scala.util.Try
 class ControllerService(using
     httpService: HttpService
 ) extends BackendServiceInterface {
-  // TODO: Handle incomming ServiceMessages from controller
-  outputB.runForeach(println)
-
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
-  implicit val executionContext: ExecutionContext = system.executionContext
-  // object UpdateObserver extends Observer {
-
-  //   override def update(e: Event, msg: Option[String]): Unit = {
-  //     httpService.request(
-  //       persistenceServiceEndpoint,
-  //       "update",
-  //       method = HttpMethods.POST,
-  //       data = Some(controller.field.toJson)
-  //     )
-  //   }
-  // }
-  // controller.add(UpdateObserver)
-
-  println("init service")
   var controller: ControllerInterface = _
-
   var queues: List[SourceQueueWithComplete[Message]] = List()
+  handleControllerUpdates
+  
   val route: Route =
     concat(
       get {
         pathSingleSlash {
-          Source
-            .single(GetFieldMessage())
-            .runWith(inputA)
           complete("HearthstoneMini ControllerAPI Service is online.")
         }
       },
       get {
         path("controller" / Segment) { command =>
           command match {
-            case "ws" => handleWebSocketMessages(websocketChanges)
+            case "ws"     => handleWebSocketMessages(websocketChanges)
             case "delete" =>
+              // DeleteMessage()
               delete match {
                 case Success(_) => completeWithData("success")
                 case Failure(exception) =>
                   failWith(exception)
               }
             case "gameState" =>
+              // GetFieldMessage()
               completeWithData(controller.field.gameState.toString())
-            case "field" =>
-              completeWithData(controller.field.toJson.toString())
+            case "field" => {
+              var res = Await.result(
+                sendRequestToInputA(
+                  GetFieldMessage(id = generateRandomMessageId()),
+                  2.seconds
+                ),
+                2.seconds
+              )
+              completeWithData(res.data.get.toString)
+            }
+            // completeWithData(controller.field.toJson.toString())
             case "save" =>
               save match {
                 case Success(_) => completeWithData("success")
@@ -113,6 +107,7 @@ class ControllerService(using
             case "load" =>
               load match {
                 case Success(json) =>
+                  // UpdateFieldMessage(json)
                   controller.field = Field.fromJson(json)
                   completeWithData(controller.field.toJson.toString)
                 case Failure(exception) =>
@@ -120,18 +115,30 @@ class ControllerService(using
               }
             case "drawCard" =>
               controller.drawCard()
+              // DrawCardMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               completeWithData(controller.field.toJson.toString)
             case "switchPlayer" =>
+              // SwitchPlayerMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               controller.switchPlayer()
               completeWithData(controller.field.toJson.toString)
             case "canUndo" =>
+              // GetCanUndoMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               complete(controller.canUndo.toString())
             case "canRedo" =>
+              // GetCanRedoMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               complete(controller.canRedo.toString())
             case "undo" =>
+              // UndoMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               controller.undo
               completeWithData(controller.field.toJson.toString)
             case "redo" =>
+              // RedoMessage()
+              // UpdateFieldMessage(controller.field.toJson)
               controller.redo
               completeWithData(controller.field.toJson.toString)
             case "exitGame" =>
@@ -152,23 +159,29 @@ class ControllerService(using
           entity(as[JsValue]) { jsValue =>
             command match {
               case "placeCard" =>
+                // PlaceCardMessage(Move.fromJson(jsValue))
                 controller.placeCard(Move.fromJson(jsValue))
               case "setPlayerNames" =>
+                // SetPlayerNamesMessage()
                 controller.setPlayerNames(
                   (jsValue \ "playername1").as[String],
                   (jsValue \ "playername2").as[String]
                 )
               case "setGameState" =>
+                // SetGameStateMessage()
                 controller.setGameState(
                   GameState.withName(
                     jsValue("gameState").toString.replace("\"", "")
                   )
                 )
               case "attack" =>
+                // AttackMessage()
                 controller.attack(Move.fromJson(jsValue))
               case "directAttack" =>
+                // DirectAttackMessage()
                 controller.directAttack(Move.fromJson(jsValue))
               case "setStrategy" => {
+                // SetStrategyMessage()
                 controller.setStrategy(
                   Strategy.withName(
                     jsValue("strategy").toString.replace("\"", "")
@@ -178,6 +191,7 @@ class ControllerService(using
               case _ => failWith(new Exception("Invalid command"))
             }
 
+            // UpdateFieldMessage(controller.field.toJson)
             completeWithData(controller.field.toJson.toString)
           }
         }
@@ -225,6 +239,19 @@ class ControllerService(using
     )
     .map(_ => ())
 
+  def handleControllerUpdates: Unit = outputB.runForeach(msg => {
+    msg match {
+      case UpdateFieldMessage(data, _) =>
+        httpService.request(
+          persistenceServiceEndpoint,
+          "update",
+          method = HttpMethods.POST,
+          data = data
+        )
+      case _ =>
+    }
+  })
+
   def start(): Unit = {
     val binding = Http().newServerAt("0.0.0.0", 9031).bind(route)
 
@@ -253,5 +280,4 @@ class ControllerService(using
         queue
       }
     Flow.fromSinkAndSource(incomingMessages, outgoingMessages)
-
 }

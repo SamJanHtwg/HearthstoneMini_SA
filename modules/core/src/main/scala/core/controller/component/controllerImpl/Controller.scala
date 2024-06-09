@@ -59,13 +59,18 @@ class Controller(
     )
   )
   backendService.outputA.runWith(Sink.foreach(msg => {
+    Source
+      .single(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+      .runWith(backendService.inputB)(backendService.materializer)
     // TODO: Handle incomming messages from service
   }))(backendService.materializer)
 
   // TODO: Send messages to service
-  Source
-    .single(UpdateFieldMessage(Some(field.toJson)))
-    .runWith(backendService.inputB)(backendService.materializer)
+  // Source
+  //   .single(UpdateFieldMessage(Some(field.toJson)))
+  //   .runWith(backendService.inputB)(backendService.materializer)
 
   var errorMsg: Option[String] = None
 
