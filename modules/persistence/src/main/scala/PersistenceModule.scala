@@ -1,10 +1,10 @@
 package persistence
 
-import persistence.fileIO.FileIOInterface
-import persistence.database.DaoInterface
-import persistence.database.mongodb.MongoDatabase
-import persistence.fileIO.jsonIOImpl.JsonIO
-import persistence.database.slick.SlickDatabase
+import fileIO.FileIOInterface
+import database.DaoInterface
+import database.mongodb.MongoDatabase
+import fileIO.jsonIOImpl.JsonIO
+import database.slick.SlickDatabase
 
 object PersistenceMongoJsonModule {
   given DaoInterface = MongoDatabase

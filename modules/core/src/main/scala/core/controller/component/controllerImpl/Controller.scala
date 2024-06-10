@@ -59,7 +59,7 @@ class Controller(
   def drawCard(): Unit = doStep(new DrawCardCommand(field))
   def setPlayerNames(playername1: String, playername2: String): Unit = {
     field = field.setPlayerNames(playername1, playername2)
-    nextState()
+    field = field.setGameState(GameState.MAINGAME)
     notifyObservers(Event.PLAY, msg = None)
   }
   def attack(move: Move): Unit = doStep(new AttackCommand(field, move))
@@ -110,21 +110,13 @@ class Controller(
     setGameState(GameState.EXIT)
   }
 
-  def nextState(): Unit = {
-    field = field.setGameState(field.gameState match {
-      case GameState.CHOOSEMODE       => GameState.ENTERPLAYERNAMES
-      case GameState.ENTERPLAYERNAMES => GameState.MAINGAME
-      case GameState.MAINGAME         => GameState.WIN
-    })
-  }
-
   def setStrategy(strat: Strategy): Unit = {
     field = strat match {
       case Strategy.normal   => field.setHpValues(30).setManaValues(1)
       case Strategy.hardcore => field.setHpValues(10).setManaValues(10)
       case Strategy.debug    => field.setHpValues(100).setManaValues(100)
     }
-    nextState()
+    field = field.setGameState(GameState.ENTERPLAYERNAMES)
     errorMsg = None
     notifyObservers(Event.PLAY, msg = None)
   }

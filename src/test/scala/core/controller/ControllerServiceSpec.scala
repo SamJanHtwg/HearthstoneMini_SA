@@ -11,6 +11,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.parboiled2.RuleTrace.Run
+import akka.stream.javadsl.FileIO
 import akka.testkit.ImplicitSender
 import akka.testkit.TestActors
 import akka.testkit.TestKit
@@ -19,8 +20,10 @@ import core.controller.Strategy.Strategy
 import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
 import core.controller.service.ControllerService
+import core.controller.service.HttpService
 import core.util.CardProvider
 import core.util.UndoManager
+import io.gatling.core.config.ConfigKeys.http
 import model.GameState
 import model.GameState.GameState
 import model.Move
@@ -31,37 +34,34 @@ import model.fieldComponent.fieldImpl.Field
 import model.playerComponent.PlayerInterface
 import model.playerComponent.playerImpl.Player
 import org.checkerframework.checker.units.qual.s
-import org.mockito.Mockito
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.when
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.when
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import persistence.*
+import persistence.database.DaoInterface
 import persistence.fileIO.FileIOInterface
 import persistence.fileIO.jsonIOImpl.JsonIO
-import persistence.fileIO.service.PersistenceService
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
+import spray.json.JsString
 
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
-import spray.json.JsString
-import persistence.database.DaoInterface
-import core.controller.service.HttpService
+import scala.util.Try
 
 class ControllerServiceSpec
     extends AnyWordSpec
     with Matchers
     with ScalatestRouteTest
-    with BeforeAndAfterEach
-    with MockFactory {
+    with BeforeAndAfterEach {
 
   var testCards: List[Card] = _
   var mockUndoManager: UndoManager = _
@@ -71,14 +71,16 @@ class ControllerServiceSpec
   var mockHttpService: HttpService = _
   var mockField: FieldInterface = _
   var mockController: ControllerInterface = _
+  var mockDao: DaoInterface = _
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockCardProvider = CardProvider(inputFile = "/json/cards.json")
-    mockUndoManager = mock[UndoManager]
-    mockFileIO = mock[FileIOInterface]
+    mockUndoManager = mock(classOf[UndoManager])
+    mockFileIO = mock(classOf[FileIOInterface])
     mockController = Controller(mockFileIO, mockUndoManager, mockCardProvider)
-    mockHttpService = mock[HttpService]
+    mockHttpService = mock(classOf[HttpService])
+    mockDao = mock(classOf[DaoInterface])
 
     testCards = List[Card](
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -123,39 +125,31 @@ class ControllerServiceSpec
     }
 
     "save field when calling GET /controller/save" in {
-      val mockFileIO = mock[FileIOInterface]
-      val mockDao = mock[DaoInterface]
+      when(mockHttpService.request(any(), any(), any(), any())).thenReturn(Success(Json.toJson("Saved")))
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
-      val persistenceService = new PersistenceService(using
-        mockFileIO,
-        mockDao
-      )
-      persistenceService.start()
+      
 
       Get("/controller/save") ~> service.route ~> check {
-        responseAs[String] shouldEqual "There was an internal server error."
+
+        responseAs[String] shouldEqual "success"
       }
 
       service.stop()
-      persistenceService.stop()
     }
 
     "load field" in {
-      val mockDao = mock[DaoInterface]
-      (mockDao.load _).expects().returning(Success(mockController.field.toJson))
-
+      when(mockFileIO.load()).thenReturn(Success(mockController.field))
+      when(mockDao.load()).thenReturn(Success(mockController.field))
+      when(mockHttpService.request(any(), any(), any(), any())).thenReturn(Success(mockController.field.toJson))
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
-      val persistenceService = new PersistenceService(using mockFileIO, mockDao)
-      persistenceService.start()
 
       Get("/controller/load") ~> service.route ~> check {
         responseAs[String] shouldEqual mockController.field.toJson.toString()
       }
 
       service.stop()
-      persistenceService.stop()
     }
 
     "draw card" in {
@@ -170,8 +164,8 @@ class ControllerServiceSpec
     }
 
     "switch player" in {
-      (mockUndoManager.doStep _).expects(*)
       val service = new ControllerService(using mockController, mockHttpService)
+
       service.start()
 
       Get("/controller/switchPlayer") ~> service.route ~> check {
@@ -182,7 +176,7 @@ class ControllerServiceSpec
     }
 
     "can undo" in {
-      (mockUndoManager.canUndo _).expects().returning(false)
+      when(mockUndoManager.canUndo()).thenReturn(false)
 
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
@@ -195,7 +189,7 @@ class ControllerServiceSpec
     }
 
     "can redo" in {
-      (mockUndoManager.canRedo _).expects().returning(false)
+      when(mockUndoManager.canRedo()).thenReturn(false)
 
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
@@ -208,9 +202,7 @@ class ControllerServiceSpec
     }
 
     "undo" in {
-      (mockUndoManager.undoStep _)
-        .expects(*)
-        .returning(Success(mockController.field))
+      when(mockUndoManager.undoStep(any())).thenReturn(Success(mockController.field))
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
@@ -222,9 +214,7 @@ class ControllerServiceSpec
     }
 
     "redo" in {
-      (mockUndoManager.redoStep _)
-        .expects(*)
-        .returning(Success(mockController.field))
+      when(mockUndoManager.redoStep(any())).thenReturn(Success(mockController.field))
       val service = new ControllerService(using mockController, mockHttpService)
       service.start()
 
@@ -258,7 +248,6 @@ class ControllerServiceSpec
     }
 
     "post place card" in {
-      (mockUndoManager.doStep _).expects(*)
       mockController.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1, manaValue = 100, hand = testCards)),

@@ -21,7 +21,7 @@ services:
     image: persistence:1.1.0
     ports: 
       - "9021:9021"
-    network_mode: "host"
+    # network_mode: "host"
     depends_on:
       - postgres_db
       - mongodb
@@ -32,7 +32,7 @@ services:
       - "9031:9031"
     depends_on:
       - persistence
-    network_mode: "host"
+    # network_mode: "host"
 
   postgres_db:
     image: postgres
@@ -50,7 +50,7 @@ services:
       - my_network
 
   mongodb:
-    image: mongo:latest
+    image: mongo:7.0.11
     container_name: mongodb_container
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
