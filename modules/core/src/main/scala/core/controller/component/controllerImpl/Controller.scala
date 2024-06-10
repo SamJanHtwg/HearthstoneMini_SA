@@ -164,7 +164,7 @@ class Controller(
   }
 
   private def handleBackendMessages =
-    backendService.outputA.runWith(Sink.foreach(msg => {
+    backendService.outputA().runWith(Sink.foreach(msg => {
       msg match {
         case GetFieldMessage(data, id) =>
           backendService.sendMessageToInputB(

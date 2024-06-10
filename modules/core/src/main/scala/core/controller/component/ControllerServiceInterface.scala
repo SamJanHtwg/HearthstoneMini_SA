@@ -56,7 +56,7 @@ trait ControllerServiceInterface {
       sinkA.offer(msg)
   }
 
-  def outputA: Source[ServiceMessage, NotUsed] = sourceA
+  def outputA(): Source[ServiceMessage, NotUsed] = sourceA
 
   def inputB: Sink[ServiceMessage, Future[Done]] = Sink.foreach[ServiceMessage] {
     msg =>
