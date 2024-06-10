@@ -24,7 +24,8 @@ object MongoDatabase extends DaoInterface with Observable {
   private val collectionName: String = "games"
   private val maxWaitSeconds = 3.seconds
 
-  private val client: MongoClient = MongoClient(
+
+  var client: MongoClient = MongoClient(
     MongoClientSettings
       .builder(
       )
@@ -38,7 +39,9 @@ object MongoDatabase extends DaoInterface with Observable {
       )
       .build()
   )
-  private val database: MongoDatabase = client.getDatabase(databaseName)
+  var database: MongoDatabase = client.getDatabase(databaseName)
+  var collection: MongoCollection[Document] = database.getCollection(collectionName)
+
   Await.result(
     database.createCollection(collectionName).toFuture(),
     maxWaitSeconds
@@ -47,7 +50,7 @@ object MongoDatabase extends DaoInterface with Observable {
   override def save(field: FieldInterface): Unit = {
     val document = Document("game" -> field.toJson.toString, "_id" -> 1)
     Await.result(
-      database.getCollection(collectionName).insertOne(document).toFuture(),
+      collection.insertOne(document).toFuture(),
       maxWaitSeconds
     )
   }
@@ -56,8 +59,7 @@ object MongoDatabase extends DaoInterface with Observable {
     Try(
       Await
         .result(
-          database
-            .getCollection(collectionName)
+          collection
             .find(equal("_id", 1))
             .headOption(),
           maxWaitSeconds
@@ -70,8 +72,7 @@ object MongoDatabase extends DaoInterface with Observable {
 
   override def update(field: FieldInterface): Unit = {
     Await.result(
-      database
-        .getCollection(collectionName)
+      collection
         .updateOne(equal("_id", 1), set("game", field.toJson.toString))
         .toFuture(),
       maxWaitSeconds
@@ -81,8 +82,7 @@ object MongoDatabase extends DaoInterface with Observable {
   override def delete(): Try[Unit] =
     Try[Unit](
       Await.result(
-        database
-          .getCollection(collectionName)
+        collection
           .deleteOne(equal("_id", 1))
           .toFuture(),
         maxWaitSeconds

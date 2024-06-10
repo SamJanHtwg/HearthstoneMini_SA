@@ -71,7 +71,7 @@ class PersistenceServiceSpec
     "start a server" in {
       val mockFileIO = mock(classOf[FileIOInterface])
       val mockDao = mock(classOf[DaoInterface])
-      
+
       val service = new PersistenceService(
         using mockFileIO,
         mockDao

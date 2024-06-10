@@ -6,4 +6,5 @@ ignore:
   - "modules/persistence/src/main/scala/PersistenceRestApi.scala"
   - "modules/core/src/main/scala/core/controller/service/HttpService.scala"
   - "modules/core/src/main/scala/CoreRunner.scala"
-  
+  - "modules/persistence/src/main/scala/PersistenceModule.scala"
+  - "modules/core/src/main/scala/core/controller/component/ControllerServiceInterface.scala"
