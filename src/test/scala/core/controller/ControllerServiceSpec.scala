@@ -72,13 +72,13 @@ class ControllerServiceSpec
   var mockHttpService: HttpService = _
   var mockField: FieldInterface = _
   var mockController: ControllerInterface = _
-  var mockBackendService: BackendServiceInterface = _
+  var mockBackendService: ControllerServiceInterface = _
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockCardProvider = CardProvider(inputFile = "/json/cards.json")
     mockUndoManager = mock[UndoManager]
-    mockBackendService = mock[BackendServiceInterface]
+    mockBackendService = mock[ControllerServiceInterface]
     mockFileIO = mock[FileIOInterface]
     mockController = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockBackendService)
     mockHttpService = mock[HttpService]

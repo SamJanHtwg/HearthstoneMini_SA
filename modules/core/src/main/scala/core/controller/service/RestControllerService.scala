@@ -15,7 +15,7 @@ import akka.http.scaladsl.unmarshalling.Unmarshaller
 import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.*
 import core.controller.component.*
-import core.controller.component.BackendServiceInterface
+import core.controller.component.ControllerServiceInterface
 import model.fieldComponent.fieldImpl.Field
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
@@ -25,7 +25,7 @@ import scala.util.*
 
 class RestBackendService(using
     httpService: HttpService
-) extends BackendServiceInterface {
+) extends ControllerServiceInterface {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
   private var queues: List[SourceQueueWithComplete[Message]] = List()
   

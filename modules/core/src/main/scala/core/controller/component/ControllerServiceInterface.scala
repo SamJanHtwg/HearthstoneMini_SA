@@ -30,7 +30,7 @@ import scala.concurrent.duration.*
 import akka.pattern.after
 import scala.util.Try
 
-trait BackendServiceInterface {
+trait ControllerServiceInterface {
   implicit val system: ActorSystem[ServiceMessage] =
     ActorSystem(Behaviors.empty, "BackendService")
   implicit val materializer: Materializer = Materializer(system)

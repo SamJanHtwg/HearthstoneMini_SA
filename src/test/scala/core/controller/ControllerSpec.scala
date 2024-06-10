@@ -36,14 +36,14 @@ class ControllerSpec
   var mockUndoManager: UndoManager = _
   var mockCardProvider: CardProvider = _
   var mockFileIO: FileIOInterface = _
-  var mockBackendService: BackendServiceInterface = _
+  var mockBackendService: ControllerServiceInterface = _
   
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockCardProvider = CardProvider(inputFile = "/json/cards.json")
     mockUndoManager = mock[UndoManager]
     mockFileIO = mock[FileIOInterface]
-    mockBackendService = mock[BackendServiceInterface]
+    mockBackendService = mock[ControllerServiceInterface]
 
     testCards = List[Card](
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),

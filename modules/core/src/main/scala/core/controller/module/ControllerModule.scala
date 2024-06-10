@@ -7,7 +7,7 @@ import core.controller.component.controllerImpl.ControllerRestClient
 import core.controller.service.RestBackendService
 import core.util.*
 import core.controller.service.HttpService
-import core.controller.component.BackendServiceInterface
+import core.controller.component.ControllerServiceInterface
 import scala.concurrent.ExecutionContext
 import java.util.concurrent.Executors
 import scala.concurrent.Future
@@ -17,7 +17,7 @@ import scala.util.Failure
 object ControllerModule:
   private val executorService = Executors.newSingleThreadExecutor()
   private implicit val executionContext: ExecutionContext = ExecutionContext.fromExecutorService(executorService)
-  private var backendService: BackendServiceInterface = RestBackendService(using
+  private var backendService: ControllerServiceInterface = RestBackendService(using
       given_HttpService
     )
 

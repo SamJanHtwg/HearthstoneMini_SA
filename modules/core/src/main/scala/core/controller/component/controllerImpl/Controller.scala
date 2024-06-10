@@ -28,7 +28,7 @@ import core.util.commands.commandImpl.{
   AttackCommand
 }
 import core.util.CardProvider
-import core.controller.component.BackendServiceInterface
+import core.controller.component.ControllerServiceInterface
 import akka.stream.scaladsl.Sink
 import org.reactivestreams.Subscriber
 import akka.stream.scaladsl.Source
@@ -41,7 +41,7 @@ class Controller(
     val fileIO: FileIOInterface,
     private val undoManager: UndoManager,
     private val cardProvider: CardProvider,
-    private val backendService: BackendServiceInterface
+    private val backendService: ControllerServiceInterface
 ) extends ControllerInterface {
   var field: FieldInterface = Field(
     players = Map(
@@ -172,7 +172,7 @@ class Controller(
           )
         case UpdateFieldMessage(Some(jsValue), id) =>
           field = Field.fromJson(jsValue).setGameState(GameState.MAINGAME)
-          
+
           backendService.sendMessageToInputB(
             UpdateFieldMessage(Some(field.toJson), id)
           )
