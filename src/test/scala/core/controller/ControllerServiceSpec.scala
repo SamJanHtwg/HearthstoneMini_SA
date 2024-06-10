@@ -11,16 +11,18 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.parboiled2.RuleTrace.Run
+import akka.stream.Materializer
 import akka.stream.javadsl.FileIO
+import akka.stream.scaladsl.Source
 import akka.testkit.ImplicitSender
 import akka.testkit.TestActors
 import akka.testkit.TestKit
 import akka.testkit.TestProbe
 import core.controller.Strategy.Strategy
 import core.controller.component.ControllerInterface
-import core.controller.component.controllerImpl.Controller
-import core.controller.service.RestControllerService
+import core.controller.component.ControllerServiceInterface
 import core.controller.service.HttpService
+import core.controller.service.RestControllerService
 import core.util.CardProvider
 import core.util.UndoManager
 import io.gatling.core.config.ConfigKeys.http
@@ -56,7 +58,6 @@ import scala.concurrent.Future
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-import core.controller.component.ControllerServiceInterface
 
 class ControllerServiceSpec
     extends AnyWordSpec
@@ -73,6 +74,7 @@ class ControllerServiceSpec
   var mockField: FieldInterface = _
   var mockController: ControllerInterface = _
   var mockDao: DaoInterface = _
+  var mockMaterializer: Materializer = _
   var mockControllerService: ControllerServiceInterface = _
 
   override def beforeEach(): Unit = {
@@ -81,9 +83,10 @@ class ControllerServiceSpec
     mockUndoManager = mock(classOf[UndoManager])
     mockControllerService = mock(classOf[ControllerServiceInterface])
     mockFileIO = mock(classOf[FileIOInterface])
-    mockController = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+    mockController = mock(classOf[ControllerInterface])
     mockHttpService = mock(classOf[HttpService])
     mockDao = mock(classOf[DaoInterface])
+    mockMaterializer = mock(classOf[Materializer])
 
     testCards = List[Card](
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
