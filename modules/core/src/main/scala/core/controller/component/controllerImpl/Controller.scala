@@ -170,8 +170,12 @@ class Controller(
           backendService.sendMessageToInputB(
             UpdateFieldMessage(Some(field.toJson), id = msg.id)
           )
-        case UpdateFieldMessage(Some(jsValue), _) =>
-          field = Field.fromJson(jsValue)
+        case UpdateFieldMessage(Some(jsValue), id) =>
+          field = Field.fromJson(jsValue).setGameState(GameState.MAINGAME)
+          
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id)
+          )
           notifyObservers(Event.PLAY, msg = None)
         case SetStrategyMessage(data, id) =>
           setStrategy(

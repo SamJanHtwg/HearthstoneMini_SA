@@ -62,10 +62,6 @@ object MongoDatabase extends DaoInterface with Observable {
             .headOption(),
           maxWaitSeconds
         )
-        .map(document => {
-          println(document)
-          document
-        })
         .toRight(Exception("No game found"))
         .map(document => Json.parse(document.getString("game")))
         .toTry

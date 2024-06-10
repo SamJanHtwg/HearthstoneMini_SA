@@ -28,7 +28,7 @@ class RestBackendService(using
 ) extends BackendServiceInterface {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
   private var queues: List[SourceQueueWithComplete[Message]] = List()
-  handleControllerUpdates
+  
   val route: Route =
     concat(
       get {
@@ -49,16 +49,23 @@ class RestBackendService(using
                   failWith(exception)
               }
             case "gameState" =>
-              sendRequestToInputA(GetFieldMessage(id = generateRandomMessageId()), 2.seconds) match
-                case Success(message) => completeWithData(message.data.map(Field.fromJson(_)).get.gameState.toString)
+              sendRequestToInputA(
+                GetFieldMessage(id = generateRandomMessageId()),
+                2.seconds
+              ) match
+                case Success(message) =>
+                  completeWithData(
+                    message.data.map(Field.fromJson(_)).get.gameState.toString
+                  )
                 case Failure(exception) => failWith(exception)
             case "field" => {
-                sendRequestToInputA(
-                  GetFieldMessage(id = generateRandomMessageId()),
-                ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
-                  case Failure(exception) => failWith(exception)
-                }
+              sendRequestToInputA(
+                GetFieldMessage(id = generateRandomMessageId())
+              ) match {
+                case Success(message) =>
+                  completeWithData(message.data.get.toString)
+                case Failure(exception) => failWith(exception)
+              }
             }
             case "save" =>
               save match {
@@ -70,9 +77,13 @@ class RestBackendService(using
               load match {
                 case Success(json) =>
                   sendRequestToInputA(
-                    UpdateFieldMessage(Some(json), id = generateRandomMessageId()),
+                    UpdateFieldMessage(
+                      Some(json),
+                      id = generateRandomMessageId()
+                    )
                   ) match {
-                    case Success(message) => completeWithData(message.data.get.toString)
+                    case Success(message) =>
+                      completeWithData(message.data.get.toString)
                     case Failure(exception) => failWith(exception)
                   }
                 case Failure(exception) =>
@@ -80,44 +91,48 @@ class RestBackendService(using
               }
             case "drawCard" =>
               sendRequestToInputA(
-                DrawCardMessage(id = generateRandomMessageId()),
+                DrawCardMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => completeWithData(message.data.get.toString)
+                case Success(message) =>
+                  completeWithData(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "switchPlayer" =>
               sendRequestToInputA(
-                SwitchPlayerMessage(id = generateRandomMessageId()),
+                SwitchPlayerMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => completeWithData(message.data.get.toString)
+                case Success(message) =>
+                  completeWithData(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "canUndo" =>
               sendRequestToInputA(
-                CanUndoMessage(id = generateRandomMessageId()),
+                CanUndoMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => complete(message.data.get.toString)
+                case Success(message)   => complete(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "canRedo" =>
               sendRequestToInputA(
-                CanRedoMessage(id = generateRandomMessageId()),
+                CanRedoMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => complete(message.data.get.toString)
+                case Success(message)   => complete(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "undo" =>
               sendRequestToInputA(
-                UndoMessage(id = generateRandomMessageId()),
+                UndoMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => completeWithData(message.data.get.toString)
+                case Success(message) =>
+                  completeWithData(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "redo" =>
               sendRequestToInputA(
-                RedoMessage(id = generateRandomMessageId()),
+                RedoMessage(id = generateRandomMessageId())
               ) match {
-                case Success(message) => completeWithData(message.data.get.toString)
+                case Success(message) =>
+                  completeWithData(message.data.get.toString)
                 case Failure(exception) => failWith(exception)
               }
             case "exitGame" =>
@@ -138,44 +153,65 @@ class RestBackendService(using
             command match {
               case "placeCard" =>
                 sendRequestToInputA(
-                  PlaceCardMessage(Some(jsValue), id = generateRandomMessageId()),
+                  PlaceCardMessage(
+                    Some(jsValue),
+                    id = generateRandomMessageId()
+                  )
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               case "setPlayerNames" =>
                 sendRequestToInputA(
-                  SetPlayerNamesMessage(Some(jsValue), id = generateRandomMessageId()),
+                  SetPlayerNamesMessage(
+                    Some(jsValue),
+                    id = generateRandomMessageId()
+                  )
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               case "setGameState" =>
                 sendRequestToInputA(
-                  SetGameStateMessage(Some(jsValue), id = generateRandomMessageId()),
+                  SetGameStateMessage(
+                    Some(jsValue),
+                    id = generateRandomMessageId()
+                  )
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               case "attack" =>
                 sendRequestToInputA(
-                  AttackMessage(Some(jsValue), id = generateRandomMessageId()),
+                  AttackMessage(Some(jsValue), id = generateRandomMessageId())
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               case "directAttack" =>
                 sendRequestToInputA(
-                  DirectAttackMessage(Some(jsValue), id = generateRandomMessageId()),
+                  DirectAttackMessage(
+                    Some(jsValue),
+                    id = generateRandomMessageId()
+                  )
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               case "setStrategy" => {
                 sendRequestToInputA(
-                  SetStrategyMessage(Some(jsValue), id = generateRandomMessageId()),
+                  SetStrategyMessage(
+                    Some(jsValue),
+                    id = generateRandomMessageId()
+                  )
                 ) match {
-                  case Success(message) => completeWithData(message.data.get.toString)
+                  case Success(message) =>
+                    completeWithData(message.data.get.toString)
                   case Failure(exception) => failWith(exception)
                 }
               }
@@ -202,19 +238,21 @@ class RestBackendService(using
 
   def save: Try[Unit] = {
     sendRequestToInputA(
-      GetFieldMessage(id = generateRandomMessageId()),
+      GetFieldMessage(id = generateRandomMessageId())
     ) match {
       case Success(message) =>
-        httpService.request(
-          persistenceServiceEndpoint,
-          "save",
-          method = HttpMethods.POST,
-          data = message.data
-        ).map(_ => ())
+        httpService
+          .request(
+            persistenceServiceEndpoint,
+            "save",
+            method = HttpMethods.POST,
+            data = message.data
+          )
+          .map(_ => ())
       case Failure(exception) =>
         Failure(exception)
     }
-    
+
   }
 
   def load: Try[JsValue] = {
@@ -232,19 +270,6 @@ class RestBackendService(using
       method = HttpMethods.GET
     )
     .map(_ => ())
-
-  def handleControllerUpdates: Unit = outputB.runForeach(msg => {
-    msg match {
-      case UpdateFieldMessage(data, _) =>
-        httpService.request(
-          persistenceServiceEndpoint,
-          "update",
-          method = HttpMethods.POST,
-          data = data
-        )
-      case _ =>
-    }
-  })
 
   def start(): Unit = {
     val binding = Http().newServerAt("0.0.0.0", 9031).bind(route)

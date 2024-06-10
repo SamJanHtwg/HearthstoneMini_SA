@@ -80,7 +80,6 @@ class ControllerRestClient(using httpService: HttpService)
 
   private def setState(newField: Try[FieldInterface]): Unit = newField match {
     case Success(newField) =>
-      println("Setting new field:" + newField.toString)
       field = newField
       errorMsg = None
       notifyObservers(Event.PLAY, msg = errorMsg)

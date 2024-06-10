@@ -18,8 +18,8 @@ class Starter() {
 
     override def run(): Unit = {
       val persistenceService = new PersistenceService(using
-        PersistenceSlickJsonModule.given_FileIOInterface,
-        PersistenceSlickJsonModule.given_DaoInterface
+        PersistenceMongoJsonModule.given_FileIOInterface,
+        PersistenceMongoJsonModule.given_DaoInterface
       )
       persistenceService.start()
     }
