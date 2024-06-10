@@ -8,10 +8,9 @@ import _root_.model.fieldComponent.fieldImpl.Field
 import _root_.model.playerComponent.playerImpl.Player
 import core.controller.Strategy
 import core.controller.Strategy.hardcore
+import core.controller.component.ControllerServiceInterface
 import core.controller.component.controllerImpl.Controller
 import core.util.CardProvider
-import util.Event
-import util.Observer
 import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.DrawCardCommand
@@ -21,11 +20,12 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import persistence.fileIO.FileIOInterface
+import util.Event
+import util.Observer
 
 import scala.annotation.meta.field
 import scala.util.Failure
 import scala.util.Success
-import core.controller.component.ControllerServiceInterface
 
 class ControllerSpec
     extends AnyWordSpec
