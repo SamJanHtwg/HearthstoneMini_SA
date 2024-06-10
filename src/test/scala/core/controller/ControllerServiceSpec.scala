@@ -19,7 +19,7 @@ import akka.testkit.TestProbe
 import core.controller.Strategy.Strategy
 import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
-import core.controller.service.RestBackendService
+import core.controller.service.RestControllerService
 import core.controller.service.HttpService
 import core.util.CardProvider
 import core.util.UndoManager
@@ -68,7 +68,7 @@ class ControllerServiceSpec
   var mockUndoManager: UndoManager = _
   var mockCardProvider: CardProvider = _
   var mockFileIO: FileIOInterface = _
-  var controllerService: RestBackendService = _
+  var controllerService: RestControllerService = _
   var mockHttpService: HttpService = _
   var mockField: FieldInterface = _
   var mockController: ControllerInterface = _
@@ -96,7 +96,7 @@ class ControllerServiceSpec
 
   "Controller Service" should {
     "return message when calling GET /" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
       Get("/") ~> service.route ~> check {
         responseAs[
@@ -108,7 +108,7 @@ class ControllerServiceSpec
     }
 
     "return game state when calling GET /controller/gameState" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
       Get("/controller/gameState") ~> service.route ~> check {
         responseAs[String] shouldEqual GameState.CHOOSEMODE.toString()
@@ -118,7 +118,7 @@ class ControllerServiceSpec
     }
 
     "return field when calling GET /controller/field" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
       Get("/controller/field") ~> service.route ~> check {
         responseAs[String] shouldEqual mockController.field.toJson.toString()
@@ -129,7 +129,7 @@ class ControllerServiceSpec
 
     "save field when calling GET /controller/save" in {
       when(mockHttpService.request(any(), any(), any(), any())).thenReturn(Success(Json.toJson("Saved")))
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
       
 
@@ -145,7 +145,7 @@ class ControllerServiceSpec
       when(mockFileIO.load()).thenReturn(Success(mockController.field))
       when(mockDao.load()).thenReturn(Success(mockController.field))
       when(mockHttpService.request(any(), any(), any(), any())).thenReturn(Success(mockController.field.toJson))
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/load") ~> service.route ~> check {
@@ -156,7 +156,7 @@ class ControllerServiceSpec
     }
 
     "draw card" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/drawCard") ~> service.route ~> check {
@@ -167,7 +167,7 @@ class ControllerServiceSpec
     }
 
     "switch player" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
 
       service.start()
 
@@ -181,7 +181,7 @@ class ControllerServiceSpec
     "can undo" in {
       when(mockUndoManager.canUndo()).thenReturn(false)
 
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/canUndo") ~> service.route ~> check {
@@ -194,7 +194,7 @@ class ControllerServiceSpec
     "can redo" in {
       when(mockUndoManager.canRedo()).thenReturn(false)
 
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/canRedo") ~> service.route ~> check {
@@ -206,7 +206,7 @@ class ControllerServiceSpec
 
     "undo" in {
       when(mockUndoManager.undoStep(any())).thenReturn(Success(mockController.field))
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/undo") ~> service.route ~> check {
@@ -218,7 +218,7 @@ class ControllerServiceSpec
 
     "redo" in {
       when(mockUndoManager.redoStep(any())).thenReturn(Success(mockController.field))
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/redo") ~> service.route ~> check {
@@ -229,7 +229,7 @@ class ControllerServiceSpec
     }
 
     "exit game" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/exitGame") ~> service.route ~> check {
@@ -240,7 +240,7 @@ class ControllerServiceSpec
     }
 
     "return error message when calling invalid command" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Get("/controller/invalid") ~> service.route ~> check {
@@ -257,7 +257,7 @@ class ControllerServiceSpec
           (2, Player(id = 2))
         )
       )
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -271,7 +271,7 @@ class ControllerServiceSpec
     }
 
     "set player names" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -287,7 +287,7 @@ class ControllerServiceSpec
     }
 
     "set game state" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -301,7 +301,7 @@ class ControllerServiceSpec
     }
 
     "attack" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -315,7 +315,7 @@ class ControllerServiceSpec
     }
 
     "direct attack" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -329,7 +329,7 @@ class ControllerServiceSpec
     }
 
     "set strategy" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(
@@ -343,7 +343,7 @@ class ControllerServiceSpec
     }
 
     "return error message when calling invalid post command" in {
-      val service = new RestBackendService(using  mockHttpService)
+      val service = new RestControllerService(using  mockHttpService)
       service.start()
 
       Post(

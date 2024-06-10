@@ -3,8 +3,7 @@ package core.controller.module
 import core.controller.component.ControllerInterface
 import core.controller.component.controllerImpl.Controller
 import persistence.fileIO.jsonIOImpl.JsonIO
-import core.controller.component.controllerImpl.ControllerRestClient
-import core.controller.service.RestBackendService
+import core.controller.service.RestControllerService
 import core.util.*
 import core.controller.service.HttpService
 import core.controller.component.ControllerServiceInterface
@@ -13,11 +12,12 @@ import java.util.concurrent.Executors
 import scala.concurrent.Future
 import scala.util.Success
 import scala.util.Failure
+import core.controller.component.controllerImpl.ControllerRestClient
 
 object ControllerModule:
   private val executorService = Executors.newSingleThreadExecutor()
   private implicit val executionContext: ExecutionContext = ExecutionContext.fromExecutorService(executorService)
-  private var backendService: ControllerServiceInterface = RestBackendService(using
+  private var backendService: ControllerServiceInterface = RestControllerService(using
       given_HttpService
     )
 

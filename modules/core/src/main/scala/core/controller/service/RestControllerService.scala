@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 import scala.concurrent.duration.*
 import scala.util.*
 
-class RestBackendService(using
+class RestControllerService(using
     httpService: HttpService
 ) extends ControllerServiceInterface {
   private val persistenceServiceEndpoint = "http://localhost:9021/persistence"
