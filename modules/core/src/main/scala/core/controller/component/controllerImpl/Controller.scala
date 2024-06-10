@@ -43,7 +43,6 @@ class Controller(
     private val cardProvider: CardProvider,
     private val backendService: BackendServiceInterface
 ) extends ControllerInterface {
-
   var field: FieldInterface = Field(
     players = Map(
       1 -> Player(
@@ -58,32 +57,7 @@ class Controller(
       )
     )
   )
-  backendService.outputA.runWith(Sink.foreach(msg => {
-    msg match {
-      case UpdateFieldMessage(Some(jsValue), _) =>
-        field = Field.fromJson(jsValue)
-        notifyObservers(Event.PLAY, msg = None)
-      case SetStrategyMessage(data, id) =>
-        setStrategy(
-          Strategy.withName(
-            data.get("strategy").toString.replace("\"", "")
-          )
-        )
-      case SetPlayerNamesMessage(data, id) => 
-        setPlayerNames(
-          data.get("playername1").toString.replace("\"", ""),
-          data.get("playername2").toString.replace("\"", "")
-        )
-      case _ => println("Unknown message type: " + msg.getClass.getSimpleName) 
-    }
-    Source
-      .single(
-        UpdateFieldMessage(Some(field.toJson), id = msg.id)
-      )
-      .runWith(backendService.inputB)(backendService.materializer)
-    // TODO: Handle incomming messages from service
-    // switch message types handle accordingly
-  }))(backendService.materializer)
+  handleBackendMessages
 
   // TODO: Send messages to service
   // Source
@@ -188,4 +162,85 @@ class Controller(
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
   }
+
+  private def handleBackendMessages =
+    backendService.outputA.runWith(Sink.foreach(msg => {
+      msg match {
+        case GetFieldMessage(data, id) =>
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case UpdateFieldMessage(Some(jsValue), _) =>
+          field = Field.fromJson(jsValue)
+          notifyObservers(Event.PLAY, msg = None)
+        case SetStrategyMessage(data, id) =>
+          setStrategy(
+            Strategy.withName(
+              data.get("strategy").toString.replace("\"", "")
+            )
+          )
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case SetPlayerNamesMessage(data, id) =>
+          setPlayerNames(
+            data.get("playername1").toString.replace("\"", ""),
+            data.get("playername2").toString.replace("\"", "")
+          )
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case DrawCardMessage(data, id) =>
+          drawCard()
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case SwitchPlayerMessage(data, id) =>
+          switchPlayer()
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case CanUndoMessage(data, id) =>
+          backendService.sendMessageToInputB(
+            CanUndoResponeMessage(Some(Json.toJson(canUndo)), id = msg.id)
+          )
+        case CanRedoMessage(data, id) =>
+          backendService.sendMessageToInputB(
+            CanRedoResponeMessage(Some(Json.toJson(canRedo)), id = msg.id)
+          )
+        case UndoMessage(data, id) =>
+          undo
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case RedoMessage(data, id) =>
+          redo
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case PlaceCardMessage(data, id) =>
+          placeCard(Move.fromJson(data.get))
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case SetGameStateMessage(data, id) =>
+          setGameState(
+            GameState.withName(data.get("gamestate").toString.replace("\"", ""))
+          )
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case AttackMessage(data, id) =>
+          attack(Move.fromJson(data.get))
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case DirectAttackMessage(data, id) =>
+          directAttack(Move.fromJson(data.get))
+          backendService.sendMessageToInputB(
+            UpdateFieldMessage(Some(field.toJson), id = msg.id)
+          )
+        case _ => println("Unknown message type: " + msg.getClass.getSimpleName)
+      }
+    }))(backendService.materializer)
 }

@@ -65,6 +65,9 @@ trait BackendServiceInterface {
 
   def outputB: Source[ServiceMessage, NotUsed] = sourceB
 
+  def sendMessageToInputB(msg: ServiceMessage): Unit = {
+    Source.single(msg).runWith(inputB)(materializer)
+  }
   def sendRequestToInputA(
       request: ServiceMessage,
       timeout: FiniteDuration = 2.seconds
