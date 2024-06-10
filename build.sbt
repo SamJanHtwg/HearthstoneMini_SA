@@ -37,7 +37,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.scalactic" %% "scalactic" % "3.2.18",
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
-    "org.mockito" % "mockito-core" % "3.12.4" % "test",
+    "org.mockito" % "mockito-core" % "5.12.0" % "test",
     "org.scalamock" %% "scalamock" % "6.0.0" % "test",
     ("com.typesafe.play" %% "play-json" % "2.10.4")
       .cross(CrossVersion.for3Use2_13),
