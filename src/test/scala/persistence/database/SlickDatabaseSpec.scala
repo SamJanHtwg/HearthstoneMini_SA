@@ -139,7 +139,7 @@ class SlickDatabaseSpec
 
   "SlickDatabase" should {
     "initialize the database" in {
-      new SlickDatabase(mockDatabase)
+      SlickDatabase()
     }
     "call db to save field" in {
       val slickDatabase = new SlickDatabase(mockDatabase)
