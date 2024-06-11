@@ -3,7 +3,6 @@ package persistence
 import fileIO.service.PersistenceService
 import database.DaoInterface
 import database.slick.SlickDatabase
-import database.mongodb.MongoDatabase
 import fileIO.FileIOInterface
 import fileIO.jsonIOImpl.JsonIO
 

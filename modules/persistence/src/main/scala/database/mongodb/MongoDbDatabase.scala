@@ -12,36 +12,37 @@ import persistence.database.DaoInterface
 import scala.util.Try
 import _root_.model.fieldComponent.FieldInterface
 import play.api.libs.json.JsValue
-import util.Observable
 import com.mongodb.connection.ServerSettings
 import scala.concurrent.Await
-import scala.concurrent.duration.*
+import scala.concurrent.duration._
 import play.api.libs.json.Json
 
-object MongoDatabase extends DaoInterface with Observable {
-  private val endpoint: String = "mongodb://localhost:9061"
+class MongoDBDatabase(
+    client: MongoClient = MongoClient(
+      MongoClientSettings
+        .builder(
+        )
+        .applyConnectionString(new ConnectionString(endpoint))
+        .credential(
+          MongoCredential.createCredential(
+            "root",
+            "admin",
+            "root".toCharArray()
+          )
+        )
+        .build()
+    )
+) extends DaoInterface {
   private val databaseName: String = "hearthstone"
   private val collectionName: String = "games"
   private val maxWaitSeconds = 3.seconds
 
+  // Initialize database and collection using the provided client
+  lazy val database: MongoDatabase = client.getDatabase(databaseName)
+  lazy val collection: MongoCollection[Document] =
+    database.getCollection(collectionName)
 
-  var client: MongoClient = MongoClient(
-    MongoClientSettings
-      .builder(
-      )
-      .applyConnectionString(new ConnectionString(endpoint))
-      .credential(
-        MongoCredential.createCredential(
-          "root",
-          "admin",
-          "root".toCharArray()
-        )
-      )
-      .build()
-  )
-  var database: MongoDatabase = client.getDatabase(databaseName)
-  var collection: MongoCollection[Document] = database.getCollection(collectionName)
-
+  // Create the collection if it doesn't exist
   Await.result(
     database.createCollection(collectionName).toFuture(),
     maxWaitSeconds
@@ -88,4 +89,35 @@ object MongoDatabase extends DaoInterface with Observable {
         maxWaitSeconds
       )
     )
+}
+
+// Companion object to provide default client configuration
+object MongoDBDatabase {
+  private val endpoint: String = "mongodb://localhost:9061"
+
+  def createClient(): MongoClient = {
+    MongoClient(
+      MongoClientSettings
+        .builder()
+        .applyConnectionString(new ConnectionString(endpoint))
+        .credential(
+          MongoCredential.createCredential(
+            "root",
+            "admin",
+            "root".toCharArray()
+          )
+        )
+        .build()
+    )
+  }
+
+  def apply(): MongoDBDatabase = new MongoDBDatabase(createClient())
+}
+
+// Example of creating an instance with the default client
+object MongoDBDatabaseExample {
+  def main(args: Array[String]): Unit = {
+    val db = MongoDBDatabase() // Uses the default client
+    // Use db for database operations...
+  }
 }
