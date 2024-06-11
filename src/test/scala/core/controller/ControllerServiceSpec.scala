@@ -193,6 +193,21 @@ class ControllerServiceSpec
       service.stop()
     }
 
+    "delete when something is saved" in {
+      when(mockDao.delete()).thenReturn(Success(true))
+      when(mockHttpService.request(any(), any(), any(), any()))
+        .thenReturn(Success(Json.toJson("Deleted")))
+
+      val service = new RestControllerService(using mockHttpService)
+      service.start()
+
+      Get("/controller/delete") ~> service.route ~> check {
+        responseAs[String] shouldEqual "success"
+      }
+
+      service.stop()
+    }
+
     "draw card" in {
       val service = new RestControllerService(using mockHttpService)
       service
@@ -322,9 +337,15 @@ class ControllerServiceSpec
 
     "exit game" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Json.toJson("Exited")), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Json.toJson("Exited")), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Get("/controller/exitGame") ~> service.route ~> check {
@@ -353,9 +374,15 @@ class ControllerServiceSpec
         )
       )
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -370,9 +397,15 @@ class ControllerServiceSpec
 
     "set player names" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -389,9 +422,15 @@ class ControllerServiceSpec
 
     "set game state" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -406,9 +445,15 @@ class ControllerServiceSpec
 
     "attack" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -423,9 +468,15 @@ class ControllerServiceSpec
 
     "direct attack" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -440,9 +491,15 @@ class ControllerServiceSpec
 
     "set strategy" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
@@ -457,9 +514,15 @@ class ControllerServiceSpec
 
     "return error message when calling invalid post command" in {
       val service = new RestControllerService(using mockHttpService)
-      service.outputA().runWith(Sink.foreach(
-        msg => Source.single(UpdateFieldMessage(Some(Field().toJson), msg.id)).runWith(service.inputB)
-      ))
+      service
+        .outputA()
+        .runWith(
+          Sink.foreach(msg =>
+            Source
+              .single(UpdateFieldMessage(Some(Field().toJson), msg.id))
+              .runWith(service.inputB)
+          )
+        )
       service.start()
 
       Post(
