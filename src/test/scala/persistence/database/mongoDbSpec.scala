@@ -78,6 +78,10 @@ class MongoDatabaseTest
         Future.successful(Some(Document("game" -> """{"key":"value"}""")))
       )
   }
+  "MongoDatabase" should "initialize" in {
+    val dataBase = MongoDBDatabase()
+    dataBase shouldBe a[MongoDBDatabase]
+  } 
 
   "MongoDatabase.save" should "insert a document into the collection" in {
     val dataBase = new MongoDBDatabase(using mockClient)
