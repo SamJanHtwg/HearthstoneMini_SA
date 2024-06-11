@@ -80,7 +80,7 @@ class MongoDatabaseTest
   }
 
   "MongoDatabase.save" should "insert a document into the collection" in {
-    val dataBase = new MongoDBDatabase(mockClient)
+    val dataBase = new MongoDBDatabase(using mockClient)
     // execute
     dataBase.save(mockField)
 
@@ -89,7 +89,7 @@ class MongoDatabaseTest
   }
 
   "MongoDatabase.load" should "return a JsValue" in {
-    val dataBase = new MongoDBDatabase(mockClient)
+    val dataBase = new MongoDBDatabase(using mockClient)
 
     // execute
     val result = dataBase.load()
@@ -100,7 +100,7 @@ class MongoDatabaseTest
   }
 
   "MongoDatabase.delete" should "delete a document from the collection" in {
-    val dataBase = new MongoDBDatabase(mockClient)
+    val dataBase = new MongoDBDatabase(using mockClient)
 
     // execute
     val result = dataBase.delete()
@@ -111,7 +111,7 @@ class MongoDatabaseTest
   }
 
   "MongoDatabase.update" should "update a document in the collection" in {
-    val dataBase = new MongoDBDatabase(mockClient)
+    val dataBase = new MongoDBDatabase(using mockClient)
 
     // execute
     dataBase.update(mockField)
