@@ -38,6 +38,8 @@ import akka.Done
 import akka.stream.scaladsl.Source
 import akka.actor.typed.ActorSystem
 import akka.stream.Materializer
+import core.controller.component.DrawCardMessage
+import core.controller.component.UpdateFieldMessage
 
 class ControllerSpec
     extends AnyWordSpec
@@ -395,6 +397,15 @@ class ControllerSpec
       controller.canRedo
 
       verify(mockUndoManager).canRedo()
+    }
+    "handle incommding messages correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      val testField = Field()
+      val mockObserver = mock(classOf[Observer]) 
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(UpdateFieldMessage(Some(testField.toJson), "1"))
+      controller.field should be(testField.setGameState(GameState.MAINGAME))
     }
   }
 }
