@@ -240,6 +240,19 @@ class ControllerRestClientTest
         any()
       )
     }
+    "call HttpService for deleting a field" in {
+      when(mockHttpService.request(anyString(), anyString(), any(), any()))
+        .thenReturn(Success(Field().toJson))
+      val controllerRestClient = new ControllerRestClient(using mockHttpService)
+
+      controllerRestClient.deleteField
+      verify(mockHttpService, times(2)).request(
+        anyString(),
+        anyString(),
+        any(),
+        any()
+      )
+    }
     "call HttpService for setStrategy" in {
       when(mockHttpService.request(anyString(), anyString(), any(), any()))
         .thenReturn(Success(Field().toJson))
