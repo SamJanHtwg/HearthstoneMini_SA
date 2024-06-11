@@ -91,7 +91,7 @@ class MongoDBDatabase(
     )
 }
 
-// Companion object to provide default client configuration
+
 object MongoDBDatabase {
   private val endpoint: String = "mongodb://localhost:9061"
 
@@ -112,12 +112,4 @@ object MongoDBDatabase {
   }
 
   def apply(): MongoDBDatabase = new MongoDBDatabase(createClient())
-}
-
-// Example of creating an instance with the default client
-object MongoDBDatabaseExample {
-  def main(args: Array[String]): Unit = {
-    val db = MongoDBDatabase() // Uses the default client
-    // Use db for database operations...
-  }
 }
