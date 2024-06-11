@@ -12,6 +12,6 @@ object PersistenceMongoJsonModule {
 }
 
 object PersistenceSlickJsonModule {
-  given DaoInterface = SlickDatabase
+  given DaoInterface = SlickDatabase()
   given FileIOInterface = JsonIO()
 }
