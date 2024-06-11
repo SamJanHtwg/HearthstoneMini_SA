@@ -18,7 +18,6 @@ import scala.concurrent.duration._
 import play.api.libs.json.Json
 
 class MongoDBDatabase(
-  // $COVERAGE-OFF$
     client: MongoClient = MongoClient(
       MongoClientSettings
         .builder(
@@ -33,7 +32,6 @@ class MongoDBDatabase(
         )
         .build()
     )
-  // $COVERAGE-ON$
 ) extends DaoInterface {
   private val databaseName: String = "hearthstone"
   private val collectionName: String = "games"
@@ -93,10 +91,10 @@ class MongoDBDatabase(
     )
 }
 
-// $COVERAGE-OFF$
 object MongoDBDatabase {
   private val endpoint: String = "mongodb://localhost:9061"
 
+  // $COVERAGE-OFF$
   def createClient(): MongoClient = {
     MongoClient(
       MongoClientSettings
@@ -112,7 +110,8 @@ object MongoDBDatabase {
         .build()
     )
   }
-
+  // $COVERAGE-ON$
+  // $COVERAGE-OFF$
   def apply(): MongoDBDatabase = new MongoDBDatabase(createClient())
+  // $COVERAGE-ON$
 }
-// $COVERAGE-ON$
