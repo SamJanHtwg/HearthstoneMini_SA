@@ -7,7 +7,7 @@ import fileIO.jsonIOImpl.JsonIO
 import database.slick.SlickDatabase
 
 object PersistenceMongoJsonModule {
-  given DaoInterface = new MongoDBDatabase()
+  given DaoInterface = MongoDBDatabase()
   given FileIOInterface = JsonIO()
 }
 
