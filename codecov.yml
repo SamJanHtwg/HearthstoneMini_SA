@@ -11,3 +11,4 @@ ignore:
   - "modules/persistence/src/main/scala/database/DaoInterface.scala"
   - "modules/persistence/src/main/scala/database/slick/PostgresProfile.scala"
   - "modules/core/src/main/scala/core/controller/component/ControllerServiceInterface.scala"
+  - "modules/persistence/src/main/scala/database/slick/"
