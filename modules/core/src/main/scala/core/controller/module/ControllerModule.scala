@@ -17,16 +17,16 @@ import core.controller.component.controllerImpl.ControllerRestClient
 object ControllerModule:
   private val executorService = Executors.newSingleThreadExecutor()
   private implicit val executionContext: ExecutionContext = ExecutionContext.fromExecutorService(executorService)
-  private var backendService: ControllerServiceInterface = RestControllerService(using
+  private var controllerService: ControllerServiceInterface = RestControllerService(using
       given_HttpService
     )
 
-  private val backendServiceFuture: Future[Unit] = Future {
-    backendService.start()
+  private val controllerServiceFuture: Future[Unit] = Future {
+    controllerService.start()
   }
 
   
-  backendServiceFuture.onComplete {
+  controllerServiceFuture.onComplete {
     case Success(service) =>
       println("Backend service started successfully.")
     case Failure(e) =>
@@ -38,7 +38,7 @@ object ControllerModule:
     new JsonIO(),
     new UndoManager(),
     new CardProvider(inputFile = "/json/cards.json"),
-    backendService
+    controllerService
   )
 
   given HttpService = HttpService()
