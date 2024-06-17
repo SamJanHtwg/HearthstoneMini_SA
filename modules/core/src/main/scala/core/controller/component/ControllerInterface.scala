@@ -7,8 +7,8 @@ import core.controller.Strategy.*
 
 //noinspection AccessorLikeMethodIsEmptyParen,UnitMethodIsParameterless
 trait ControllerInterface extends Observable {
-  var errorMsg: Option[String]
-  var field: FieldInterface
+  var errorMsg: Option[String] = None
+  var field: FieldInterface = _
   def setGameState(gameState: GameState): Unit
   def canUndo: Boolean
   def canRedo: Boolean

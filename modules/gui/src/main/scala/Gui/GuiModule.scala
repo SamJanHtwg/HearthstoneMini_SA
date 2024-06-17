@@ -7,7 +7,7 @@ import core.controller.component.ControllerInterface
 import model.GameState
 import util.Event
 import scala.io.StdIn
-import core.controller.component.controllerImpl.ControllerRestClient
+import core.controller.component.controllerImpl.RestControllerClient
 
 // object GuiModule {
 //   Starter(ControllerModule.given_ControllerInterface).start()

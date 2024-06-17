@@ -12,7 +12,7 @@ import java.util.concurrent.Executors
 import scala.concurrent.Future
 import scala.util.Success
 import scala.util.Failure
-import core.controller.component.controllerImpl.ControllerRestClient
+import core.controller.component.controllerImpl.RestControllerClient
 
 object ControllerModule:
   private val executorService = Executors.newSingleThreadExecutor()
@@ -44,6 +44,6 @@ object ControllerModule:
   given HttpService = HttpService()
 
 object ControllerRestClientModule:
-  given ControllerInterface = ControllerRestClient(using
+  given ControllerInterface = RestControllerClient(using
     ControllerModule.given_HttpService
   )
