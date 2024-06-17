@@ -8,39 +8,64 @@ import _root_.model.fieldComponent.fieldImpl.Field
 import _root_.model.playerComponent.playerImpl.Player
 import core.controller.Strategy
 import core.controller.Strategy.hardcore
+import core.controller.component.ControllerServiceInterface
+import core.controller.component.ServiceMessage
 import core.controller.component.controllerImpl.Controller
 import core.util.CardProvider
-import util.Event
-import util.Observer
 import core.util.UndoManager
 import core.util.commands.CommandInterface
 import core.util.commands.commandImpl.DrawCardCommand
 import model.fieldComponent.FieldInterface
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.when
+import org.mockito.Mockito.times
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import persistence.fileIO.FileIOInterface
+import util.Event
+import util.Observer
 
 import scala.annotation.meta.field
 import scala.util.Failure
 import scala.util.Success
+import akka.stream.scaladsl.Sink
+import scala.concurrent.Future
+import akka.Done
+import akka.stream.scaladsl.Source
+import akka.actor.typed.ActorSystem
+import akka.stream.Materializer
+import core.controller.component.*
+import play.api.libs.json.Json
 
 class ControllerSpec
     extends AnyWordSpec
     with Matchers
-    with MockFactory
     with BeforeAndAfterEach {
   var testCards: List[Card] = _
   var mockUndoManager: UndoManager = _
   var mockCardProvider: CardProvider = _
   var mockFileIO: FileIOInterface = _
+  var mockControllerService: ControllerServiceInterface = _
+  var mockMaterializer: Materializer = _
+  var mockSystem: ActorSystem[ServiceMessage] = _
+  var mockObserver: Observer = _
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockCardProvider = CardProvider(inputFile = "/json/cards.json")
-    mockUndoManager = mock[UndoManager]
-    mockFileIO = mock[FileIOInterface]
+    mockUndoManager = mock(classOf[UndoManager])
+    mockFileIO = mock(classOf[FileIOInterface])
+    mockControllerService = mock(classOf[ControllerServiceInterface])
+    mockMaterializer = mock(classOf[Materializer])
+    mockSystem = mock(classOf[ActorSystem[ServiceMessage]])
+    mockObserver = mock(classOf[Observer])
+
+    when(mockControllerService.outputA()).thenReturn(Source.empty)
+    when(mockControllerService.materializer).thenReturn(mockMaterializer)
 
     testCards = List[Card](
       Card("test1", 1, 1, 1, "testEffect1", "testRarety1", 1, ""),
@@ -57,7 +82,8 @@ class ControllerSpec
       assert(allStates.length == 5)
     }
     "have a default game state of GameState.PREGAME" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1).resetAndIncreaseMana()),
@@ -66,8 +92,9 @@ class ControllerSpec
       )
       controller.field.gameState should be(GameState.CHOOSEMODE)
     }
+
     "place a card on field" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
       controller.field = Field(
         players = Map[Int, Player](
@@ -76,15 +103,17 @@ class ControllerSpec
         ),
         turns = 3
       )
-      (mockUndoManager.doStep _).expects(*).once()
+      
       controller.placeCard(Move(2, 2))
       controller.field
         .players(controller.field.activePlayerId)
         .field(2)
         .isDefined should be(true)
+
+      verify(mockUndoManager).doStep(any())
     }
     "draw a card" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (
@@ -95,16 +124,16 @@ class ControllerSpec
           (2, Player(id = 2))
         )
       )
-      (mockUndoManager.doStep _).expects(*).once()
       controller.drawCard()
       controller.field
         .players(controller.field.activePlayerId)
         .hand
         .length should be(5)
+
+      verify(mockUndoManager).doStep(any())
     }
     "setting player names" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1).resetAndIncreaseMana()),
@@ -118,7 +147,7 @@ class ControllerSpec
       controller.field.players(2).name should be("Sam")
     }
     "attacking" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         turns = 3,
         players = Map[Int, Player](
@@ -141,27 +170,27 @@ class ControllerSpec
         )
       )
 
-      (mockUndoManager.doStep _).expects(*).once()
-
       controller.attack(Move(fieldSlotActive = 2, fieldSlotInactive = 2))
+
+      verify(mockUndoManager).doStep(any())
     }
     "switching player" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1, name = 1.toString).resetAndIncreaseMana()),
           (2, Player(id = 2, name = 2.toString))
         )
       )
-      (mockUndoManager.doStep _).expects(*).once()
       controller.switchPlayer()
       controller.field.players(controller.field.activePlayerId).name should be(
         "2"
       )
+
+      verify(mockUndoManager).doStep(any())
     }
     "do a direct attack" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1, manaValue = 100, hand = testCards)),
@@ -169,28 +198,33 @@ class ControllerSpec
         ),
         turns = 3
       )
-      (mockUndoManager.doStep _).expects(*).twice()
       controller.placeCard(Move(2, 2))
       controller.directAttack(Move(fieldSlotActive = 2))
       controller.field.players(2).hpValue should be(4)
+
+      verify(mockUndoManager, times(2)).doStep(any())
     }
     "undo step / redo step" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      when(mockUndoManager.undoStep(any()))
+        .thenReturn(Success(Field(players = Map[Int, Player]((1, Player(id = 1))))))
+      when(mockUndoManager.redoStep(any()))
+        .thenReturn(Success(Field(players = Map[Int, Player]((1, Player(id = 1))))))
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1, hand = List.empty, deck = testCards)),
           (2, Player(id = 2))
         )
       )
-      (mockUndoManager.undoStep _).expects(*).returns(Success(controller.field))
-      (mockUndoManager.redoStep _).expects(*).returns(Success(controller.field))
 
       controller.undo
       controller.redo
+
+      verify(mockUndoManager).undoStep(any())
+      verify(mockUndoManager).redoStep(any())
     }
     "setStrategy should set a strategy based on input" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1).resetAndIncreaseMana()),
@@ -202,8 +236,7 @@ class ControllerSpec
       controller.field.getPlayerById(1).manaValue should be(100)
     }
     "should set game state to Exit" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1).resetAndIncreaseMana()),
@@ -214,8 +247,7 @@ class ControllerSpec
       controller.field.gameState should be(GameState.EXIT)
     }
     "should return the Winner when one player has 0 hp" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
       controller.field = Field(
         players = Map[Int, Player](
@@ -230,8 +262,7 @@ class ControllerSpec
       )
     }
     "should return none when game dont have a winner" in {
-
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1)),
@@ -243,14 +274,9 @@ class ControllerSpec
       controller.getWinner() should be(None)
     }
     "undo should notify with error" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
-      val mockObserver = mock[Observer]
-
-      (mockObserver.update _).expects(*, *).once()
-      (mockUndoManager.undoStep _)
-        .expects(*)
-        .returns(Failure(new Exception("error")))
-
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      when(mockUndoManager.undoStep(any()))
+        .thenReturn(Failure(new Exception("error")))
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1)),
@@ -258,13 +284,16 @@ class ControllerSpec
         ),
         turns = 2
       )
-
       controller.add(mockObserver)
+
       controller.undo
       controller.errorMsg should be(Some("error"))
+
+      verify(mockObserver).update(any(), any())
+      verify(mockUndoManager).undoStep(any())
     }
     "saveField calls fileIO service" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
       controller.field = Field(
         players = Map[Int, Player](
@@ -274,11 +303,13 @@ class ControllerSpec
         turns = 2
       )
 
-      (mockFileIO.save(_: FieldInterface)).expects(controller.field).once()
       controller.saveField
+      verify(mockFileIO).save(controller.field)
     }
     "loadField calls fileIO service" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      when(mockFileIO.load())
+        .thenReturn(Success(Field(players = Map[Int, Player]((1, Player(id = 1))))))
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
       controller.field = Field(
         players = Map[Int, Player](
@@ -288,15 +319,14 @@ class ControllerSpec
         turns = 2
       )
 
-      (mockFileIO.load _)
-        .expects()
-        .onCall(_ => Success(controller.field))
-        .once()
       controller.loadField
+      
+      verify(mockFileIO).load()
     }
     "loadField updates error on failure" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
-      val mockObserver = mock[Observer]
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      when(mockFileIO.load())
+        .thenReturn(Failure(new Exception("any")))
       controller.add(mockObserver)
 
       controller.field = Field(
@@ -306,18 +336,16 @@ class ControllerSpec
         ),
         turns = 2
       )
-      (mockObserver.update _).expects(Event.ERROR, *).once()
-      (mockFileIO.load _)
-        .expects()
-        .onCall(_ => Failure(Exception("any")))
-        .once()
+     
       controller.loadField
       controller.errorMsg should be(
         Some("Sieht so aus als wäre die Datei beschädigt.")
       )
+
+      verify(mockObserver).update(any(), any())
     }
     "setStrategy works for all strategies" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
       controller.setStrategy(Strategy.normal)
       controller.field.players(1).hpValue should be(30)
@@ -330,7 +358,7 @@ class ControllerSpec
       controller.field.players(1).manaValue should be(100)
     }
     "doStep sets error on failure" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
       controller.field = Field(
         players = Map[Int, Player](
           (1, Player(id = 1, hand = testCards, deck = testCards)),
@@ -344,28 +372,158 @@ class ControllerSpec
       controller.errorMsg should be(Some("Your hand is full!"))
     }
     "redo sets error on failure" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
-      val mockObserver = mock[Observer]
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      when(mockUndoManager.redoStep(any()))
+        .thenReturn(Failure(new Exception("error")))
       controller.add(mockObserver)
 
-      (mockUndoManager.redoStep _)
-        .expects(*)
-        .returns(Failure(new Exception("error")))
-        .once()
-      (mockObserver.update _).expects(Event.ERROR, *).once()
       controller.redo
+
+      verify(mockObserver).update(any(), any())
     }
     "canUndo calls undoManager" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
-      (mockUndoManager.canUndo _).expects().returns(true).once()
       controller.canUndo
+
+      verify(mockUndoManager).canUndo()
     }
     "canRedo calls undoManager" in {
-      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider)
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
 
-      (mockUndoManager.canRedo _).expects().returns(true).once()
       controller.canRedo
+
+      verify(mockUndoManager).canRedo()
+    }
+    "handle incomming UpdateFieldMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      val testField = Field().setGameState(GameState.MAINGAME)
+      controller.add(mockObserver)
+      
+      controller.handleServiceMessage(UpdateFieldMessage(Some(testField.toJson), "1"))
+      
+      controller.field should be(testField)
+      verify(mockObserver).update(any(), any())
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(Some(testField.toJson), "1"))
+    }
+    "handle incomming GetFieldMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+
+      controller.handleServiceMessage(GetFieldMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(Some(controller.field.toJson), "1"))
+    }
+    "handle incomming SetStrategyMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)      
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(SetStrategyMessage(Some(Json.obj("strategy" -> Strategy.debug.toString)), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+      controller.field.players(1).hpValue should be(100)
+      controller.field.players(1).manaValue should be(100)
+    }
+    "handle incomming SetPlayerNamesMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(SetPlayerNamesMessage(Some(Json.obj("playername1" -> "Jan", "playername2" -> "Sam")), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+      controller.field.players(1).name should be("Jan")
+      controller.field.players(2).name should be("Sam")
+    }
+    "handle incomming DrawCardMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(DrawCardMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming SwitchPlayerMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(SwitchPlayerMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming CanUndoMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+
+      controller.handleServiceMessage(CanUndoMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(CanUndoResponeMessage(any(), "1"))
+    }
+    "handle incomming CanRedoMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+
+      controller.handleServiceMessage(CanRedoMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(CanRedoResponeMessage(any(), "1"))
+    }
+    "handle incomming UndoMessage correctly" in {
+      when(mockUndoManager.undoStep(any()))
+        .thenReturn(Success(Field(players = Map[Int, Player]((1, Player(id = 1))))))
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(UndoMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming RedoMessage correctly" in {
+      when(mockUndoManager.redoStep(any()))
+        .thenReturn(Success(Field(players = Map[Int, Player]((1, Player(id = 1))))))
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(RedoMessage(id = "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming PlaceCardMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(PlaceCardMessage(Some(Move(2, 2).toJson), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming SetGameStateMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(SetGameStateMessage(Some(Json.obj("gamestate" -> GameState.MAINGAME.toString)), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming AttackMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(AttackMessage(Some(Move(2, 2).toJson), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
+    }
+    "handle incomming DirectAttackMessage correctly" in {
+      val controller = Controller(mockFileIO, mockUndoManager, mockCardProvider, mockControllerService)
+      controller.add(mockObserver)
+
+      controller.handleServiceMessage(DirectAttackMessage(Some(Move(2).toJson), "1"))
+
+      verify(mockControllerService).sendMessageToInputB(UpdateFieldMessage(any(), "1"))
+      verify(mockObserver).update(any(), any())
     }
   }
 }

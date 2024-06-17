@@ -40,6 +40,8 @@ import scala.util.Try
 import model.fieldComponent.FieldInterface
 import play.api.libs.json.JsValue
 import persistence.fileIO.FileIOInterface
+import akka.http.scaladsl.model.HttpEntity
+import akka.http.scaladsl.model.ContentTypes
 
 class PersistenceServiceSpec
     extends AnyWordSpec
@@ -71,9 +73,9 @@ class PersistenceServiceSpec
     "start a server" in {
       val mockFileIO = mock(classOf[FileIOInterface])
       val mockDao = mock(classOf[DaoInterface])
-      
-      val service = new PersistenceService(
-        using mockFileIO,
+
+      val service = new PersistenceService(using
+        mockFileIO,
         mockDao
       )
       service.start()
@@ -104,7 +106,7 @@ class PersistenceServiceSpec
       when(mockDao.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
-      val service = new PersistenceService(using mockFileIO,dao = mockDao)
+      val service = new PersistenceService(using mockFileIO, dao = mockDao)
       service.start()
 
       Get("/") ~> service.route ~> check {
@@ -120,7 +122,7 @@ class PersistenceServiceSpec
       when(mockDao.load()).thenReturn(
         Failure(new Exception("Error loading field"))
       )
-      val service = new PersistenceService(using mockFileIO,dao = mockDao)
+      val service = new PersistenceService(using mockFileIO, dao = mockDao)
       service.start()
 
       Post(
@@ -163,7 +165,8 @@ class PersistenceServiceSpec
         Failure(new Exception("Error loading field"))
       )
 
-      val service = new PersistenceService(using fileIO = mockJsonIO, dao = mockDao)
+      val service =
+        new PersistenceService(using fileIO = mockJsonIO, dao = mockDao)
       service.start()
 
       Get("/persistence/load") ~> service.route ~> check {
@@ -174,17 +177,76 @@ class PersistenceServiceSpec
       service.stop()
     }
 
+    "update a field when" in {
+      val mockDao = mock(classOf[DaoInterface])
+      val mockFileIO = mock(classOf[FileIOInterface])
+      when(mockDao.load()).thenReturn(
+        Failure(new Exception("Error loading field"))
+      )
+      val service = new PersistenceService(using mockFileIO, dao = mockDao)
+      service.start()
+
+      Post(
+        "/persistence/update",
+        Json.prettyPrint(field.toJson)
+      ) ~> service.route ~> check {
+        responseAs[String] shouldEqual "Updated"
+      }
+
+      service.stop()
+    }
+
+    "delete a field when a GET request is sent" in {
+      val mockDao = mock(classOf[DaoInterface])
+      val mockFileIO = mock(classOf[FileIOInterface])
+      when(mockDao.delete()).thenReturn(
+        Success(())
+      )
+      val service = new PersistenceService(using mockFileIO, dao = mockDao)
+      service.start()
+
+      Get("/persistence/delete") ~> service.route ~> check {
+        responseAs[String] shouldEqual "deleted"
+      }
+
+      service.stop()
+    }
+
+    "return an error when deleting fails" in {
+      val mockDao = mock(classOf[DaoInterface])
+      val mockFileIO = mock(classOf[FileIOInterface])
+      val service = new PersistenceService(using mockFileIO, dao = mockDao)
+      service.start()
+
+      Get("/persistence/delete") ~> service.route ~> check {
+        responseAs[String] shouldEqual "There was an internal server error."
+      }
+
+      service.stop()
+    }
+
     "stop the server when a POST request is sent" in {
       val mockFileIO = mock(classOf[FileIOInterface])
       val mockDao = mock(classOf[DaoInterface])
-      val service = new PersistenceService(
-        using mockFileIO,
+      val service = new PersistenceService(using
+        mockFileIO,
         mockDao
       )
       service.start()
 
       Post("/persistence/stopServer") ~> service.route ~> check {
         responseAs[String] shouldEqual "Server stopped"
+      }
+    }
+
+    "return an error when stopping the server fails" in {
+      val mockFileIO = mock(classOf[FileIOInterface])
+      val mockDao = mock(classOf[DaoInterface])
+      val service = new PersistenceService(using mockFileIO, mockDao)
+
+      Post("/persistence/stopServer") ~> service.route ~> check {
+        status shouldEqual StatusCodes.InternalServerError
+        responseAs[String] should include("There was an internal server error.")
       }
     }
   }

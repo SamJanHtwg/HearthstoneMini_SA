@@ -14,7 +14,7 @@ import akka.stream.scaladsl.*
 import akka.util.ByteString
 import model.fieldComponent.fieldImpl.Field
 import persistence.database.DaoInterface
-import persistence.database.mongodb.MongoDatabase
+import persistence.database.mongodb.MongoDBDatabase
 import persistence.database.slick.SlickDatabase
 import play.api.libs.json.Json
 

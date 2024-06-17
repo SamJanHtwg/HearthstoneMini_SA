@@ -3,7 +3,6 @@ package persistence
 import fileIO.service.PersistenceService
 import database.DaoInterface
 import database.slick.SlickDatabase
-import database.mongodb.MongoDatabase
 import fileIO.FileIOInterface
 import fileIO.jsonIOImpl.JsonIO
 
@@ -18,8 +17,8 @@ class Starter() {
 
     override def run(): Unit = {
       val persistenceService = new PersistenceService(using
-        PersistenceSlickJsonModule.given_FileIOInterface,
-        PersistenceSlickJsonModule.given_DaoInterface
+        PersistenceMongoJsonModule.given_FileIOInterface,
+        PersistenceMongoJsonModule.given_DaoInterface
       )
       persistenceService.start()
     }

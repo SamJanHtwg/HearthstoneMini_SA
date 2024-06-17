@@ -28,13 +28,21 @@ import core.util.commands.commandImpl.{
   AttackCommand
 }
 import core.util.CardProvider
+import core.controller.component.ControllerServiceInterface
+import akka.stream.scaladsl.Sink
+import org.reactivestreams.Subscriber
+import akka.stream.scaladsl.Source
+import akka.actor.Actor
+import core.controller.component.*
+import play.api.libs.json.JsValue
+import play.api.libs.json.Json
 
 class Controller(
     val fileIO: FileIOInterface,
     private val undoManager: UndoManager,
-    private val cardProvider: CardProvider
+    private val cardProvider: CardProvider,
+    private val controllerService: ControllerServiceInterface
 ) extends ControllerInterface {
-
   var field: FieldInterface = Field(
     players = Map(
       1 -> Player(
@@ -49,6 +57,12 @@ class Controller(
       )
     )
   )
+  subcribeToServiceRequests
+
+  // TODO: Send messages to service
+  // Source
+  //   .single(UpdateFieldMessage(Some(field.toJson)))
+  //   .runWith(backendService.inputB)(backendService.materializer)
 
   var errorMsg: Option[String] = None
 
@@ -147,5 +161,93 @@ class Controller(
         errorMsg = Some("Sieht so aus als wäre die Datei beschädigt.")
         notifyObservers(Event.ERROR, msg = errorMsg)
     }
+  }
+
+  private def subcribeToServiceRequests =
+    controllerService
+      .outputA()
+      .runWith(Sink.foreach(handleServiceMessage))
+      (controllerService.materializer)
+
+  def handleServiceMessage(msg: ServiceMessage) = msg match {
+    case GetFieldMessage(data, id) =>
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case UpdateFieldMessage(Some(jsValue), id) =>
+      field = Field.fromJson(jsValue).setGameState(GameState.MAINGAME)
+
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id)
+      )
+      notifyObservers(Event.PLAY, msg = None)
+    case SetStrategyMessage(data, id) =>
+      setStrategy(
+        Strategy.withName(
+          data.get("strategy").toString.replace("\"", "")
+        )
+      )
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case SetPlayerNamesMessage(data, id) =>
+      setPlayerNames(
+        data.get("playername1").toString.replace("\"", ""),
+        data.get("playername2").toString.replace("\"", "")
+      )
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case DrawCardMessage(data, id) =>
+      drawCard()
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case SwitchPlayerMessage(data, id) =>
+      switchPlayer()
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case CanUndoMessage(data, id) =>
+      controllerService.sendMessageToInputB(
+        CanUndoResponeMessage(Some(Json.toJson(canUndo)), id = msg.id)
+      )
+    case CanRedoMessage(data, id) =>
+      controllerService.sendMessageToInputB(
+        CanRedoResponeMessage(Some(Json.toJson(canRedo)), id = msg.id)
+      )
+    case UndoMessage(data, id) =>
+      undo
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case RedoMessage(data, id) =>
+      redo
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case PlaceCardMessage(data, id) =>
+      placeCard(Move.fromJson(data.get))
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case SetGameStateMessage(data, id) =>
+      setGameState(
+        GameState.withName(data.get("gamestate").toString.replace("\"", ""))
+      )
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case AttackMessage(data, id) =>
+      attack(Move.fromJson(data.get))
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case DirectAttackMessage(data, id) =>
+      directAttack(Move.fromJson(data.get))
+      controllerService.sendMessageToInputB(
+        UpdateFieldMessage(Some(field.toJson), id = msg.id)
+      )
+    case _ => println("Unknown message type: " + msg.getClass.getSimpleName)
   }
 }

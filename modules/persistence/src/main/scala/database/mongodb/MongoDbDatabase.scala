@@ -12,33 +12,22 @@ import persistence.database.DaoInterface
 import scala.util.Try
 import _root_.model.fieldComponent.FieldInterface
 import play.api.libs.json.JsValue
-import util.Observable
 import com.mongodb.connection.ServerSettings
 import scala.concurrent.Await
-import scala.concurrent.duration.*
+import scala.concurrent.duration._
 import play.api.libs.json.Json
 
-object MongoDatabase extends DaoInterface with Observable {
-  private val endpoint: String = "mongodb://localhost:9061"
+class MongoDBDatabase(using client: MongoClient) extends DaoInterface {
   private val databaseName: String = "hearthstone"
   private val collectionName: String = "games"
   private val maxWaitSeconds = 3.seconds
 
-  private val client: MongoClient = MongoClient(
-    MongoClientSettings
-      .builder(
-      )
-      .applyConnectionString(new ConnectionString(endpoint))
-      .credential(
-        MongoCredential.createCredential(
-          "root",
-          "admin",
-          "root".toCharArray()
-        )
-      )
-      .build()
-  )
-  private val database: MongoDatabase = client.getDatabase(databaseName)
+  // Initialize database and collection using the provided client
+  lazy val database: MongoDatabase = client.getDatabase(databaseName)
+  lazy val collection: MongoCollection[Document] =
+    database.getCollection(collectionName)
+
+  // Create the collection if it doesn't exist
   Await.result(
     database.createCollection(collectionName).toFuture(),
     maxWaitSeconds
@@ -47,7 +36,7 @@ object MongoDatabase extends DaoInterface with Observable {
   override def save(field: FieldInterface): Unit = {
     val document = Document("game" -> field.toJson.toString, "_id" -> 1)
     Await.result(
-      database.getCollection(collectionName).insertOne(document).toFuture(),
+      collection.insertOne(document).toFuture(),
       maxWaitSeconds
     )
   }
@@ -56,16 +45,11 @@ object MongoDatabase extends DaoInterface with Observable {
     Try(
       Await
         .result(
-          database
-            .getCollection(collectionName)
+          collection
             .find(equal("_id", 1))
             .headOption(),
           maxWaitSeconds
         )
-        .map(document => {
-          println(document)
-          document
-        })
         .toRight(Exception("No game found"))
         .map(document => Json.parse(document.getString("game")))
         .toTry
@@ -74,8 +58,7 @@ object MongoDatabase extends DaoInterface with Observable {
 
   override def update(field: FieldInterface): Unit = {
     Await.result(
-      database
-        .getCollection(collectionName)
+      collection
         .updateOne(equal("_id", 1), set("game", field.toJson.toString))
         .toFuture(),
       maxWaitSeconds
@@ -85,11 +68,31 @@ object MongoDatabase extends DaoInterface with Observable {
   override def delete(): Try[Unit] =
     Try[Unit](
       Await.result(
-        database
-          .getCollection(collectionName)
+        collection
           .deleteOne(equal("_id", 1))
           .toFuture(),
         maxWaitSeconds
       )
     )
+}
+
+object MongoDBDatabase {
+  private val endpoint: String = "mongodb://localhost:9061"
+
+  def createClient(): MongoClient = {
+    MongoClient(
+      MongoClientSettings
+        .builder()
+        .applyConnectionString(new ConnectionString(endpoint))
+        .credential(
+          MongoCredential.createCredential(
+            "root",
+            "admin",
+            "root".toCharArray()
+          )
+        )
+        .build()
+    )
+  }
+  def apply(): MongoDBDatabase = new MongoDBDatabase(using createClient())
 }

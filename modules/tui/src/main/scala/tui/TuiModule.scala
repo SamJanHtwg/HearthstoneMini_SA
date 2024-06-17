@@ -11,8 +11,8 @@ import core.controller.component.ControllerInterface
 import core.controller.module.ControllerRestClientModule
 import model.GameState
 
-object TuiService:
-  Starter(ControllerModule.given_ControllerInterface).start()
+// object TuiService:
+//   Starter(ControllerModule.given_ControllerInterface).start()
 
 object TuiRestService:
   Starter(ControllerRestClientModule.given_ControllerInterface).start()
