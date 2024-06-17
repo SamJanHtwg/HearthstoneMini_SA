@@ -15,7 +15,6 @@ class KafkaControllerClient extends ControllerInterface{
 
   override def switchPlayer(): Unit = ???
 
-
   override def attack(move: Move): Unit = ???
 
   override def canRedo: Boolean = ???

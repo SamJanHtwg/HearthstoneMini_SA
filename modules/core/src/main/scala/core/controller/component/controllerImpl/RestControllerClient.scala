@@ -63,10 +63,7 @@ class RestControllerClient(using httpService: HttpService)
   }
 
   connectToWebsocket
-
-  var field: FieldInterface = _
   setState(fieldRequest(controllerServiceUrl, "field", HttpMethods.GET))
-  var errorMsg: Option[String] = None
 
   private def fieldRequest(
       endpoint: String,

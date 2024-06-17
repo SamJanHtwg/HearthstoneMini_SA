@@ -43,7 +43,7 @@ class Controller(
     private val cardProvider: CardProvider,
     private val controllerService: ControllerServiceInterface
 ) extends ControllerInterface {
-  var field: FieldInterface = Field(
+  field = Field(
     players = Map(
       1 -> Player(
         id = 1,
@@ -63,8 +63,6 @@ class Controller(
   // Source
   //   .single(UpdateFieldMessage(Some(field.toJson)))
   //   .runWith(backendService.inputB)(backendService.materializer)
-
-  var errorMsg: Option[String] = None
 
   def canUndo: Boolean = undoManager.canUndo()
   def canRedo: Boolean = undoManager.canRedo()
