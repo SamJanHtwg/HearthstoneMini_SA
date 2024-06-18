@@ -4,8 +4,12 @@ import com.typesafe.sbt.packager.docker.DockerChmodType
 import librarymanagement.InclExclRule
 
 val scala3Version = "3.3.3"
-val AkkaVersion = "2.9.2"
+val AkkaVersion = "2.9.3"
 val AkkaHttpVersion = "10.6.2"
+
+scalacOptions ++= Seq(
+  "-Xignore-scala2-macros"
+)
 
 ThisBuild / scalaVersion := scala3Version
 ThisBuild / version := "1.1.0"
@@ -39,6 +43,7 @@ lazy val commonSettings = Seq(
     "org.scalatest" %% "scalatest" % "3.2.18" % "test",
     "org.mockito" % "mockito-core" % "5.12.0" % "test",
     "org.scalamock" %% "scalamock" % "6.0.0" % "test",
+    "com.typesafe.akka" %% "akka-pki" % "2.9.3",
     ("com.typesafe.play" %% "play-json" % "2.10.4")
       .cross(CrossVersion.for3Use2_13),
     "com.google.inject.extensions" % "guice-assistedinject" % "7.0.0",
@@ -49,7 +54,7 @@ lazy val commonSettings = Seq(
     "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
     "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
     "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
-    "com.typesafe.akka" %% "akka-testkit" % "2.9.2" % Test,
+    "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % Test,
     "com.typesafe.akka" %% "akka-http-testkit" % "10.6.2" % Test,
     "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime,
     "com.typesafe.slick" %% "slick" % "3.5.1",
@@ -57,7 +62,8 @@ lazy val commonSettings = Seq(
     "com.typesafe.slick" %% "slick-hikaricp" % "3.5.1",
     "org.slf4j" % "slf4j-nop" % "1.6.4",
     "com.github.tminglei" %% "slick-pg" % "0.22.1",
-    "com.github.tminglei" %% "slick-pg_play-json" % "0.22.1"
+    "com.github.tminglei" %% "slick-pg_play-json" % "0.22.1",
+    "com.typesafe.akka" %% "akka-stream-kafka" % "6.0.0"
   ) ++ Seq(
     "base",
     "controls",

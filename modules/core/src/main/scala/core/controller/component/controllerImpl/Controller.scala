@@ -16,7 +16,7 @@ import core.util.UndoManager
 import util.{Observer, Observable, Event}
 import core.util.commands.CommandInterface
 import model.fieldComponent.fieldImpl.Field
-
+import core.controller._
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}

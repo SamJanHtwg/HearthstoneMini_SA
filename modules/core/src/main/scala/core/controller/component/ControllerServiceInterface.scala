@@ -29,6 +29,12 @@ import scala.concurrent.*
 import scala.concurrent.duration.*
 import akka.pattern.after
 import scala.util.Try
+import play.api.libs.json.Format
+import play.api.libs.json.Json
+import play.api.libs.json.Reads
+import play.api.libs.json.JsSuccess
+import play.api.libs.json.Writes
+import core.controller.ServiceMessage
 
 trait ControllerServiceInterface {
   implicit val system: ActorSystem[ServiceMessage] =
@@ -51,21 +57,22 @@ trait ControllerServiceInterface {
       .toMat(BroadcastHub.sink(bufferSize))(Keep.both)
       .run()
 
-  def inputA: Sink[ServiceMessage, Future[Done]] = Sink.foreach[ServiceMessage] {
-    msg =>
+  def inputA: Sink[ServiceMessage, Future[Done]] =
+    Sink.foreach[ServiceMessage] { msg =>
       sinkA.offer(msg)
-  }
+    }
 
   def outputA(): Source[ServiceMessage, NotUsed] = sourceA
 
-  def inputB: Sink[ServiceMessage, Future[Done]] = Sink.foreach[ServiceMessage] {
-    msg =>
+  def inputB: Sink[ServiceMessage, Future[Done]] =
+    Sink.foreach[ServiceMessage] { msg =>
       sinkB.offer(msg)
-  }
+    }
 
   def outputB: Source[ServiceMessage, NotUsed] = sourceB
 
   def sendMessageToInputB(msg: ServiceMessage): Unit = {
+    println("controller: sending message to inputB")
     Source.single(msg).runWith(inputB)(materializer)
   }
   def sendRequestToInputA(
@@ -77,7 +84,8 @@ trait ControllerServiceInterface {
     // Subscribe to outputB and wait for the matching response
     val cancellable = outputB.runForeach {
       case msg if msg.id == request.id => promise.success(msg)
-      case cause                       => promise.failure(Throwable(cause.toString()))// Ignore other messages
+      case cause =>
+        promise.failure(Throwable(cause.toString())) // Ignore other messages
     }
 
     // Send the request
@@ -87,37 +95,15 @@ trait ControllerServiceInterface {
       after(timeout)(Future.failed(new TimeoutException("Request timed out")))
 
     // Return the future that completes first: either the promise when a response is received, or the timeoutFuture when the timeout is reached
-    Try(Await.result(Future.firstCompletedOf(Seq(promise.future, timeoutFuture)), timeout))
+    Try(
+      Await.result(
+        Future.firstCompletedOf(Seq(promise.future, timeoutFuture)),
+        timeout
+      )
+    )
   }
-  
+
   def generateRandomMessageId(): String = java.util.UUID.randomUUID().toString
-  
+
   def start(): Unit;
 }
-
-sealed trait ServiceMessage {
-  val id: String
-  val data: Option[JsValue]
-}
-
-case class GetFieldMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class UpdateFieldMessage(data: Option[JsValue], id: String) extends ServiceMessage
-case class DeleteMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class DrawCardMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class SwitchPlayerMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class CanUndoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class CanUndoResponeMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class CanRedoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class CanRedoResponeMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class UndoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class RedoMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class PlaceCardMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class SetPlayerNamesMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class SetGameStateMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class SetStrategyMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class AttackMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class DirectAttackMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-case class EndTurnMessage(data: Option[JsValue] = None, id: String) extends ServiceMessage
-
-
-

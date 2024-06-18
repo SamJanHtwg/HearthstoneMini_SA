@@ -8,6 +8,7 @@ import model.GameState
 import util.Event
 import scala.io.StdIn
 import core.controller.component.controllerImpl.RestControllerClient
+import core.controller.module.ControllerKafkaModule
 
 // object GuiModule {
 //   Starter(ControllerModule.given_ControllerInterface).start()
@@ -15,6 +16,10 @@ import core.controller.component.controllerImpl.RestControllerClient
 
 object GuiRestModule {
   Starter(ControllerRestClientModule.given_ControllerInterface).start()
+}
+
+object GuiKafkaModule {
+  Starter(ControllerKafkaModule.given_ControllerInterface).start()
 }
 
 class Starter(controller: ControllerInterface) {
