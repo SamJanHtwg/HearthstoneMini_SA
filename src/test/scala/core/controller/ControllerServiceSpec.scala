@@ -59,7 +59,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 import akka.stream.scaladsl.Sink
-import core.controller.component.UpdateFieldMessage
+
 
 class ControllerServiceSpec
     extends AnyWordSpec
