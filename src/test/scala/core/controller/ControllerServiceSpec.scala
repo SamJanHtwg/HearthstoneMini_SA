@@ -25,7 +25,6 @@ import core.controller.service.HttpService
 import core.controller.service.RestControllerService
 import core.util.CardProvider
 import core.util.UndoManager
-import io.gatling.core.config.ConfigKeys.http
 import model.GameState
 import model.GameState.GameState
 import model.Move

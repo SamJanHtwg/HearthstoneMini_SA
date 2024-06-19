@@ -14,26 +14,10 @@ scalacOptions ++= Seq(
 ThisBuild / scalaVersion := scala3Version
 ThisBuild / version := "1.1.0"
 
-ThisBuild / Gatling / publishArtifact := false
-ThisBuild / GatlingIt / publishArtifact := false
 
 Compile / mainClass := Some("hearthstoneMini.HearthstoneMini")
 Compile / packageBin / mainClass := Some("hearthstoneMini.HearthstoneMini")
 
-val gatlingExclude = Seq(
-  ("com.typesafe.akka", "akka-actor_2.13"),
-  ("org.scala-lang.modules", "scala-java8-compat_2.13"),
-  ("com.typesafe.akka", "akka-slf4j_2.13"),
-  ("org.scala-lang.modules","scala-parser-combinators_2.13"),
-  ("org.scala-lang.modules", "scala-collection-compat_2.13")
-).toVector.map((org_name: Tuple2[String, String]) =>
-  InclExclRule(org_name._1, org_name._2)
-)
-val gatlingHigh =
-  ("io.gatling.highcharts" % "gatling-charts-highcharts" % "3.11.3" % "test")
-    .withExclusions(gatlingExclude)
-val gatlingTest = ("io.gatling" % "gatling-test-framework" % "3.11.3" % "test")
-  .withExclusions(gatlingExclude)
 
 lazy val commonSettings = Seq(
   scalaVersion := scala3Version,
@@ -117,16 +101,13 @@ lazy val model = project
 
 lazy val persistence = project
   .in(file("./modules/persistence"))
-  .enablePlugins(DockerCompose, JavaServerAppPackaging, GatlingPlugin)
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "persistence",
     commonSettings,
     libraryDependencies ++= Seq(
       ("org.mongodb.scala" %% "mongo-scala-driver" % "5.1.0")
         .cross(CrossVersion.for3Use2_13)
-        ,
-        gatlingHigh,
-        gatlingTest
       ),
       dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
       dockerExposedPorts := Seq(9021),
@@ -135,14 +116,10 @@ lazy val persistence = project
 
 lazy val core = project
   .in(file("./modules/core"))
-  .enablePlugins(DockerCompose, JavaServerAppPackaging, GatlingPlugin)
+  .enablePlugins(DockerCompose, JavaServerAppPackaging)
   .settings(
     name := "core",
     commonSettings,
-    libraryDependencies ++= Seq(
-      gatlingHigh,
-      gatlingTest
-    ),
     dockerBaseImage := "hseeberger/scala-sbt:17.0.2_1.6.2_3.1.1",
     dockerExposedPorts := Seq(9031)
   )

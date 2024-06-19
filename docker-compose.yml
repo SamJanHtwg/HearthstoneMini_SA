@@ -21,7 +21,7 @@ services:
     image: persistence:1.1.0
     ports: 
       - "9021:9021"
-    # network_mode: "host"
+    network_mode: "host"
     depends_on:
       - postgres_db
       - mongodb
@@ -30,9 +30,12 @@ services:
     image: core:1.1.0
     ports: 
       - "9031:9031"
+      - "9092:9092"
     depends_on:
       - persistence
-    # network_mode: "host"
+      - kafka1
+      - zoo1
+    network_mode: "host"
 
   postgres_db:
     image: postgres

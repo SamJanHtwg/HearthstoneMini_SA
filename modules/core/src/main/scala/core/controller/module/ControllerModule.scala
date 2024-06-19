@@ -16,7 +16,7 @@ import core.controller.component.controllerImpl.RestControllerClient
 import core.controller.component.KafkaControllerService
 import core.controller.component.controllerImpl.KafkaControllerClient
 
-object ControllerModule:
+object ControllerModule extends App:
   private val executorService = Executors.newSingleThreadExecutor()
   private implicit val executionContext: ExecutionContext = ExecutionContext.fromExecutorService(executorService)
   private var restControllerService: ControllerServiceInterface = RestControllerService(using
@@ -28,7 +28,6 @@ object ControllerModule:
     kafkaControllerService.start()
   }
 
-  
   controllerServiceFuture.onComplete {
     case Success(service) =>
       println("Backend service started successfully.")
