@@ -32,8 +32,6 @@ class KafkaControllerService extends ControllerServiceInterface {
       .withBootstrapServers(kafkaBootstrapServers)
       .withGroupId("group1")
 
-
-
   override def start(): Unit = {
     Consumer
       .plainSource(consumerSettings, Subscriptions.topics(consumerTopic))

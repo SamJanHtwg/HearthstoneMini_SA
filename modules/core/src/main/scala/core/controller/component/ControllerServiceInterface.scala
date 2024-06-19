@@ -72,7 +72,6 @@ trait ControllerServiceInterface {
   def outputB: Source[ServiceMessage, NotUsed] = sourceB
 
   def sendMessageToInputB(msg: ServiceMessage): Unit = {
-    println("controller: sending message to inputB")
     Source.single(msg).runWith(inputB)(materializer)
   }
   def sendRequestToInputA(
