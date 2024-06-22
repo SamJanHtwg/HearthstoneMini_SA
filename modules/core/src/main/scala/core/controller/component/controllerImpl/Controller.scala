@@ -59,11 +59,6 @@ class Controller(
   )
   subcribeToServiceRequests
 
-  // TODO: Send messages to service
-  // Source
-  //   .single(UpdateFieldMessage(Some(field.toJson)))
-  //   .runWith(backendService.inputB)(backendService.materializer)
-
   def canUndo: Boolean = undoManager.canUndo()
   def canRedo: Boolean = undoManager.canRedo()
 
@@ -82,7 +77,7 @@ class Controller(
 
   def doStep(command: CommandInterface): Unit = {
     command.doStep match {
-      case Success(newField) => // noinspection RedundantBlock
+      case Success(newField) => 
         {
           field = newField
           undoManager.doStep(command)
