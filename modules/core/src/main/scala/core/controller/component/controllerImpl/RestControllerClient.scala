@@ -44,7 +44,8 @@ import scala.concurrent.duration.*
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
-class ControllerRestClient(using httpService: HttpService)
+
+class RestControllerClient(using httpService: HttpService)
     extends ControllerInterface {
   private val controllerServiceUrl = "http://localhost:9031/controller"
 
@@ -62,10 +63,7 @@ class ControllerRestClient(using httpService: HttpService)
   }
 
   connectToWebsocket
-
-  var field: FieldInterface = _
   setState(fieldRequest(controllerServiceUrl, "field", HttpMethods.GET))
-  var errorMsg: Option[String] = None
 
   private def fieldRequest(
       endpoint: String,

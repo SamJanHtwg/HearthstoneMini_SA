@@ -10,6 +10,7 @@ import core.controller.component.ControllerInterface
 
 import core.controller.module.ControllerRestClientModule
 import model.GameState
+import core.controller.module.ControllerKafkaModule
 
 // object TuiService:
 //   Starter(ControllerModule.given_ControllerInterface).start()
@@ -17,6 +18,9 @@ import model.GameState
 object TuiRestService:
   Starter(ControllerRestClientModule.given_ControllerInterface).start()
 
+object TuiKafkaService:
+  Starter(ControllerKafkaModule.given_ControllerInterface).start()
+  
 case class Starter(controller: ControllerInterface) {
   val thread: Thread = new Thread {
     override def run(): Unit = {

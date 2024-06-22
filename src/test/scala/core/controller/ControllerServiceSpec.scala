@@ -25,7 +25,6 @@ import core.controller.service.HttpService
 import core.controller.service.RestControllerService
 import core.util.CardProvider
 import core.util.UndoManager
-import io.gatling.core.config.ConfigKeys.http
 import model.GameState
 import model.GameState.GameState
 import model.Move
@@ -59,7 +58,7 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 import akka.stream.scaladsl.Sink
-import core.controller.component.UpdateFieldMessage
+
 
 class ControllerServiceSpec
     extends AnyWordSpec

@@ -19,7 +19,7 @@ import core.controller.component.ControllerServiceInterface
 import model.fieldComponent.fieldImpl.Field
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json
-
+import core.controller._
 import scala.concurrent.duration.*
 import scala.util.*
 
@@ -246,7 +246,7 @@ class RestControllerService(using
             persistenceServiceEndpoint,
             "save",
             method = HttpMethods.POST,
-            data = message.data
+            data = message.data 
           )
           .map(_ => ())
       case Failure(exception) =>

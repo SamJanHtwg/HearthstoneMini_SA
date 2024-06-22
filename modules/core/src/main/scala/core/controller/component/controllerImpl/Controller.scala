@@ -16,7 +16,7 @@ import core.util.UndoManager
 import util.{Observer, Observable, Event}
 import core.util.commands.CommandInterface
 import model.fieldComponent.fieldImpl.Field
-
+import core.controller._
 import java.lang.System.exit
 import java.text.Annotation
 import scala.util.{Failure, Success, Try}
@@ -43,7 +43,7 @@ class Controller(
     private val cardProvider: CardProvider,
     private val controllerService: ControllerServiceInterface
 ) extends ControllerInterface {
-  var field: FieldInterface = Field(
+  field = Field(
     players = Map(
       1 -> Player(
         id = 1,
@@ -58,13 +58,6 @@ class Controller(
     )
   )
   subcribeToServiceRequests
-
-  // TODO: Send messages to service
-  // Source
-  //   .single(UpdateFieldMessage(Some(field.toJson)))
-  //   .runWith(backendService.inputB)(backendService.materializer)
-
-  var errorMsg: Option[String] = None
 
   def canUndo: Boolean = undoManager.canUndo()
   def canRedo: Boolean = undoManager.canRedo()
@@ -84,7 +77,7 @@ class Controller(
 
   def doStep(command: CommandInterface): Unit = {
     command.doStep match {
-      case Success(newField) => // noinspection RedundantBlock
+      case Success(newField) => 
         {
           field = newField
           undoManager.doStep(command)
